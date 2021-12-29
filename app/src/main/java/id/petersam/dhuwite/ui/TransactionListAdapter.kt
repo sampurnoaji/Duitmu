@@ -1,14 +1,17 @@
-package id.petersam.dhuwite
+package id.petersam.dhuwite.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import id.petersam.dhuwite.R
+import id.petersam.dhuwite.Transaction
 import id.petersam.dhuwite.databinding.ItemListChildBinding
 import id.petersam.dhuwite.databinding.ItemListHeaderBinding
 import id.petersam.dhuwite.util.DatePattern
 import id.petersam.dhuwite.util.toReadableString
 import id.petersam.dhuwite.util.toRupiah
+import java.util.Date
 
 class TransactionListAdapter(val items: List<Item>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -21,10 +24,14 @@ class TransactionListAdapter(val items: List<Item>) :
     private inner class HeaderViewHolder(private val binding: ItemListHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-            items[position].transaction?.date?.let {
-                binding.tvDay.text = it.toReadableString(DatePattern.D)
-                binding.tvMonth.text = it.toReadableString(DatePattern.M_LONG)
-                binding.tvYear.text = it.toReadableString(DatePattern.Y_LONG)
+            with(items[position]) {
+                date?.let {
+                    binding.tvDay.text = it.toReadableString(DatePattern.D)
+                    binding.tvMonth.text = it.toReadableString(DatePattern.M_LONG)
+                    binding.tvYear.text = it.toReadableString(DatePattern.Y_LONG)
+                }
+                binding.tvIncome.text = "+ ${if (income != 0L) income?.toRupiah() else 0}"
+                binding.tvExpense.text = "- ${if (expense != 0L) expense?.toRupiah() else 0}"
             }
         }
     }
@@ -72,5 +79,11 @@ class TransactionListAdapter(val items: List<Item>) :
         return items[position].viewType
     }
 
-    data class Item(val viewType: Int, val transaction: Transaction? = null)
+    data class Item(
+        val viewType: Int,
+        val transaction: Transaction? = null,
+        val date: Date? = null,
+        val income: Long? = null,
+        val expense: Long? = null
+    )
 }

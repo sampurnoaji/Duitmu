@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -60,13 +60,13 @@
                 android:id="@+id/tvIncome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rp 10.000.000"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelIncome" />
+                app:layout_constraintTop_toBottomOf="@+id/labelIncome"
+                tools:text="Rp 10.000.000" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -102,13 +102,13 @@
                 android:id="@+id/tvExpense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rp 5.050.000"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelExpense" />
+                app:layout_constraintTop_toBottomOf="@+id/labelExpense"
+                tools:text="Rp 5.050.000" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

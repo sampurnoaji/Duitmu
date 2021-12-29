@@ -39,23 +39,25 @@
         android:id="@+id/tvIncome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+Rp 5.000.000"
         android:textColor="@color/green_text"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvExpense"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tvMonth"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="+Rp 5.000.000" />
 
     <TextView
         android:id="@+id/tvExpense"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+Rp 5.000.000"
         android:textColor="@color/red_text"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/tvIncome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tvIncome"
-        app:layout_constraintTop_toTopOf="@+id/tvIncome" />
+        app:layout_constraintTop_toTopOf="@+id/tvIncome"
+        tools:text="+Rp 5.000.000" />
 </androidx.constraintlayout.widget.ConstraintLayout>
