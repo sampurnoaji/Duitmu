@@ -3,9 +3,11 @@ package id.petersam.dhuwite.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import id.petersam.dhuwite.R
-import id.petersam.dhuwite.Transaction
+import id.petersam.dhuwite.model.Transaction
 import id.petersam.dhuwite.databinding.ItemListChildBinding
 import id.petersam.dhuwite.databinding.ItemListHeaderBinding
 import id.petersam.dhuwite.util.DatePattern
@@ -14,7 +16,7 @@ import id.petersam.dhuwite.util.toRupiah
 import java.util.Date
 
 class TransactionListAdapter(val items: List<Item>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    ListAdapter<TransactionListAdapter.Item, RecyclerView.ViewHolder>(DiffCallback()) {
 
     companion object {
         const val VIEW_TYPE_HEADER = 1
@@ -86,4 +88,14 @@ class TransactionListAdapter(val items: List<Item>) :
         val income: Long? = null,
         val expense: Long? = null
     )
+
+    class DiffCallback : DiffUtil.ItemCallback<Item>() {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem.hashCode() == newItem.hashCode()
+        }
+
+        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+            return oldItem == newItem
+        }
+    }
 }

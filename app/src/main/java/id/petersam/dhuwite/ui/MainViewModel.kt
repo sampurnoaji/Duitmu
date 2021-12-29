@@ -1,8 +1,12 @@
 package id.petersam.dhuwite.ui
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
-import id.petersam.dhuwite.Transaction
+import id.petersam.dhuwite.data.TransactionRepository
+import id.petersam.dhuwite.model.Transaction
 import id.petersam.dhuwite.util.DatePattern
 import id.petersam.dhuwite.util.toDate
 import id.petersam.dhuwite.util.toReadableString
@@ -11,9 +15,15 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel @Inject constructor(transactionRepository: TransactionRepository) :
+    ViewModel() {
 
-    private val raws = listOf(
+    val transaction: LiveData<List<TransactionListAdapter.Item>> =
+        transactionRepository.getTransactions().asLiveData().map {
+            it.toRecyclerViewItems()
+        }
+
+    val raws = listOf(
         Transaction(
             1,
             Transaction.Type.INCOME,
@@ -48,9 +58,9 @@ class MainViewModel @Inject constructor() : ViewModel() {
         ),
     )
 
-    fun toRecyclerViewItems(): List<TransactionListAdapter.Item> {
+    private fun List<Transaction>.toRecyclerViewItems(): List<TransactionListAdapter.Item> {
         val items = mutableListOf<TransactionListAdapter.Item>()
-        val group = raws.sortedByDescending { it.date }
+        val group = this.sortedByDescending { it.date }
             .groupBy { it.date.toReadableString(DatePattern.DMY_LONG) }
         group.entries.forEach {
             items.add(

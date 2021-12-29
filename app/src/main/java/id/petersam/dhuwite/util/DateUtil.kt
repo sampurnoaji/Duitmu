@@ -11,7 +11,8 @@ enum class DatePattern(val pattern: String) {
     D("d"),
     M_LONG("MMMM"),
     Y_LONG("yyyy"),
-    DMY_LONG("d MMMM yyyy")
+    DMY_LONG("d MMMM yyyy"),
+    FULL("yyyy-MM-dd'T'HH:mm:ss")
 }
 
 fun Date.toReadableString(pattern: DatePattern): String {
