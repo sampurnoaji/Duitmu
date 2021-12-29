@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="2dp"
-    android:paddingHorizontal="8dp"
-    android:background="#f8f8f8">
+    android:background="@color/primaryLightColor_transparent_40"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/tvDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="29"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/tvYear"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvMonth" />
+        app:layout_constraintTop_toTopOf="@+id/tvMonth"
+        tools:text="29" />
 
     <TextView
         android:id="@+id/tvMonth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:text="Desember"
         app:layout_constraintStart_toEndOf="@+id/tvDay"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Desember" />
 
     <TextView
         android:id="@+id/tvYear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2020"
         app:layout_constraintStart_toStartOf="@+id/tvMonth"
-        app:layout_constraintTop_toBottomOf="@+id/tvMonth" />
+        app:layout_constraintTop_toBottomOf="@+id/tvMonth"
+        tools:text="2020" />
 
     <TextView
         android:id="@+id/tvIncome"
@@ -52,11 +52,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+Rp 5.000.000"
-        android:textColor="@android:color/holo_red_dark"
+        android:textColor="@color/red_text"
         app:layout_constraintBottom_toBottomOf="@+id/tvIncome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tvIncome"
         app:layout_constraintTop_toTopOf="@+id/tvIncome" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

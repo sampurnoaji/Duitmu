@@ -17,7 +17,7 @@
             android:layout_height="?android:attr/actionBarSize"
             app:title="Keuangan"
             app:titleCentered="true"
-            app:titleTextColor="@color/white"/>
+            app:titleTextColor="@color/white" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -34,6 +34,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        app:cardBackgroundColor="@color/green_text"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
@@ -49,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="4dp"
                 android:text="Pemasukan"
+                android:textColor="@color/black"
                 app:drawableStartCompat="@drawable/ic_baseline_trending_up_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -58,13 +60,13 @@
                 android:id="@+id/tvIncome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/green_text"
+                android:text="Rp 10.000.000"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelIncome"
-                android:text="Rp 10.000.000" />
+                app:layout_constraintTop_toBottomOf="@+id/labelIncome" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -74,6 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        app:cardBackgroundColor="@color/red_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/cardIncome">
@@ -89,6 +92,7 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="4dp"
                 android:text="Pengeluaran"
+                android:textColor="@color/black"
                 app:drawableStartCompat="@drawable/ic_baseline_trending_down_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -98,21 +102,22 @@
                 android:id="@+id/tvExpense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/holo_red_dark"
+                android:text="Rp 5.050.000"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelExpense"
-                android:text="Rp 5.050.000" />
+                app:layout_constraintTop_toBottomOf="@+id/labelExpense" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTransactions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/cardIncome"
-        tools:listitem="@layout/item_list_header"/>
+        tools:listitem="@layout/item_list_header" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
