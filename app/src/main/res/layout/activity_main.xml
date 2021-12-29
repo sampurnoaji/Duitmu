@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="4dp"
-                android:text="Pemasukan"
+                android:text="@string/income"
                 android:textColor="@color/black"
                 app:drawableStartCompat="@drawable/ic_baseline_trending_up_24"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="4dp"
-                android:text="Pengeluaran"
+                android:text="@string/expense"
                 android:textColor="@color/black"
                 app:drawableStartCompat="@drawable/ic_baseline_trending_down_24"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -115,9 +115,38 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTransactions"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardIncome"
         tools:listitem="@layout/item_list_header" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupEmprtNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="imgEmptyNote, tvEmptyNote" />
+
+    <ImageView
+        android:id="@+id/imgEmptyNote"
+        android:layout_width="120dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/empty_note"
+        android:src="@drawable/ic_baseline_android_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardIncome" />
+
+    <TextView
+        android:id="@+id/tvEmptyNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_note"
+        app:layout_constraintEnd_toEndOf="@+id/imgEmptyNote"
+        app:layout_constraintStart_toStartOf="@+id/imgEmptyNote"
+        app:layout_constraintTop_toBottomOf="@+id/imgEmptyNote" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

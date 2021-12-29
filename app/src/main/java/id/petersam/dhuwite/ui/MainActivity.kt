@@ -3,6 +3,7 @@ package id.petersam.dhuwite.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,9 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
 
         vm.transaction.observe(this) { items ->
+            binding.rvTransactions.isVisible = items.isNotEmpty()
+            binding.groupEmprtNote.isVisible = items.isEmpty()
+
             adapter.submitList(items)
             binding.tvIncome.text = items.sumOf { it.income ?: 0L }.toRupiah()
             binding.tvExpense.text = items.sumOf { it.expense ?: 0L }.toRupiah()
