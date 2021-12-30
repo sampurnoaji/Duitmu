@@ -3,4 +3,10 @@
     <string name="income">Pemasukan</string>
     <string name="expense">Pengeluaran</string>
     <string name="empty_note">Catatan Kosong</string>
+    <string name="add_transaction">Tambah Transaksi</string>
+    <string name="label_date">Tanggal</string>
+    <string name="label_note">Catatan</string>
+    <string name="label_category">Kategori</string>
+    <string name="label_amount">Biaya</string>
+    <string name="save">Simpan</string>
 </resources>

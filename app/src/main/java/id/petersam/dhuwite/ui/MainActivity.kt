@@ -1,5 +1,6 @@
 package id.petersam.dhuwite.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.dhuwite.databinding.ActivityMainBinding
+import id.petersam.dhuwite.ui.create.CreateTransactionActivity
 import id.petersam.dhuwite.util.toRupiah
 import id.petersam.dhuwite.util.viewBinding
 import java.util.*
@@ -32,6 +34,11 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(items)
             binding.tvIncome.text = items.sumOf { it.income ?: 0L }.toRupiah()
             binding.tvExpense.text = items.sumOf { it.expense ?: 0L }.toRupiah()
+        }
+
+        binding.fabCreateTransaction.setOnClickListener {
+            val intent = Intent(this, CreateTransactionActivity::class.java)
+            startActivity(intent)
         }
     }
 

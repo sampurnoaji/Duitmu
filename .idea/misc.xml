@@ -3,9 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_prefix_rupiah.xml" value="0.4338461538461538" />
+        <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.4338461538461538" />
+        <entry key="app/src/main/res/drawable/ic_prefix_rupiah.xml" value="0.17685185185185184" />
+        <entry key="app/src/main/res/layout/activity_create_transaction.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.45" />
         <entry key="app/src/main/res/layout/item_list_child.xml" value="0.375" />
         <entry key="app/src/main/res/layout/item_list_header.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/list_item_dropdown.xml" value="0.4244791666666667" />
       </map>
     </option>
   </component>
