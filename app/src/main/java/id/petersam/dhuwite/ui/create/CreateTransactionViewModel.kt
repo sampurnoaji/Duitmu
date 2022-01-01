@@ -14,10 +14,30 @@ class CreateTransactionViewModel @Inject constructor() : ViewModel(){
     private val _date = MutableLiveData<Date>()
     val date: LiveData<Date> get() = _date
 
+    private val _category = MutableLiveData<String>()
+    val category: LiveData<String> get() = _category
+
+    private val _amount = MutableLiveData<String>()
+    val amount: LiveData<String> get() = _amount
+
+    private var _note: String? = null
+
     fun onDateChanged(timeInMillis: Long) {
         val selectedDate = Calendar.getInstance().apply {
             this.timeInMillis = timeInMillis
         }.time
         _date.value = selectedDate
+    }
+
+    fun onCategoryChanged(category: String) {
+        _category.value = category
+    }
+
+    fun onAmountChanged(amount: String) {
+        _amount.value = amount
+    }
+
+    fun onNoteChanged(note: String) {
+        _note = note
     }
 }

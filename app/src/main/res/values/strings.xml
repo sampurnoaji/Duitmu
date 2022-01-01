@@ -9,4 +9,6 @@
     <string name="label_category">Kategori</string>
     <string name="label_amount">Biaya</string>
     <string name="save">Simpan</string>
+
+    <string name="error_required_field">Isian masih kosong</string>
 </resources>

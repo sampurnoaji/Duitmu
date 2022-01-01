@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.activity.viewModels
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.widget.doOnTextChanged
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.dhuwite.R
@@ -13,7 +13,6 @@ import id.petersam.dhuwite.databinding.ActivityCreateTransactionBinding
 import id.petersam.dhuwite.util.DatePattern
 import id.petersam.dhuwite.util.toReadableString
 import id.petersam.dhuwite.util.viewBinding
-import java.util.Calendar
 
 @AndroidEntryPoint
 class CreateTransactionActivity : AppCompatActivity() {
@@ -25,7 +24,7 @@ class CreateTransactionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupToolbar()
-        setupTextInput()
+        setupActionView()
         observeVm()
     }
 
@@ -41,20 +40,58 @@ class CreateTransactionActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupTextInput() {
+    private fun setupActionView() {
+        binding.toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
+
+        }
+
         val items = listOf("Material", "Design", "Components", "Android")
         val adapter = ArrayAdapter(this, R.layout.list_item_dropdown, items)
         (binding.etCategory as? AutoCompleteTextView)?.setAdapter(adapter)
 
-        binding.etDate.setOnClickListener {
-            MaterialDatePicker.Builder.datePicker()
-                .setSelection(vm.date.value?.time)
-                .build().apply {
-                    show(supportFragmentManager, tag)
-                    addOnPositiveButtonClickListener {
-                        vm.onDateChanged(it)
+        with(binding.etDate) {
+            setOnClickListener {
+                MaterialDatePicker.Builder.datePicker()
+                    .setSelection(vm.date.value?.time)
+                    .build().apply {
+                        show(supportFragmentManager, tag)
+                        addOnPositiveButtonClickListener {
+                            vm.onDateChanged(it)
+                        }
                     }
-                }
+            }
+            doOnTextChanged { _, _, _, _ -> binding.tilDate.error = null }
         }
+        binding.etCategory.doOnTextChanged { text, _, _, _ ->
+            binding.tilCategory.error = null
+            vm.onCategoryChanged(text.toString())
+        }
+        binding.etAmount.doOnTextChanged { text, _, _, _ ->
+            binding.tilAmount.error = null
+            vm.onAmountChanged(text.toString())
+        }
+        binding.etNote.doOnTextChanged { text, _, _, _ ->
+            vm.onNoteChanged(text.toString())
+        }
+
+        binding.btnSave.setOnClickListener {
+            validateInput()
+        }
+    }
+
+    private fun validateInput() {
+        if (vm.date.value == null) {
+            binding.tilDate.error = getString(R.string.error_required_field)
+            return
+        }
+        if (vm.category.value == null) {
+            binding.tilCategory.error = getString(R.string.error_required_field)
+            return
+        }
+        if (vm.amount.value == null) {
+            binding.tilAmount.error = getString(R.string.error_required_field)
+            return
+        }
+        finish()
     }
 }
