@@ -15,7 +15,7 @@ import id.petersam.dhuwite.util.toReadableString
 import id.petersam.dhuwite.util.toRupiah
 import java.util.Date
 
-class TransactionListAdapter(val items: List<Item>) :
+class TransactionListAdapter :
     ListAdapter<TransactionListAdapter.Item, RecyclerView.ViewHolder>(DiffCallback()) {
 
     companion object {
@@ -26,7 +26,7 @@ class TransactionListAdapter(val items: List<Item>) :
     private inner class HeaderViewHolder(private val binding: ItemListHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-            with(items[position]) {
+            with(currentList[position]) {
                 date?.let {
                     binding.tvDay.text = it.toReadableString(DatePattern.D)
                     binding.tvMonth.text = it.toReadableString(DatePattern.M_LONG)
@@ -41,7 +41,7 @@ class TransactionListAdapter(val items: List<Item>) :
     private inner class ChildViewHolder(private val binding: ItemListChildBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-            items[position].transaction?.let {
+            currentList[position].transaction?.let {
                 binding.tvCategory.text = it.category
                 binding.tvDesc.text = it.note
                 binding.tvAmount.apply {
@@ -69,16 +69,12 @@ class TransactionListAdapter(val items: List<Item>) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (items[position].viewType == VIEW_TYPE_HEADER) (holder as HeaderViewHolder).bind(position)
+        if (currentList[position].viewType == VIEW_TYPE_HEADER) (holder as HeaderViewHolder).bind(position)
         else (holder as ChildViewHolder).bind(position)
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
-
     override fun getItemViewType(position: Int): Int {
-        return items[position].viewType
+        return currentList[position].viewType
     }
 
     data class Item(

@@ -123,7 +123,7 @@
         tools:listitem="@layout/item_list_header" />
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/groupEmprtNote"
+        android:id="@+id/groupEmptyNote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -152,8 +152,8 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabCreateTransaction"
-        android:layout_width="wrap_content"
         style="@style/FloatingActionButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/ic_baseline_add_24"

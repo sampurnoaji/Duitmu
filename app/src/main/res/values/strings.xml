@@ -10,5 +10,8 @@
     <string name="label_amount">Biaya</string>
     <string name="save">Simpan</string>
 
+    <string name="success_add_data">Berhasil menambah data</string>
+
     <string name="error_required_field">Isian masih kosong</string>
+    <string name="error_occured">Terjadi kesalahan</string>
 </resources>

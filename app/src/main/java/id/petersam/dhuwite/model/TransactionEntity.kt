@@ -9,7 +9,8 @@ import java.util.Date
 
 @Entity
 data class TransactionEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey
+    @ColumnInfo(name = "createdAt") val createdAt: String,
     @ColumnInfo(name = "type") val type: String,
     @ColumnInfo(name = "date") val date: String,
     @ColumnInfo(name = "category") val category: String,
@@ -17,7 +18,7 @@ data class TransactionEntity(
     @ColumnInfo(name = "amount") val amount: Long
 ) {
     fun toDomain() = Transaction(
-        id = id,
+        id = createdAt,
         type = Transaction.Type.map(type),
         date = date.toDate(DatePattern.FULL) ?: Date(),
         category = category,

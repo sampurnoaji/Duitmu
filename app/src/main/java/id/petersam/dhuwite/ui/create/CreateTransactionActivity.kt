@@ -4,16 +4,21 @@ import android.os.Bundle
 import android.text.InputType
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.dhuwite.R
 import id.petersam.dhuwite.databinding.ActivityCreateTransactionBinding
 import id.petersam.dhuwite.util.DatePattern
+import id.petersam.dhuwite.util.LoadState
 import id.petersam.dhuwite.util.ThousandSeparatorTextWatcher
 import id.petersam.dhuwite.util.removeThousandSeparator
+import id.petersam.dhuwite.util.snackbar
 import id.petersam.dhuwite.util.toReadableString
 import id.petersam.dhuwite.util.viewBinding
 
@@ -22,6 +27,11 @@ class CreateTransactionActivity : AppCompatActivity() {
 
     private val binding by viewBinding(ActivityCreateTransactionBinding::inflate)
     private val vm by viewModels<CreateTransactionViewModel>()
+
+    companion object {
+        const val INCOME_BUTTON_INDEX = 0
+        const val EXPENSE_BUTTON_INDEX = 1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +51,29 @@ class CreateTransactionActivity : AppCompatActivity() {
         vm.date.observe(this) {
             binding.etDate.setText(it.toReadableString(DatePattern.DMY_LONG))
         }
+
+        vm.insertTransaction.observe(this) {
+            when (it) {
+                is LoadState.Loading -> {
+                    setLoading(true)
+                }
+                is LoadState.Success -> {
+                    setLoading(false)
+                    snackbar(binding.root, getString(R.string.success_add_data), R.color.green_text)
+                    finish()
+                }
+                is LoadState.Error -> {
+                    setLoading(false)
+                    snackbar(binding.root, getString(R.string.error_occured), R.color.red_text)
+                }
+            }
+        }
     }
 
     private fun setupActionView() {
-        binding.toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
-
+        binding.toggleButton.addOnButtonCheckedListener { _, _, _ ->
+            if (binding.btnIncome.isChecked) vm.onTypeChanged(INCOME_BUTTON_INDEX)
+            if (binding.btnExpense.isChecked) vm.onTypeChanged(EXPENSE_BUTTON_INDEX)
         }
 
         val items = listOf("Material", "Design", "Components", "Android")
@@ -100,6 +128,11 @@ class CreateTransactionActivity : AppCompatActivity() {
             binding.tilAmount.error = getString(R.string.error_required_field)
             return
         }
-        finish()
+        vm.saveTransaction()
+    }
+
+    private fun setLoading(isVisible: Boolean) {
+        binding.pgbLoading.isVisible = isVisible
+        binding.btnSave.isEnabled = !isVisible
     }
 }

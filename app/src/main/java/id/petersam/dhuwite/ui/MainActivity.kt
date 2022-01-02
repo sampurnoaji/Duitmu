@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityMainBinding::inflate)
     private val vm by viewModels<MainViewModel>()
 
-    private val adapter by lazy { TransactionListAdapter(emptyList()) }
+    private val adapter by lazy { TransactionListAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         vm.transaction.observe(this) { items ->
             binding.rvTransactions.isVisible = items.isNotEmpty()
-            binding.groupEmprtNote.isVisible = items.isEmpty()
+            binding.groupEmptyNote.isVisible = items.isEmpty()
 
             adapter.submitList(items)
             binding.tvIncome.text = items.sumOf { it.income ?: 0L }.toRupiah()
