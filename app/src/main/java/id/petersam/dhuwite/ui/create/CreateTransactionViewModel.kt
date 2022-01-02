@@ -17,8 +17,8 @@ class CreateTransactionViewModel @Inject constructor() : ViewModel(){
     private val _category = MutableLiveData<String>()
     val category: LiveData<String> get() = _category
 
-    private val _amount = MutableLiveData<String>()
-    val amount: LiveData<String> get() = _amount
+    private val _amount = MutableLiveData<Long>()
+    val amount: LiveData<Long> get() = _amount
 
     private var _note: String? = null
 
@@ -33,7 +33,7 @@ class CreateTransactionViewModel @Inject constructor() : ViewModel(){
         _category.value = category
     }
 
-    fun onAmountChanged(amount: String) {
+    fun onAmountChanged(amount: Long) {
         _amount.value = amount
     }
 

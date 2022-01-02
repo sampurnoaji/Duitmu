@@ -1,16 +1,19 @@
 package id.petersam.dhuwite.ui.create
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.dhuwite.R
 import id.petersam.dhuwite.databinding.ActivityCreateTransactionBinding
 import id.petersam.dhuwite.util.DatePattern
+import id.petersam.dhuwite.util.ThousandSeparatorTextWatcher
+import id.petersam.dhuwite.util.removeThousandSeparator
 import id.petersam.dhuwite.util.toReadableString
 import id.petersam.dhuwite.util.viewBinding
 
@@ -66,10 +69,15 @@ class CreateTransactionActivity : AppCompatActivity() {
             binding.tilCategory.error = null
             vm.onCategoryChanged(text.toString())
         }
-        binding.etAmount.doOnTextChanged { text, _, _, _ ->
-            binding.tilAmount.error = null
-            vm.onAmountChanged(text.toString())
+        with(binding.etAmount) {
+            inputType = InputType.TYPE_CLASS_NUMBER
+            addTextChangedListener(ThousandSeparatorTextWatcher(this))
+            doOnTextChanged { text, _, _, _ ->
+                binding.tilAmount.error = null
+                vm.onAmountChanged(text.toString().removeThousandSeparator() ?: 0)
+            }
         }
+
         binding.etNote.doOnTextChanged { text, _, _, _ ->
             vm.onNoteChanged(text.toString())
         }
