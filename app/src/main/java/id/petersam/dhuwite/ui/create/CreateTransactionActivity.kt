@@ -31,6 +31,8 @@ class CreateTransactionActivity : AppCompatActivity() {
     companion object {
         const val INCOME_BUTTON_INDEX = 0
         const val EXPENSE_BUTTON_INDEX = 1
+
+        private const val DATE_PICKER_TAG = "date_picker"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,14 +84,16 @@ class CreateTransactionActivity : AppCompatActivity() {
 
         with(binding.etDate) {
             setOnClickListener {
-                MaterialDatePicker.Builder.datePicker()
-                    .setSelection(vm.date.value?.time)
-                    .build().apply {
-                        show(supportFragmentManager, tag)
-                        addOnPositiveButtonClickListener {
-                            vm.onDateChanged(it)
+                if (supportFragmentManager.findFragmentByTag(DATE_PICKER_TAG) == null) {
+                    MaterialDatePicker.Builder.datePicker()
+                        .setSelection(vm.date.value?.time)
+                        .build().apply {
+                            show(supportFragmentManager, DATE_PICKER_TAG)
+                            addOnPositiveButtonClickListener {
+                                vm.onDateChanged(it)
+                            }
                         }
-                    }
+                }
             }
             doOnTextChanged { _, _, _, _ -> binding.tilDate.error = null }
         }
