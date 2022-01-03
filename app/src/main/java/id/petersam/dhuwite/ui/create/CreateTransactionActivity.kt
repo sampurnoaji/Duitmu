@@ -78,7 +78,7 @@ class CreateTransactionActivity : AppCompatActivity() {
             if (binding.btnExpense.isChecked) vm.onTypeChanged(EXPENSE_BUTTON_INDEX)
         }
 
-        val items = listOf("Material", "Design", "Components", "Android")
+        val items = vm.incomeCategories.map { it }
         val adapter = ArrayAdapter(this, R.layout.list_item_dropdown, items)
         (binding.etCategory as? AutoCompleteTextView)?.setAdapter(adapter)
 

@@ -25,6 +25,7 @@ class CreateTransactionViewModel @Inject constructor(
     private val _date = MutableLiveData<Date>()
     val date: LiveData<Date> get() = _date
 
+    val incomeCategories = repository.getIncomeCategories()
     private val _category = MutableLiveData<String>()
     val category: LiveData<String> get() = _category
 
