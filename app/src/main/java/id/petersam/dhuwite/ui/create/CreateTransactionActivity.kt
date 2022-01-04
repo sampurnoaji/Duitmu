@@ -1,5 +1,8 @@
 package id.petersam.dhuwite.ui.create
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.widget.ArrayAdapter
@@ -71,7 +74,7 @@ class CreateTransactionActivity : AppCompatActivity() {
                 }
                 is LoadState.Success -> {
                     setLoading(false)
-                    snackbar(binding.root, getString(R.string.success_add_data), R.color.green_text)
+                    setResult(Activity.RESULT_OK)
                     finish()
                 }
                 is LoadState.Error -> {
