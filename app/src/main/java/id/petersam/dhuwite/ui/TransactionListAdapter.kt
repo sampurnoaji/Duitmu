@@ -29,11 +29,8 @@ class TransactionListAdapter :
             with(currentList[position]) {
                 date?.let {
                     binding.tvDay.text = it.toReadableString(DatePattern.D)
-                    binding.tvMonth.text = it.toReadableString(DatePattern.M_LONG)
-                    binding.tvYear.text = it.toReadableString(DatePattern.Y_LONG)
+                    binding.tvMonthYear.text = it.toReadableString(DatePattern.MY_LONG)
                 }
-                binding.tvIncome.text = "+ ${if (income != 0L) income?.toRupiah() else 0}"
-                binding.tvExpense.text = "- ${if (expense != 0L) expense?.toRupiah() else 0}"
             }
         }
     }
