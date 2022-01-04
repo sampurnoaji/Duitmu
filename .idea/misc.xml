@@ -9,6 +9,8 @@
         <entry key="app/src/main/res/drawable/ic_prefix_rupiah.xml" value="0.17685185185185184" />
         <entry key="app/src/main/res/layout/activity_create_transaction.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/fragment_transaction_category_modal.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/item_list_category.xml" value="0.375" />
         <entry key="app/src/main/res/layout/item_list_child.xml" value="0.375" />
         <entry key="app/src/main/res/layout/item_list_header.xml" value="0.375" />
         <entry key="app/src/main/res/layout/list_item_dropdown.xml" value="0.4244791666666667" />

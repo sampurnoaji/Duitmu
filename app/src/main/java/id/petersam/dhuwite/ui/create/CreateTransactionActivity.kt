@@ -1,23 +1,20 @@
 package id.petersam.dhuwite.ui.create
 
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.dhuwite.R
 import id.petersam.dhuwite.databinding.ActivityCreateTransactionBinding
 import id.petersam.dhuwite.model.Transaction
+import id.petersam.dhuwite.ui.create.category.TransactionCategoryModalFragment
 import id.petersam.dhuwite.util.DatePattern
 import id.petersam.dhuwite.util.LoadState
 import id.petersam.dhuwite.util.ThousandSeparatorTextWatcher
@@ -25,7 +22,6 @@ import id.petersam.dhuwite.util.removeThousandSeparator
 import id.petersam.dhuwite.util.snackbar
 import id.petersam.dhuwite.util.toReadableString
 import id.petersam.dhuwite.util.viewBinding
-import java.util.Date
 
 @AndroidEntryPoint
 class CreateTransactionActivity : AppCompatActivity() {
@@ -111,6 +107,11 @@ class CreateTransactionActivity : AppCompatActivity() {
             binding.tilCategory.error = null
             vm.onCategoryChanged(text.toString())
         }
+        binding.btnEditCategory.setOnClickListener {
+            val modal = TransactionCategoryModalFragment.newInstance(supportFragmentManager)
+            modal?.show(supportFragmentManager, TransactionCategoryModalFragment.TAG)
+        }
+
         with(binding.etAmount) {
             inputType = InputType.TYPE_CLASS_NUMBER
             addTextChangedListener(ThousandSeparatorTextWatcher(this))

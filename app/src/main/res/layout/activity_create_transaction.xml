@@ -126,7 +126,7 @@
         android:layout_marginTop="2dp"
         android:layout_marginEnd="8dp"
         app:errorEnabled="true"
-        app:layout_constraintEnd_toStartOf="@+id/imgEditCategory"
+        app:layout_constraintEnd_toStartOf="@+id/btnEditCategory"
         app:layout_constraintStart_toStartOf="@+id/barrier"
         app:layout_constraintTop_toBottomOf="@+id/tilDate"
         app:startIconDrawable="@drawable/ic_baseline_category_24">
@@ -139,7 +139,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageButton
-        android:id="@+id/imgEditCategory"
+        android:id="@+id/btnEditCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
