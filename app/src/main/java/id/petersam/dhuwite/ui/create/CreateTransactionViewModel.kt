@@ -20,12 +20,14 @@ class CreateTransactionViewModel @Inject constructor(
     private val repository: TransactionRepository
 ) : ViewModel() {
 
-    private var _type = Transaction.Type.EXPENSE
+    private val _type = MutableLiveData<Transaction.Type>()
+    val type: LiveData<Transaction.Type> get() = _type
 
-    private val _date = MutableLiveData<Date>()
+    private val _date = MutableLiveData(Date())
     val date: LiveData<Date> get() = _date
 
-    val incomeCategories = repository.getIncomeCategories()
+    val incomeCategories = repository.getIncomeCategories().map { it }
+    val expenseCategories = repository.getExpenseCategories().map { it }
     private val _category = MutableLiveData<String>()
     val category: LiveData<String> get() = _category
 
@@ -38,7 +40,7 @@ class CreateTransactionViewModel @Inject constructor(
     val insertTransaction: LiveData<LoadState<Boolean>> get() = _insertTransaction
 
     fun onTypeChanged(index: Int) {
-        _type =
+        _type.value =
             if (index == CreateTransactionActivity.INCOME_BUTTON_INDEX) Transaction.Type.INCOME
             else Transaction.Type.EXPENSE
     }
@@ -69,7 +71,7 @@ class CreateTransactionViewModel @Inject constructor(
                 repository.insertTransaction(
                     Transaction(
                         id = Date().toReadableString(DatePattern.FULL),
-                        type = _type,
+                        type = _type.value ?: Transaction.Type.EXPENSE,
                         amount = _amount.value ?: 0,
                         category = _category.value.orEmpty(),
                         date = _date.value ?: Date(),
@@ -80,6 +82,16 @@ class CreateTransactionViewModel @Inject constructor(
             } catch (e: Exception) {
                 _insertTransaction.value = LoadState.Error(e.message ?: "Something went wrong")
             }
+        }
+    }
+
+    fun findCategoryPosition(): Int {
+        return if (_type.value == Transaction.Type.EXPENSE) {
+            val index = expenseCategories.indexOf(_category.value)
+            if (index == -1) 0 else index
+        } else {
+            val index = incomeCategories.indexOf(_category.value)
+            if (index == -1) 0 else index
         }
     }
 }

@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.dhuwite.R
 import id.petersam.dhuwite.databinding.ActivityCreateTransactionBinding
+import id.petersam.dhuwite.model.Transaction
 import id.petersam.dhuwite.util.DatePattern
 import id.petersam.dhuwite.util.LoadState
 import id.petersam.dhuwite.util.ThousandSeparatorTextWatcher
@@ -21,6 +22,7 @@ import id.petersam.dhuwite.util.removeThousandSeparator
 import id.petersam.dhuwite.util.snackbar
 import id.petersam.dhuwite.util.toReadableString
 import id.petersam.dhuwite.util.viewBinding
+import java.util.Date
 
 @AndroidEntryPoint
 class CreateTransactionActivity : AppCompatActivity() {
@@ -53,6 +55,14 @@ class CreateTransactionActivity : AppCompatActivity() {
         vm.date.observe(this) {
             binding.etDate.setText(it.toReadableString(DatePattern.DMY_LONG))
         }
+        vm.type.observe(this) {
+            val adapter = ArrayAdapter(
+                this, R.layout.list_item_dropdown,
+                if (it == Transaction.Type.EXPENSE) vm.expenseCategories else vm.incomeCategories
+            )
+            (binding.etCategory as? AutoCompleteTextView)?.setAdapter(adapter)
+            binding.etCategory.setText(adapter.getItem(vm.findCategoryPosition()))
+        }
 
         vm.insertTransaction.observe(this) {
             when (it) {
@@ -77,10 +87,7 @@ class CreateTransactionActivity : AppCompatActivity() {
             if (binding.btnIncome.isChecked) vm.onTypeChanged(INCOME_BUTTON_INDEX)
             if (binding.btnExpense.isChecked) vm.onTypeChanged(EXPENSE_BUTTON_INDEX)
         }
-
-        val items = vm.incomeCategories.map { it }
-        val adapter = ArrayAdapter(this, R.layout.list_item_dropdown, items)
-        (binding.etCategory as? AutoCompleteTextView)?.setAdapter(adapter)
+        vm.onTypeChanged(EXPENSE_BUTTON_INDEX)
 
         with(binding.etDate) {
             setOnClickListener {

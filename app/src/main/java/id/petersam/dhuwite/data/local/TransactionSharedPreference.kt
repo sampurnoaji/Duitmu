@@ -13,7 +13,16 @@ class TransactionSharedPreference @Inject constructor(
             ?: incomeCategories
     }
 
+    fun getTransactionExpenseCategory(): Set<String> {
+        return sharedPreferences.getStringSet(PrefConstant.PREF_INCOME_CATEGORIES, expenseCategories)
+            ?: expenseCategories
+    }
+
     private val incomeCategories = setOf(
         "Gaji", "Deposito", "Hadiah"
+    )
+
+    private val expenseCategories = setOf(
+        "Belanja", "Listrik", "Internet"
     )
 }

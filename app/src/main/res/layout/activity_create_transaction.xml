@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/label_date"
-        app:layout_constraintBottom_toBottomOf="@+id/tilDate"
+        app:layout_constraintBaseline_toBaselineOf="@id/tilDate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tilDate" />
 
@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/label_category"
-        app:layout_constraintBottom_toBottomOf="@+id/tilCategory"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tilCategory"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tilCategory" />
 
@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/label_amount"
-        app:layout_constraintBottom_toBottomOf="@+id/tilAmount"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tilAmount"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tilAmount" />
 
@@ -86,7 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/label_note"
-        app:layout_constraintBottom_toBottomOf="@+id/tilNote"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tilNote"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tilNote" />
 
@@ -122,10 +122,11 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
         app:errorEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imgEditCategory"
         app:layout_constraintStart_toStartOf="@+id/barrier"
         app:layout_constraintTop_toBottomOf="@+id/tilDate"
         app:startIconDrawable="@drawable/ic_baseline_category_24">
@@ -136,6 +137,16 @@
             android:layout_height="wrap_content"
             android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/imgEditCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_baseline_edit_24"
+        app:layout_constraintBottom_toBottomOf="@+id/labelCategory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/labelCategory" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilAmount"

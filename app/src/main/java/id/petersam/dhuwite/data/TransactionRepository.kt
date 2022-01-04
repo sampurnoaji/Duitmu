@@ -28,4 +28,8 @@ class TransactionRepository @Inject constructor(
     fun getIncomeCategories(): Set<String> {
         return transactionSharedPreference.getTransactionIncomeCategory()
     }
+
+    fun getExpenseCategories(): Set<String> {
+        return transactionSharedPreference.getTransactionExpenseCategory()
+    }
 }
