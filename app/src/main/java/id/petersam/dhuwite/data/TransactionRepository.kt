@@ -33,6 +33,10 @@ class TransactionRepository @Inject constructor(
         return transactionSharedPreference.getTransactionExpenseCategory()
     }
 
+    fun addTransactionExpenseCategory(category: String) {
+        transactionSharedPreference.addTransactionExpenseCategory(category)
+    }
+
     fun addTransactionIncomeCategory(category: String) {
         transactionSharedPreference.addTransactionIncomeCategory(category)
     }

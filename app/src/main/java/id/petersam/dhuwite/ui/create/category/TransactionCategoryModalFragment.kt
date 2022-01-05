@@ -110,7 +110,7 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
             positiveBtnAction = {
                 val input = etCategory?.text.toString().trim()
                 if (input.isNotEmpty()) {
-                    if (btnExpense?.isChecked == true) {}
+                    if (btnExpense?.isChecked == true) vm.addTransactionExpenseCategory(input)
                     else vm.addTransactionIncomeCategory(input)
                 }
             },

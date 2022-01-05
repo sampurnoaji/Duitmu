@@ -26,6 +26,13 @@ class TransactionSharedPreference @Inject constructor(
         "Belanja", "Listrik", "Internet"
     )
 
+    fun addTransactionExpenseCategory(category: String) {
+        val categories = getTransactionExpenseCategory().toMutableSet()
+        categories.add(category)
+        editor.putStringSet(PrefConstant.PREF_EXPENSE_CATEGORIES, categories)
+        editor.apply()
+    }
+
     fun addTransactionIncomeCategory(category: String) {
         val categories = getTransactionIncomeCategory().toMutableSet()
         categories.add(category)

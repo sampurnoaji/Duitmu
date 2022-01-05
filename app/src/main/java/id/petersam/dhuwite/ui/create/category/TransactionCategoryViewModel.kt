@@ -26,6 +26,10 @@ class TransactionCategoryViewModel @Inject constructor(
             else Transaction.Type.EXPENSE
     }
 
+    fun addTransactionExpenseCategory(category: String) {
+        repository.addTransactionExpenseCategory(category)
+    }
+
     fun addTransactionIncomeCategory(category: String) {
         repository.addTransactionIncomeCategory(category)
     }
