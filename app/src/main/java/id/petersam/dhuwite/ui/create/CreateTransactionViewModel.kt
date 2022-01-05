@@ -26,8 +26,8 @@ class CreateTransactionViewModel @Inject constructor(
     private val _date = MutableLiveData(Date())
     val date: LiveData<Date> get() = _date
 
-    val incomeCategories = repository.getIncomeCategories().map { it }
-    val expenseCategories = repository.getExpenseCategories().map { it }
+    val incomeCategories = repository.getIncomeCategories().map { it }.sortedBy { it }
+    val expenseCategories = repository.getExpenseCategories().map { it }.sortedBy { it }
     private val _category = MutableLiveData<String>()
     val category: LiveData<String> get() = _category
 
@@ -43,6 +43,7 @@ class CreateTransactionViewModel @Inject constructor(
         _type.value =
             if (index == CreateTransactionActivity.INCOME_BUTTON_INDEX) Transaction.Type.INCOME
             else Transaction.Type.EXPENSE
+        _category.value = null
     }
 
     fun onDateChanged(timeInMillis: Long) {

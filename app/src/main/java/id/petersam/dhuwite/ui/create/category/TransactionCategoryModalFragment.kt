@@ -4,21 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import android.widget.EditText
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.dhuwite.R
 import id.petersam.dhuwite.databinding.FragmentTransactionCategoryModalBinding
 import id.petersam.dhuwite.model.Transaction
 import id.petersam.dhuwite.ui.create.CreateTransactionActivity
 import id.petersam.dhuwite.util.showDialog
-import id.petersam.dhuwite.util.snackbar
 import id.petersam.dhuwite.util.viewBinding
 
 @AndroidEntryPoint
@@ -27,6 +25,8 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
     private val binding by viewBinding(FragmentTransactionCategoryModalBinding::bind)
     private val vm by viewModels<TransactionCategoryViewModel>()
     private val categoriesAdapter by lazy { TransactionCategoryListAdapter(onItemListClick) }
+
+    private lateinit var addCategoryView: View
 
     companion object {
         const val TAG = "TransactionCategoryModalFragment"
@@ -76,11 +76,15 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
             if (binding.btnExpense.isChecked) vm.onTypeChanged(CreateTransactionActivity.EXPENSE_BUTTON_INDEX)
         }
         vm.onTypeChanged(CreateTransactionActivity.EXPENSE_BUTTON_INDEX)
+
+        binding.btnAdd.setOnClickListener {
+            showAddCategoryDialog()
+        }
     }
 
     private val onItemListClick = object : TransactionCategoryListAdapter.OnItemClick {
         override fun onEditItem(category: String) {
-
+            showAddCategoryDialog(category)
         }
 
         override fun onDeleteItem(category: String) {
@@ -90,6 +94,31 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
                 positiveBtnAction = {},
                 negativeBtn = getString(R.string.cancel)
             )
+        }
+    }
+
+    private fun showAddCategoryDialog(category: String? = null) {
+        val view = layoutInflater.inflate(R.layout.dialog_add_category, null, false)
+        val btnExpense = view?.findViewById<MaterialButton>(R.id.btnExpense)
+        val btnIncome = view?.findViewById<MaterialButton>(R.id.btnIncome)
+        val etCategory = view?.findViewById<EditText>(R.id.etCategory)
+
+        requireContext().showDialog(
+            view = view,
+            msg = getString(R.string.add_category),
+            positiveBtn = getString(android.R.string.ok),
+            positiveBtnAction = {
+                val input = etCategory?.text.toString().trim()
+                if (input.isNotEmpty()) {
+                    if (btnExpense?.isChecked == true) {}
+                    else vm.addTransactionIncomeCategory(input)
+                }
+            },
+            negativeBtn = getString(R.string.cancel)
+        ).apply {
+            btnExpense?.isChecked = vm.type.value == Transaction.Type.EXPENSE
+            btnIncome?.isChecked = vm.type.value == Transaction.Type.INCOME
+            etCategory?.setText(category)
         }
     }
 }

@@ -4,6 +4,7 @@
     <string name="expense">Pengeluaran</string>
     <string name="empty_note">Catatan Kosong</string>
     <string name="add_transaction">Tambah Transaksi</string>
+    <string name="add_category">Tambah Kategori</string>
     <string name="label_date">Tanggal</string>
     <string name="label_note">Catatan</string>
     <string name="label_category">Kategori</string>
@@ -11,7 +12,7 @@
     <string name="save">Simpan</string>
     <string name="delete">Hapus</string>
     <string name="cancel">Batal</string>
-    <string name="ok">Ok</string>
+    <string name="add">Tambah</string>
 
     <string name="success_add_data">Berhasil menambah data</string>
 

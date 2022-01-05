@@ -59,8 +59,11 @@ class CreateTransactionActivity : AppCompatActivity() {
                 this, R.layout.list_item_dropdown,
                 if (it == Transaction.Type.EXPENSE) vm.expenseCategories else vm.incomeCategories
             )
-            (binding.etCategory as? AutoCompleteTextView)?.setAdapter(adapter)
-            binding.etCategory.setText(adapter.getItem(vm.findCategoryPosition()))
+            (binding.etCategory as? AutoCompleteTextView)?.let { dropdown ->
+                dropdown.setAdapter(null)
+                dropdown.setAdapter(adapter)
+                dropdown.setText("")
+            }
         }
 
         vm.insertTransaction.observe(this) {
