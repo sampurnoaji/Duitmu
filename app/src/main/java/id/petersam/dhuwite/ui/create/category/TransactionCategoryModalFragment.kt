@@ -87,7 +87,9 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
             requireContext().showDialog(
                 msg = "${getString(R.string.delete)} $category?",
                 positiveBtn = getString(android.R.string.ok),
-                positiveBtnAction = {},
+                positiveBtnAction = {
+
+                },
                 negativeBtn = getString(R.string.cancel)
             )
         }
@@ -106,8 +108,13 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
             positiveBtnAction = {
                 val input = etCategory?.text.toString().trim()
                 if (input.isNotEmpty()) {
-                    if (btnExpense?.isChecked == true) vm.addTransactionExpenseCategory(input)
-                    else vm.addTransactionIncomeCategory(input)
+                    if (btnExpense?.isChecked == true) {
+                        if (category.isNullOrEmpty()) vm.addTransactionExpenseCategory(input)
+                        else vm.updateTransactionExpenseCategory(category, input)
+                    } else {
+                        if (category.isNullOrEmpty()) vm.addTransactionIncomeCategory(input)
+                        else vm.updateTransactionIncomeCategory(category, input)
+                    }
                 }
             },
             negativeBtn = getString(R.string.cancel)
