@@ -9,6 +9,9 @@
     <string name="label_category">Kategori</string>
     <string name="label_amount">Biaya</string>
     <string name="save">Simpan</string>
+    <string name="delete">Hapus</string>
+    <string name="cancel">Batal</string>
+    <string name="ok">Ok</string>
 
     <string name="success_add_data">Berhasil menambah data</string>
 
