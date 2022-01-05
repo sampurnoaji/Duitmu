@@ -11,17 +11,18 @@ class TransactionSharedPreference @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val editor: SharedPreferences.Editor
 ) {
-    fun getTransactionExpenseCategory(): Set<String> {
+    private fun getTransactionExpenseCategory(): Set<String> {
         return sharedPreferences.getStringSet(
             PrefConstant.PREF_EXPENSE_CATEGORIES,
             DummyData.expenseCategories
-        )
-            ?: DummyData.expenseCategories
+        ) ?: DummyData.expenseCategories
     }
 
-    fun getTransactionIncomeCategory(): Set<String> {
-        return sharedPreferences.getStringSet(PrefConstant.PREF_INCOME_CATEGORIES, DummyData.incomeCategories)
-            ?: DummyData.incomeCategories
+    private fun getTransactionIncomeCategory(): Set<String> {
+        return sharedPreferences.getStringSet(
+            PrefConstant.PREF_INCOME_CATEGORIES,
+            DummyData.incomeCategories
+        ) ?: DummyData.incomeCategories
     }
 
     fun getTransactionExpenseCategories(): LiveData<Set<String>> {
@@ -48,6 +49,22 @@ class TransactionSharedPreference @Inject constructor(
     fun addTransactionIncomeCategory(category: String) {
         val categories = getTransactionIncomeCategory().toMutableSet()
         categories.add(category)
+        editor.putStringSet(PrefConstant.PREF_INCOME_CATEGORIES, categories)
+        editor.apply()
+    }
+
+    fun updateTransactionExpenseCategory(oldCategory: String, newCategory: String) {
+        val categories = getTransactionExpenseCategory().toMutableSet()
+        categories.remove(oldCategory)
+        categories.add(newCategory)
+        editor.putStringSet(PrefConstant.PREF_EXPENSE_CATEGORIES, categories)
+        editor.apply()
+    }
+
+    fun updateTransactionIncomeCategory(oldCategory: String, newCategory: String) {
+        val categories = getTransactionIncomeCategory().toMutableSet()
+        categories.remove(oldCategory)
+        categories.add(newCategory)
         editor.putStringSet(PrefConstant.PREF_INCOME_CATEGORIES, categories)
         editor.apply()
     }

@@ -51,4 +51,12 @@ class TransactionCategoryViewModel @Inject constructor(
     fun addTransactionIncomeCategory(category: String) {
         repository.addTransactionIncomeCategory(category)
     }
+
+    fun updateTransactionExpenseCategory(oldCategory: String, newCategory: String) {
+        repository.updateTransactionExpenseCategory(oldCategory, newCategory)
+    }
+
+    fun updateTransactionIncomeCategory(oldCategory: String, newCategory: String) {
+        repository.updateTransactionIncomeCategory(oldCategory, newCategory)
+    }
 }

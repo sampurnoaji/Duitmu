@@ -120,7 +120,7 @@ class CreateTransactionActivity : AppCompatActivity() {
         }
 
         binding.etNote.doOnTextChanged { text, _, _, _ ->
-            vm.onNoteChanged(text.toString())
+            vm.onNoteChanged(text.toString().trim())
         }
 
         binding.btnSave.setOnClickListener {
