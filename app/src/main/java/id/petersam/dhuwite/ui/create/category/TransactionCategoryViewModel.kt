@@ -1,8 +1,10 @@
 package id.petersam.dhuwite.ui.create.category
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.dhuwite.data.TransactionRepository
 import id.petersam.dhuwite.model.Transaction
@@ -14,11 +16,28 @@ class TransactionCategoryViewModel @Inject constructor(
     private val repository: TransactionRepository
 ) : ViewModel() {
 
-    val incomeCategories = repository.getIncomeCategories().map { it }.sortedBy { it }
-    val expenseCategories = repository.getExpenseCategories().map { it }.sortedBy { it }
-
     private val _type = MutableLiveData<Transaction.Type>()
     val type: LiveData<Transaction.Type> get() = _type
+
+    private val incomeCategories = repository.getTransactionIncomeCategories().map { set ->
+        set.toList().sortedBy { it }
+    }
+    private val expenseCategories = repository.getTransactionExpenseCategories().map { set ->
+        set.toList().sortedBy { it }
+    }
+
+    val categories = MediatorLiveData<List<String>>().apply {
+        addSource(_type) {
+            value = if (_type.value == Transaction.Type.EXPENSE) expenseCategories.value
+            else incomeCategories.value
+        }
+        addSource(expenseCategories) {
+            if (_type.value == Transaction.Type.EXPENSE) value = it
+        }
+        addSource(incomeCategories) {
+            if (_type.value == Transaction.Type.INCOME) value = it
+        }
+    }
 
     fun onTypeChanged(index: Int) {
         _type.value =

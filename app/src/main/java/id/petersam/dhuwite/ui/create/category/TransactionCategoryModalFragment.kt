@@ -26,8 +26,6 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
     private val vm by viewModels<TransactionCategoryViewModel>()
     private val categoriesAdapter by lazy { TransactionCategoryListAdapter(onItemListClick) }
 
-    private lateinit var addCategoryView: View
-
     companion object {
         const val TAG = "TransactionCategoryModalFragment"
 
@@ -53,10 +51,8 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
     }
 
     private fun observeVm() {
-        vm.type.observe(this) {
-            categoriesAdapter.submitList(
-                if (it == Transaction.Type.EXPENSE) vm.expenseCategories else vm.incomeCategories
-            )
+        vm.categories.observe(this) {
+            categoriesAdapter.submitList(it)
         }
     }
 
@@ -105,7 +101,7 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
 
         requireContext().showDialog(
             view = view,
-            msg = getString(R.string.add_category),
+            msg = if (category.isNullOrEmpty()) getString(R.string.add_category) else getString(R.string.edit_category),
             positiveBtn = getString(android.R.string.ok),
             positiveBtnAction = {
                 val input = etCategory?.text.toString().trim()

@@ -1,5 +1,6 @@
 package id.petersam.dhuwite.data
 
+import androidx.lifecycle.LiveData
 import id.petersam.dhuwite.data.local.TransactionDao
 import id.petersam.dhuwite.data.local.TransactionSharedPreference
 import id.petersam.dhuwite.model.Transaction
@@ -23,6 +24,14 @@ class TransactionRepository @Inject constructor(
 
     suspend fun insertTransaction(transaction: Transaction) {
         transactionDao.insertTransaction(transaction.toEntity())
+    }
+
+    fun getTransactionExpenseCategories(): LiveData<Set<String>> {
+        return transactionSharedPreference.getTransactionExpenseCategories()
+    }
+
+    fun getTransactionIncomeCategories(): LiveData<Set<String>> {
+        return transactionSharedPreference.getTransactionIncomeCategories()
     }
 
     fun getIncomeCategories(): Set<String> {
