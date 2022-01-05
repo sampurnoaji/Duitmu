@@ -25,7 +25,6 @@ class TransactionCategoryViewModel @Inject constructor(
     private val expenseCategories = repository.getTransactionExpenseCategories().map { set ->
         set.toList().sortedBy { it }
     }
-
     val categories = MediatorLiveData<List<String>>().apply {
         addSource(_type) {
             value = if (_type.value == Transaction.Type.EXPENSE) expenseCategories.value

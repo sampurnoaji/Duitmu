@@ -13,7 +13,6 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.dhuwite.R
 import id.petersam.dhuwite.databinding.ActivityCreateTransactionBinding
-import id.petersam.dhuwite.model.Transaction
 import id.petersam.dhuwite.ui.create.category.TransactionCategoryModalFragment
 import id.petersam.dhuwite.util.DatePattern
 import id.petersam.dhuwite.util.LoadState
@@ -54,13 +53,9 @@ class CreateTransactionActivity : AppCompatActivity() {
         vm.date.observe(this) {
             binding.etDate.setText(it.toReadableString(DatePattern.DMY_LONG))
         }
-        vm.type.observe(this) {
-            val adapter = ArrayAdapter(
-                this, R.layout.list_item_dropdown,
-                if (it == Transaction.Type.EXPENSE) vm.expenseCategories else vm.incomeCategories
-            )
+        vm.categories.observe(this) {
+            val adapter = ArrayAdapter(this, R.layout.list_item_dropdown, it)
             (binding.etCategory as? AutoCompleteTextView)?.let { dropdown ->
-                dropdown.setAdapter(null)
                 dropdown.setAdapter(adapter)
                 dropdown.setText("")
             }

@@ -1,8 +1,10 @@
 package id.petersam.dhuwite.ui.create
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.dhuwite.data.TransactionRepository
@@ -26,8 +28,25 @@ class CreateTransactionViewModel @Inject constructor(
     private val _date = MutableLiveData(Date())
     val date: LiveData<Date> get() = _date
 
-    val incomeCategories = repository.getIncomeCategories().map { it }.sortedBy { it }
-    val expenseCategories = repository.getExpenseCategories().map { it }.sortedBy { it }
+    private val incomeCategories = repository.getTransactionIncomeCategories().map { set ->
+        set.toList().sortedBy { it }
+    }
+    private val expenseCategories = repository.getTransactionExpenseCategories().map { set ->
+        set.toList().sortedBy { it }
+    }
+    val categories = MediatorLiveData<List<String>>().apply {
+        addSource(_type) {
+            value = if (_type.value == Transaction.Type.EXPENSE) expenseCategories.value
+            else incomeCategories.value
+        }
+        addSource(expenseCategories) {
+            if (_type.value == Transaction.Type.EXPENSE) value = it
+        }
+        addSource(incomeCategories) {
+            if (_type.value == Transaction.Type.INCOME) value = it
+        }
+    }
+
     private val _category = MutableLiveData<String>()
     val category: LiveData<String> get() = _category
 
@@ -83,16 +102,6 @@ class CreateTransactionViewModel @Inject constructor(
             } catch (e: Exception) {
                 _insertTransaction.value = LoadState.Error(e.message ?: "Something went wrong")
             }
-        }
-    }
-
-    fun findCategoryPosition(): Int {
-        return if (_type.value == Transaction.Type.EXPENSE) {
-            val index = expenseCategories.indexOf(_category.value)
-            if (index == -1) 0 else index
-        } else {
-            val index = incomeCategories.indexOf(_category.value)
-            if (index == -1) 0 else index
         }
     }
 }
