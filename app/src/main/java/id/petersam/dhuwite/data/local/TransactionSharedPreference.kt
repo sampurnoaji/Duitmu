@@ -11,14 +11,14 @@ class TransactionSharedPreference @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     private val editor: SharedPreferences.Editor
 ) {
-    private fun getTransactionExpenseCategory(): Set<String> {
+    private fun getTransactionExpenseCategory(): MutableSet<String> {
         return sharedPreferences.getStringSet(
             PrefConstant.PREF_EXPENSE_CATEGORIES,
             DummyData.expenseCategories
         ) ?: DummyData.expenseCategories
     }
 
-    private fun getTransactionIncomeCategory(): Set<String> {
+    private fun getTransactionIncomeCategory(): MutableSet<String> {
         return sharedPreferences.getStringSet(
             PrefConstant.PREF_INCOME_CATEGORIES,
             DummyData.incomeCategories
@@ -40,21 +40,21 @@ class TransactionSharedPreference @Inject constructor(
     }
 
     fun addTransactionExpenseCategory(category: String) {
-        val categories = getTransactionExpenseCategory().toMutableSet()
+        val categories = getTransactionExpenseCategory()
         categories.add(category)
         editor.putStringSet(PrefConstant.PREF_EXPENSE_CATEGORIES, categories)
         editor.apply()
     }
 
     fun addTransactionIncomeCategory(category: String) {
-        val categories = getTransactionIncomeCategory().toMutableSet()
+        val categories = getTransactionIncomeCategory()
         categories.add(category)
         editor.putStringSet(PrefConstant.PREF_INCOME_CATEGORIES, categories)
         editor.apply()
     }
 
     fun updateTransactionExpenseCategory(oldCategory: String, newCategory: String) {
-        val categories = getTransactionExpenseCategory().toMutableSet()
+        val categories = getTransactionExpenseCategory()
         categories.remove(oldCategory)
         categories.add(newCategory)
         editor.putStringSet(PrefConstant.PREF_EXPENSE_CATEGORIES, categories)
@@ -62,9 +62,25 @@ class TransactionSharedPreference @Inject constructor(
     }
 
     fun updateTransactionIncomeCategory(oldCategory: String, newCategory: String) {
-        val categories = getTransactionIncomeCategory().toMutableSet()
+        val categories = getTransactionIncomeCategory()
         categories.remove(oldCategory)
         categories.add(newCategory)
+        editor.putStringSet(PrefConstant.PREF_INCOME_CATEGORIES, categories)
+        editor.apply()
+    }
+
+    fun deleteTransactionExpenseCategory(category: String) {
+        val categories = getTransactionExpenseCategory()
+        categories.remove(category)
+
+        editor.putStringSet(PrefConstant.PREF_EXPENSE_CATEGORIES, categories)
+        editor.commit()
+    }
+
+    fun deleteTransactionIncomeCategory(category: String) {
+        val categories = getTransactionIncomeCategory()
+        categories.remove(category)
+
         editor.putStringSet(PrefConstant.PREF_INCOME_CATEGORIES, categories)
         editor.apply()
     }

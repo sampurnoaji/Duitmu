@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -16,7 +17,9 @@ import id.petersam.dhuwite.R
 import id.petersam.dhuwite.databinding.FragmentTransactionCategoryModalBinding
 import id.petersam.dhuwite.model.Transaction
 import id.petersam.dhuwite.ui.create.CreateTransactionActivity
+import id.petersam.dhuwite.util.LoadState
 import id.petersam.dhuwite.util.showDialog
+import id.petersam.dhuwite.util.snackbar
 import id.petersam.dhuwite.util.viewBinding
 
 @AndroidEntryPoint
@@ -54,6 +57,21 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
         vm.categories.observe(this) {
             categoriesAdapter.submitList(it)
         }
+
+        vm.insertCategory.observe(this) {
+            when (it) {
+                is LoadState.Loading -> {
+                    setLoading(true)
+                }
+                is LoadState.Success -> {
+                    setLoading(false)
+                }
+                is LoadState.Error -> {
+                    setLoading(false)
+                    requireActivity().snackbar(binding.root, getString(R.string.error_occured), R.color.red_text)
+                }
+            }
+        }
     }
 
     private fun setupRecyclerView() {
@@ -87,9 +105,7 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
             requireContext().showDialog(
                 msg = "${getString(R.string.delete)} $category?",
                 positiveBtn = getString(android.R.string.ok),
-                positiveBtnAction = {
-
-                },
+                positiveBtnAction = { vm.deleteTransactionCategory(category) },
                 negativeBtn = getString(R.string.cancel)
             )
         }
@@ -109,10 +125,10 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
                 val input = etCategory?.text.toString().trim()
                 if (input.isNotEmpty()) {
                     if (btnExpense?.isChecked == true) {
-                        if (category.isNullOrEmpty()) vm.addTransactionExpenseCategory(input)
+                        if (category.isNullOrEmpty()) vm.insertCategory(input, Transaction.Type.EXPENSE)
                         else vm.updateTransactionExpenseCategory(category, input)
                     } else {
-                        if (category.isNullOrEmpty()) vm.addTransactionIncomeCategory(input)
+                        if (category.isNullOrEmpty()) vm.insertCategory(input, Transaction.Type.INCOME)
                         else vm.updateTransactionIncomeCategory(category, input)
                     }
                 }
@@ -123,5 +139,10 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
             btnIncome?.isChecked = vm.type.value == Transaction.Type.INCOME
             etCategory?.setText(category)
         }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.pgbLoading.isVisible = isLoading
+        binding.btnAdd.visibility = if (isLoading) View.INVISIBLE else View.VISIBLE
     }
 }

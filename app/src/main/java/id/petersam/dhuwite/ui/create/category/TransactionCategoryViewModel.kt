@@ -4,11 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.dhuwite.data.TransactionRepository
+import id.petersam.dhuwite.model.Category
 import id.petersam.dhuwite.model.Transaction
 import id.petersam.dhuwite.ui.create.CreateTransactionActivity
+import id.petersam.dhuwite.util.LoadState
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,22 +23,24 @@ class TransactionCategoryViewModel @Inject constructor(
     private val _type = MutableLiveData<Transaction.Type>()
     val type: LiveData<Transaction.Type> get() = _type
 
-    private val incomeCategories = repository.getTransactionIncomeCategories().map { set ->
-        set.toList().sortedBy { it }
-    }
-    private val expenseCategories = repository.getTransactionExpenseCategories().map { set ->
-        set.toList().sortedBy { it }
-    }
+    private val _insertCategory = MutableLiveData<LoadState<Boolean>>()
+    val insertCategory: LiveData<LoadState<Boolean>> get() = _insertCategory
+
+    private val _categories = repository.getCategories().asLiveData()
     val categories = MediatorLiveData<List<String>>().apply {
         addSource(_type) {
-            value = if (_type.value == Transaction.Type.EXPENSE) expenseCategories.value
-            else incomeCategories.value
+            value = _categories.value?.filter { category ->
+                category.type == it
+            }?.map { it.category }
         }
-        addSource(expenseCategories) {
-            if (_type.value == Transaction.Type.EXPENSE) value = it
-        }
-        addSource(incomeCategories) {
-            if (_type.value == Transaction.Type.INCOME) value = it
+        addSource(_categories) {
+            value = if (_type.value == Transaction.Type.EXPENSE) it.map { category ->
+                category.category
+            } else {
+                it.map { category ->
+                    category.category
+                }
+            }
         }
     }
 
@@ -44,8 +50,16 @@ class TransactionCategoryViewModel @Inject constructor(
             else Transaction.Type.EXPENSE
     }
 
-    fun addTransactionExpenseCategory(category: String) {
-        repository.addTransactionExpenseCategory(category)
+    fun insertCategory(category: String, type: Transaction.Type) {
+        _insertCategory.value = LoadState.Loading
+        viewModelScope.launch {
+            try {
+                repository.insertCategory(Category(category, type))
+                _insertCategory.value = LoadState.Success(true)
+            } catch (e: Exception) {
+                _insertCategory.value = LoadState.Error(e.message ?: "Something went wrong")
+            }
+        }
     }
 
     fun addTransactionIncomeCategory(category: String) {
@@ -58,5 +72,12 @@ class TransactionCategoryViewModel @Inject constructor(
 
     fun updateTransactionIncomeCategory(oldCategory: String, newCategory: String) {
         repository.updateTransactionIncomeCategory(oldCategory, newCategory)
+    }
+
+    fun deleteTransactionCategory(category: String) {
+        if (_type.value == Transaction.Type.EXPENSE)
+            repository.deleteTransactionExpenseCategory(category)
+        else
+            repository.deleteTransactionIncomeCategory(category)
     }
 }

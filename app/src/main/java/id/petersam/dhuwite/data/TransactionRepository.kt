@@ -3,6 +3,7 @@ package id.petersam.dhuwite.data
 import androidx.lifecycle.LiveData
 import id.petersam.dhuwite.data.local.TransactionDao
 import id.petersam.dhuwite.data.local.TransactionSharedPreference
+import id.petersam.dhuwite.model.Category
 import id.petersam.dhuwite.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -14,7 +15,7 @@ class TransactionRepository @Inject constructor(
 ) {
 
     fun getTransactions(): Flow<List<Transaction>> {
-        return transactionDao.getAll().map {
+        return transactionDao.getAllTransaction().map {
             it.map { trxEntity ->
                 trxEntity.toDomain()
             }
@@ -23,6 +24,18 @@ class TransactionRepository @Inject constructor(
 
     suspend fun insertTransaction(transaction: Transaction) {
         transactionDao.insertTransaction(transaction.toEntity())
+    }
+
+    fun getCategories(): Flow<List<Category>> {
+        return transactionDao.getAllCategory().map {
+            it.map { categoryEntity ->
+                categoryEntity.toDomain()
+            }
+        }
+    }
+
+    suspend fun insertCategory(category: Category) {
+        transactionDao.insertCategory(category.toEntity())
     }
 
     fun getTransactionExpenseCategories(): LiveData<Set<String>> {
@@ -47,5 +60,13 @@ class TransactionRepository @Inject constructor(
 
     fun updateTransactionIncomeCategory(oldCategory: String, newCategory: String) {
         transactionSharedPreference.updateTransactionIncomeCategory(oldCategory, newCategory)
+    }
+
+    fun deleteTransactionExpenseCategory(category: String) {
+        transactionSharedPreference.deleteTransactionExpenseCategory(category)
+    }
+
+    fun deleteTransactionIncomeCategory(category: String) {
+        transactionSharedPreference.deleteTransactionIncomeCategory(category)
     }
 }

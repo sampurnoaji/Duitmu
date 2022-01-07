@@ -36,6 +36,17 @@
             app:layout_constraintStart_toStartOf="@+id/labelTitle"
             app:layout_constraintTop_toBottomOf="@+id/labelTitle" />
 
+        <ProgressBar
+            android:id="@+id/pgbLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/btnAdd"
+            app:layout_constraintEnd_toEndOf="@+id/btnAdd"
+            app:layout_constraintStart_toStartOf="@+id/btnAdd"
+            app:layout_constraintTop_toTopOf="@+id/btnAdd"
+            tools:visibility="visible" />
+
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/toggleButton"
             android:layout_width="match_parent"
