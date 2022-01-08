@@ -29,11 +29,11 @@ class TransactionCategoryViewModel @Inject constructor(
 
     private val _expenseCategories =
         repository.getExpenseCategories().asLiveData().map { categories ->
-            categories.map { it.category }
+            categories.map { it.category }.sortedBy { it }
         }
     private val _incomeCategories =
         repository.getIncomeCategories().asLiveData().map { categories ->
-            categories.map { it.category }
+            categories.map { it.category }.sortedBy { it }
         }
     val categories = MediatorLiveData<List<String>>().apply {
         addSource(_type) { type ->

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import id.petersam.dhuwite.model.CategoryEntity
 import id.petersam.dhuwite.model.TransactionEntity
 import kotlinx.coroutines.flow.Flow
