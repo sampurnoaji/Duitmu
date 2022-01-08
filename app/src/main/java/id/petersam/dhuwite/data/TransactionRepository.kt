@@ -46,6 +46,13 @@ class TransactionRepository @Inject constructor(
         transactionDao.insertCategory(category.toEntity())
     }
 
+    suspend fun deleteCategory(category: String) {
+        transactionDao.deleteCategory(category)
+    }
+
+
+
+
     fun getTransactionExpenseCategories(): LiveData<Set<String>> {
         return transactionSharedPreference.getTransactionExpenseCategories()
     }
@@ -54,27 +61,11 @@ class TransactionRepository @Inject constructor(
         return transactionSharedPreference.getTransactionIncomeCategories()
     }
 
-    fun addTransactionExpenseCategory(category: String) {
-        transactionSharedPreference.addTransactionExpenseCategory(category)
-    }
-
-    fun addTransactionIncomeCategory(category: String) {
-        transactionSharedPreference.addTransactionIncomeCategory(category)
-    }
-
     fun updateTransactionExpenseCategory(oldCategory: String, newCategory: String) {
         transactionSharedPreference.updateTransactionExpenseCategory(oldCategory, newCategory)
     }
 
     fun updateTransactionIncomeCategory(oldCategory: String, newCategory: String) {
         transactionSharedPreference.updateTransactionIncomeCategory(oldCategory, newCategory)
-    }
-
-    fun deleteTransactionExpenseCategory(category: String) {
-        transactionSharedPreference.deleteTransactionExpenseCategory(category)
-    }
-
-    fun deleteTransactionIncomeCategory(category: String) {
-        transactionSharedPreference.deleteTransactionIncomeCategory(category)
     }
 }

@@ -105,7 +105,7 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
             requireContext().showDialog(
                 msg = "${getString(R.string.delete)} $category?",
                 positiveBtn = getString(android.R.string.ok),
-                positiveBtnAction = { vm.deleteTransactionCategory(category) },
+                positiveBtnAction = { vm.deleteCategory(category) },
                 negativeBtn = getString(R.string.cancel)
             )
         }

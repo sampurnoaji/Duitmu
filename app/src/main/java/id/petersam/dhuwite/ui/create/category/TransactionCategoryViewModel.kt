@@ -66,8 +66,10 @@ class TransactionCategoryViewModel @Inject constructor(
         }
     }
 
-    fun addTransactionIncomeCategory(category: String) {
-        repository.addTransactionIncomeCategory(category)
+    fun deleteCategory(category: String) {
+        viewModelScope.launch {
+            repository.deleteCategory(category)
+        }
     }
 
     fun updateTransactionExpenseCategory(oldCategory: String, newCategory: String) {
@@ -76,12 +78,5 @@ class TransactionCategoryViewModel @Inject constructor(
 
     fun updateTransactionIncomeCategory(oldCategory: String, newCategory: String) {
         repository.updateTransactionIncomeCategory(oldCategory, newCategory)
-    }
-
-    fun deleteTransactionCategory(category: String) {
-        if (_type.value == Transaction.Type.EXPENSE)
-            repository.deleteTransactionExpenseCategory(category)
-        else
-            repository.deleteTransactionIncomeCategory(category)
     }
 }
