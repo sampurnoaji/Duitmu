@@ -5,6 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.dhuwite.data.TransactionRepository
@@ -26,21 +27,24 @@ class TransactionCategoryViewModel @Inject constructor(
     private val _insertCategory = MutableLiveData<LoadState<Boolean>>()
     val insertCategory: LiveData<LoadState<Boolean>> get() = _insertCategory
 
-    private val _categories = repository.getCategories().asLiveData()
-    val categories = MediatorLiveData<List<String>>().apply {
-        addSource(_type) {
-            value = _categories.value?.filter { category ->
-                category.type == it
-            }?.map { it.category }
+    private val _expenseCategories =
+        repository.getExpenseCategories().asLiveData().map { categories ->
+            categories.map { it.category }
         }
-        addSource(_categories) {
-            value = if (_type.value == Transaction.Type.EXPENSE) it.map { category ->
-                category.category
-            } else {
-                it.map { category ->
-                    category.category
-                }
-            }
+    private val _incomeCategories =
+        repository.getIncomeCategories().asLiveData().map { categories ->
+            categories.map { it.category }
+        }
+    val categories = MediatorLiveData<List<String>>().apply {
+        addSource(_type) { type ->
+            value = if (type == Transaction.Type.EXPENSE) _expenseCategories.value
+            else _incomeCategories.value
+        }
+        addSource(_expenseCategories) {
+            if (_type.value == Transaction.Type.EXPENSE) value = it
+        }
+        addSource(_incomeCategories) {
+            if (_type.value == Transaction.Type.INCOME) value = it
         }
     }
 

@@ -26,8 +26,16 @@ class TransactionRepository @Inject constructor(
         transactionDao.insertTransaction(transaction.toEntity())
     }
 
-    fun getCategories(): Flow<List<Category>> {
-        return transactionDao.getAllCategory().map {
+    fun getExpenseCategories(): Flow<List<Category>> {
+        return transactionDao.getAllCategory(Transaction.Type.EXPENSE.readable).map {
+            it.map { categoryEntity ->
+                categoryEntity.toDomain()
+            }
+        }
+    }
+
+    fun getIncomeCategories(): Flow<List<Category>> {
+        return transactionDao.getAllCategory(Transaction.Type.INCOME.readable).map {
             it.map { categoryEntity ->
                 categoryEntity.toDomain()
             }

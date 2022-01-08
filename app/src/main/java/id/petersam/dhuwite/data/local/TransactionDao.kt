@@ -1,6 +1,7 @@
 package id.petersam.dhuwite.data.local
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import id.petersam.dhuwite.model.CategoryEntity
@@ -16,9 +17,12 @@ interface TransactionDao {
     @Insert
     suspend fun insertTransaction(transaction: TransactionEntity)
 
-    @Query("SELECT * FROM CategoryEntity")
-    fun getAllCategory(): Flow<List<CategoryEntity>>
+    @Query("SELECT * FROM CategoryEntity WHERE type = :type")
+    fun getAllCategory(type: String): Flow<List<CategoryEntity>>
 
     @Insert
     suspend fun insertCategory(category: CategoryEntity)
+
+    @Query("DELETE FROM CategoryEntity WHERE category = :id")
+    suspend fun deleteCategory(id: String)
 }
