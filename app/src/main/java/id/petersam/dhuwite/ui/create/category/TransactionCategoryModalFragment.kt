@@ -15,6 +15,7 @@ import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.dhuwite.R
 import id.petersam.dhuwite.databinding.FragmentTransactionCategoryModalBinding
+import id.petersam.dhuwite.model.Category
 import id.petersam.dhuwite.model.Transaction
 import id.petersam.dhuwite.ui.create.CreateTransactionActivity
 import id.petersam.dhuwite.util.LoadState
@@ -68,7 +69,11 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
                 }
                 is LoadState.Error -> {
                     setLoading(false)
-                    requireActivity().snackbar(binding.root, getString(R.string.error_occured), R.color.red_text)
+                    requireActivity().snackbar(
+                        binding.root,
+                        getString(R.string.error_occured),
+                        R.color.red_text
+                    )
                 }
             }
         }
@@ -97,13 +102,13 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
     }
 
     private val onItemListClick = object : TransactionCategoryListAdapter.OnItemClick {
-        override fun onEditItem(category: String) {
+        override fun onEditItem(category: Category) {
             showAddCategoryDialog(category)
         }
 
-        override fun onDeleteItem(category: String) {
+        override fun onDeleteItem(category: Category) {
             requireContext().showDialog(
-                msg = "${getString(R.string.delete)} $category?",
+                msg = "${getString(R.string.delete)} ${category.category}?",
                 positiveBtn = getString(android.R.string.ok),
                 positiveBtnAction = { vm.deleteCategory(category) },
                 negativeBtn = getString(R.string.cancel)
@@ -111,7 +116,7 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun showAddCategoryDialog(category: String? = null) {
+    private fun showAddCategoryDialog(category: Category? = null) {
         val view = layoutInflater.inflate(R.layout.dialog_add_category, null, false)
         val btnExpense = view?.findViewById<MaterialButton>(R.id.btnExpense)
         val btnIncome = view?.findViewById<MaterialButton>(R.id.btnIncome)
@@ -119,17 +124,29 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
 
         requireContext().showDialog(
             view = view,
-            msg = if (category.isNullOrEmpty()) getString(R.string.add_category) else getString(R.string.edit_category),
+            msg = if (category == null) getString(R.string.add_category) else getString(R.string.edit_category),
             positiveBtn = getString(android.R.string.ok),
             positiveBtnAction = {
                 val input = etCategory?.text.toString().trim()
                 if (input.isNotEmpty()) {
                     if (btnExpense?.isChecked == true) {
-                        if (category.isNullOrEmpty()) vm.insertCategory(input, Transaction.Type.EXPENSE)
-                        else vm.updateTransactionExpenseCategory(category, input)
+                        if (category == null) vm.insertCategory(input, Transaction.Type.EXPENSE)
+                        else vm.updateCategory(
+                            Category(
+                                id = category.id,
+                                category = input,
+                                type = Transaction.Type.EXPENSE
+                            )
+                        )
                     } else {
-                        if (category.isNullOrEmpty()) vm.insertCategory(input, Transaction.Type.INCOME)
-                        else vm.updateTransactionIncomeCategory(category, input)
+                        if (category == null) vm.insertCategory(input, Transaction.Type.INCOME)
+                        else vm.updateCategory(
+                            Category(
+                                id = category.id,
+                                category = input,
+                                type = Transaction.Type.INCOME
+                            )
+                        )
                     }
                 }
             },
@@ -137,7 +154,7 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
         ).apply {
             btnExpense?.isChecked = vm.type.value == Transaction.Type.EXPENSE
             btnIncome?.isChecked = vm.type.value == Transaction.Type.INCOME
-            etCategory?.setText(category)
+            etCategory?.setText(category?.category)
         }
     }
 

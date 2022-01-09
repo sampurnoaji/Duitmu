@@ -6,14 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import id.petersam.dhuwite.databinding.ItemListCategoryBinding
+import id.petersam.dhuwite.model.Category
 
 class TransactionCategoryListAdapter(private var listener: OnItemClick? = null) :
-    ListAdapter<String, TransactionCategoryListAdapter.ContentViewHolder>(DiffCallback()) {
+    ListAdapter<Category, TransactionCategoryListAdapter.ContentViewHolder>(DiffCallback()) {
 
     inner class ContentViewHolder(private val binding: ItemListCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-            binding.tvCategory.text = currentList[position]
+            binding.tvCategory.text = currentList[position].category
         }
     }
 
@@ -30,18 +31,18 @@ class TransactionCategoryListAdapter(private var listener: OnItemClick? = null) 
         holder.bind(position)
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<String>() {
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem.hashCode() == newItem.hashCode()
+    class DiffCallback : DiffUtil.ItemCallback<Category>() {
+        override fun areItemsTheSame(oldItem: Category, newItem: Category): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areContentsTheSame(oldItem: Category, newItem: Category): Boolean {
             return oldItem == newItem
         }
     }
 
     interface OnItemClick {
-        fun onEditItem(category: String)
-        fun onDeleteItem(category: String)
+        fun onEditItem(category: Category)
+        fun onDeleteItem(category: Category)
     }
 }

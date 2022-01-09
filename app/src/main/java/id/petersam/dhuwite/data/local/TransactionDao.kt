@@ -18,12 +18,15 @@ interface TransactionDao {
     @Insert
     suspend fun insertTransaction(transaction: TransactionEntity)
 
-    @Query("SELECT * FROM CategoryEntity WHERE type = :type")
+    @Query("SELECT * FROM CategoryEntity WHERE type = :type ORDER BY category ASC")
     fun getAllCategory(type: String): Flow<List<CategoryEntity>>
 
     @Insert
     suspend fun insertCategory(category: CategoryEntity)
 
-    @Query("DELETE FROM CategoryEntity WHERE category = :id")
-    suspend fun deleteCategory(id: String)
+    @Delete
+    suspend fun deleteCategory(category: CategoryEntity)
+
+    @Update
+    suspend fun updateCategory(category: CategoryEntity)
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.dhuwite.data.TransactionRepository
@@ -27,15 +28,9 @@ class TransactionCategoryViewModel @Inject constructor(
     private val _insertCategory = MutableLiveData<LoadState<Boolean>>()
     val insertCategory: LiveData<LoadState<Boolean>> get() = _insertCategory
 
-    private val _expenseCategories =
-        repository.getExpenseCategories().asLiveData().map { categories ->
-            categories.map { it.category }.sortedBy { it }
-        }
-    private val _incomeCategories =
-        repository.getIncomeCategories().asLiveData().map { categories ->
-            categories.map { it.category }.sortedBy { it }
-        }
-    val categories = MediatorLiveData<List<String>>().apply {
+    private val _expenseCategories = repository.getExpenseCategories().asLiveData()
+    private val _incomeCategories = repository.getIncomeCategories().asLiveData()
+    val categories = MediatorLiveData<List<Category>>().apply {
         addSource(_type) { type ->
             value = if (type == Transaction.Type.EXPENSE) _expenseCategories.value
             else _incomeCategories.value
@@ -58,7 +53,7 @@ class TransactionCategoryViewModel @Inject constructor(
         _insertCategory.value = LoadState.Loading
         viewModelScope.launch {
             try {
-                repository.insertCategory(Category(category, type))
+                repository.insertCategory(Category(category = category, type = type))
                 _insertCategory.value = LoadState.Success(true)
             } catch (e: Exception) {
                 _insertCategory.value = LoadState.Error(e.message ?: "Something went wrong")
@@ -66,17 +61,15 @@ class TransactionCategoryViewModel @Inject constructor(
         }
     }
 
-    fun deleteCategory(category: String) {
+    fun deleteCategory(category: Category) {
         viewModelScope.launch {
             repository.deleteCategory(category)
         }
     }
 
-    fun updateTransactionExpenseCategory(oldCategory: String, newCategory: String) {
-        repository.updateTransactionExpenseCategory(oldCategory, newCategory)
-    }
-
-    fun updateTransactionIncomeCategory(oldCategory: String, newCategory: String) {
-        repository.updateTransactionIncomeCategory(oldCategory, newCategory)
+    fun updateCategory(category: Category) {
+        viewModelScope.launch {
+            repository.updateCategory(category)
+        }
     }
 }

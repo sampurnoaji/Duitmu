@@ -11,5 +11,5 @@ data class CategoryEntity(
     @ColumnInfo(name = "category") val category: String,
     @ColumnInfo(name = "type") val type: String
 ) {
-    fun toDomain() = Category(category = category, type = Transaction.Type.map(type))
+    fun toDomain() = Category(id = id, category = category, type = Transaction.Type.map(type))
 }
