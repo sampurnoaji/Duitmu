@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.dhuwite.data.TransactionRepository
+import id.petersam.dhuwite.model.Category
 import id.petersam.dhuwite.model.Transaction
 import id.petersam.dhuwite.util.DatePattern
 import id.petersam.dhuwite.util.LoadState
@@ -28,22 +30,19 @@ class CreateTransactionViewModel @Inject constructor(
     private val _date = MutableLiveData(Date())
     val date: LiveData<Date> get() = _date
 
-    private val incomeCategories = repository.getTransactionIncomeCategories().map { set ->
-        set.toList().sortedBy { it }
-    }
-    private val expenseCategories = repository.getTransactionExpenseCategories().map { set ->
-        set.toList().sortedBy { it }
-    }
+    private val _expenseCategories = repository.getExpenseCategories().asLiveData()
+    private val _incomeCategories = repository.getIncomeCategories().asLiveData()
     val categories = MediatorLiveData<List<String>>().apply {
-        addSource(_type) {
-            value = if (_type.value == Transaction.Type.EXPENSE) expenseCategories.value
-            else incomeCategories.value
+        addSource(_type) { type ->
+            value =
+                if (type == Transaction.Type.EXPENSE) _expenseCategories.value?.map { it.category }
+                else _incomeCategories.value?.map { it.category }
         }
-        addSource(expenseCategories) {
-            if (_type.value == Transaction.Type.EXPENSE) value = it
+        addSource(_expenseCategories) { list ->
+            if (_type.value == Transaction.Type.EXPENSE) value = list.map { it.category }
         }
-        addSource(incomeCategories) {
-            if (_type.value == Transaction.Type.INCOME) value = it
+        addSource(_incomeCategories) { list ->
+            if (_type.value == Transaction.Type.INCOME) value = list.map { it.category }
         }
     }
 
