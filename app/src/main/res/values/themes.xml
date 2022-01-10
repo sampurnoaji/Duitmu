@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Dhuwite" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Duitmu" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
@@ -16,7 +16,7 @@
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
     </style>
 
-    <style name="Theme.Green" parent="Theme.Dhuwite">
+    <style name="Theme.Green" parent="Theme.Duitmu">
         <item name="android:colorAccent">#27AE60</item>
         <item name="colorAccent">#27AE60</item>
     </style>

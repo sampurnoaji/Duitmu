@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="id.petersam.dhuwite">
+    package="id.petersam.duitmu">
 
     <application
-        android:name=".DhuwiteApplication"
+        android:name="id.petersam.duitmu.DuitmuApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Dhuwite">
+        android:theme="@style/Theme.Duitmu">
         <activity
-            android:name=".ui.create.CreateTransactionActivity"
+            android:name="id.petersam.duitmu.ui.create.CreateTransactionActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.MainActivity"
+            android:name="id.petersam.duitmu.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
