@@ -20,4 +20,32 @@
 
     <string name="error_required_field">Isian masih kosong</string>
     <string name="error_occured">Terjadi kesalahan</string>
+
+    <string-array name="expense_categories">
+        <item>Makanana/minuman</item>
+        <item>Listrik</item>
+        <item>Belanja</item>
+        <item>Bensin</item>
+        <item>Liburan</item>
+        <item>Hiburan</item>
+        <item>Kesehatan</item>
+        <item>Pajak</item>
+        <item>Transportasi</item>
+        <item>Pendidikan</item>
+        <item>Tagihan</item>
+        <item>Pulsa</item>
+        <item>Internet</item>
+        <item>Hadiah</item>
+        <item>Pakaian</item>
+        <item>Kecantikan</item>
+        <item>Olahraga</item>
+        <item>Elektronik</item>
+    </string-array>
+
+    <string-array name="income_categories">
+        <item>Gaji</item>
+        <item>Deposito</item>
+        <item>Pekerjaan tidak tetap</item>
+        <item>Tabungan</item>
+    </string-array>
 </resources>

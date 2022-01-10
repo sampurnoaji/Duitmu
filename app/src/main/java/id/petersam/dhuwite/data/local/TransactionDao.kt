@@ -22,7 +22,7 @@ interface TransactionDao {
     fun getAllCategory(type: String): Flow<List<CategoryEntity>>
 
     @Insert
-    suspend fun insertCategory(category: CategoryEntity)
+    suspend fun insertCategory(categories: List<CategoryEntity>)
 
     @Delete
     suspend fun deleteCategory(category: CategoryEntity)

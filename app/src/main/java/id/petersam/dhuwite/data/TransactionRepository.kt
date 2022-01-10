@@ -1,18 +1,13 @@
 package id.petersam.dhuwite.data
 
-import androidx.lifecycle.LiveData
 import id.petersam.dhuwite.data.local.TransactionDao
-import id.petersam.dhuwite.data.local.TransactionSharedPreference
 import id.petersam.dhuwite.model.Category
 import id.petersam.dhuwite.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class TransactionRepository @Inject constructor(
-    private val transactionDao: TransactionDao,
-    private val transactionSharedPreference: TransactionSharedPreference
-) {
+class TransactionRepository @Inject constructor(private val transactionDao: TransactionDao) {
 
     fun getTransactions(): Flow<List<Transaction>> {
         return transactionDao.getAllTransaction().map {
@@ -43,7 +38,7 @@ class TransactionRepository @Inject constructor(
     }
 
     suspend fun insertCategory(category: Category) {
-        transactionDao.insertCategory(category.toEntity())
+        transactionDao.insertCategory(listOf(category.toEntity()))
     }
 
     suspend fun deleteCategory(category: Category) {
@@ -52,16 +47,5 @@ class TransactionRepository @Inject constructor(
 
     suspend fun updateCategory(category: Category) {
         transactionDao.updateCategory(category.toEntity())
-    }
-
-
-
-
-    fun getTransactionExpenseCategories(): LiveData<Set<String>> {
-        return transactionSharedPreference.getTransactionExpenseCategories()
-    }
-
-    fun getTransactionIncomeCategories(): LiveData<Set<String>> {
-        return transactionSharedPreference.getTransactionIncomeCategories()
     }
 }
