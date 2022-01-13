@@ -3,6 +3,9 @@ package id.petersam.duitmu.data
 import id.petersam.duitmu.data.local.TransactionDao
 import id.petersam.duitmu.model.Category
 import id.petersam.duitmu.model.Transaction
+import id.petersam.duitmu.util.DatePattern
+import id.petersam.duitmu.util.toDate
+import id.petersam.duitmu.util.toReadableString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -19,13 +22,19 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
 
     suspend fun getSummaryExpenseTransactions(): List<Pair<String, Long>> {
         return transactionDao.getSummaryExpenseTransactions().map { trx ->
-            Pair(trx.date, trx.amount)
+            Pair(
+                trx.date.toDate(DatePattern.FULL)?.toReadableString(DatePattern.DMY_LONG).orEmpty(),
+                trx.amount
+            )
         }
     }
 
     suspend fun getSummaryIncomeTransactions(): List<Pair<String, Long>> {
         return transactionDao.getSummaryIncomeTransactions().map { trx ->
-            Pair(trx.date, trx.amount)
+            Pair(
+                trx.date.toDate(DatePattern.FULL)?.toReadableString(DatePattern.DMY_LONG).orEmpty(),
+                trx.amount
+            )
         }
     }
 
