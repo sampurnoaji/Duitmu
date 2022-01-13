@@ -1,5 +1,7 @@
 package id.petersam.duitmu.ui.chart
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -29,6 +31,15 @@ class TransactionChartActivity : AppCompatActivity() {
     companion object {
         const val INCOME_BUTTON_INDEX = 0
         const val EXPENSE_BUTTON_INDEX = 1
+
+        private const val TAB_INDEX = "index"
+
+        @JvmStatic
+        fun start(context: Context, index: Int) {
+            val starter = Intent(context, TransactionChartActivity::class.java)
+                .putExtra(TAB_INDEX, index)
+            context.startActivity(starter)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +80,7 @@ class TransactionChartActivity : AppCompatActivity() {
             description.isEnabled = false
 
             //add animation
-            animateX(1000, Easing.EaseInSine)
+            animateX(500, Easing.EaseInSine)
 
             // to draw label on xAxis
             val xAxis: XAxis = xAxis
@@ -95,8 +106,11 @@ class TransactionChartActivity : AppCompatActivity() {
                 if (binding.btnIncome.isChecked) vm.onTypeChanged(INCOME_BUTTON_INDEX)
                 if (binding.btnExpense.isChecked) vm.onTypeChanged(EXPENSE_BUTTON_INDEX)
             }
-            //initial checked
-            check(binding.btnExpense.id)
+            val tabIndex = intent.extras?.getInt(TAB_INDEX)
+            check(
+                if (tabIndex == INCOME_BUTTON_INDEX) binding.btnIncome.id
+                else binding.btnExpense.id
+            )
         }
     }
 

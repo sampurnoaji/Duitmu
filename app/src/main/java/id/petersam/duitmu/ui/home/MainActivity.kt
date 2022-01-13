@@ -47,8 +47,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.cardIncome.setOnClickListener {
-            val intent = Intent(this, TransactionChartActivity::class.java)
-            startActivity(intent)
+            TransactionChartActivity.start(this, TransactionChartActivity.INCOME_BUTTON_INDEX)
+        }
+        binding.cardExpense.setOnClickListener {
+            TransactionChartActivity.start(this, TransactionChartActivity.EXPENSE_BUTTON_INDEX)
         }
     }
 
