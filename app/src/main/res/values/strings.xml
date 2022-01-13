@@ -1,12 +1,17 @@
 <resources>
     <string name="app_name">Duitmu</string>
+    <string name="finance">Keuangan</string>
     <string name="income">Pemasukan</string>
     <string name="expense">Pengeluaran</string>
+    <string name="chart">Grafik</string>
+
     <string name="empty_note">Catatan Kosong</string>
+
     <string name="label_date">Tanggal</string>
     <string name="label_note">Catatan</string>
     <string name="label_category">Kategori</string>
     <string name="label_amount">Biaya</string>
+
     <string name="save">Simpan</string>
     <string name="delete">Hapus</string>
     <string name="cancel">Batal</string>

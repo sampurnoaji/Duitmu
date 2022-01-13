@@ -1,4 +1,4 @@
-package id.petersam.duitmu.ui
+package id.petersam.duitmu.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

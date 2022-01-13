@@ -1,4 +1,4 @@
-package id.petersam.duitmu.ui
+package id.petersam.duitmu.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -23,8 +23,7 @@ class MainViewModel @Inject constructor(transactionRepository: TransactionReposi
 
     private fun List<Transaction>.toRecyclerViewItems(): List<TransactionListAdapter.Item> {
         val items = mutableListOf<TransactionListAdapter.Item>()
-        val group = this.sortedByDescending { it.date }
-            .groupBy { it.date.toReadableString(DatePattern.DMY_LONG) }
+        val group = this.groupBy { it.date.toReadableString(DatePattern.DMY_LONG) }
         group.entries.forEach {
             items.add(
                 TransactionListAdapter.Item(

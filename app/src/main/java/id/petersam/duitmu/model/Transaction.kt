@@ -26,7 +26,7 @@ data class Transaction(
     fun toEntity() = TransactionEntity(
         createdAt = id,
         type = type.readable,
-        date = date.toReadableString(DatePattern.FULL),
+        date = date.toReadableString(DatePattern.DMY_LONG),
         category = category,
         note = note,
         amount = amount

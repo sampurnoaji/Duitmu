@@ -17,6 +17,18 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         }
     }
 
+    suspend fun getSummaryExpenseTransactions(): List<Pair<String, Long>> {
+        return transactionDao.getSummaryExpenseTransactions().map { trx ->
+            Pair(trx.date, trx.amount)
+        }
+    }
+
+    suspend fun getSummaryIncomeTransactions(): List<Pair<String, Long>> {
+        return transactionDao.getSummaryIncomeTransactions().map { trx ->
+            Pair(trx.date, trx.amount)
+        }
+    }
+
     suspend fun insertTransaction(transaction: Transaction) {
         transactionDao.insertTransaction(transaction.toEntity())
     }

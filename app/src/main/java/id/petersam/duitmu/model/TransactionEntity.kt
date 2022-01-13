@@ -20,7 +20,7 @@ data class TransactionEntity(
     fun toDomain() = Transaction(
         id = createdAt,
         type = Transaction.Type.map(type),
-        date = date.toDate(DatePattern.FULL) ?: Date(),
+        date = date.toDate(DatePattern.DMY_LONG) ?: Date(),
         category = category,
         note = note.orEmpty(),
         amount = amount

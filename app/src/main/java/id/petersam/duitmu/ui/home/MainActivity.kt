@@ -1,4 +1,4 @@
-package id.petersam.duitmu.ui
+package id.petersam.duitmu.ui.home
 
 import android.app.Activity
 import android.content.Intent
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.duitmu.R
 import id.petersam.duitmu.databinding.ActivityMainBinding
+import id.petersam.duitmu.ui.chart.TransactionChartActivity
 import id.petersam.duitmu.ui.create.CreateTransactionActivity
 import id.petersam.duitmu.util.snackbar
 import id.petersam.duitmu.util.toRupiah
@@ -43,6 +44,11 @@ class MainActivity : AppCompatActivity() {
         binding.fabCreateTransaction.setOnClickListener {
             val intent = Intent(this, CreateTransactionActivity::class.java)
             launcher.launch(intent)
+        }
+
+        binding.cardIncome.setOnClickListener {
+            val intent = Intent(this, TransactionChartActivity::class.java)
+            startActivity(intent)
         }
     }
 

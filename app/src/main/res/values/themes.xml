@@ -26,6 +26,12 @@
         <item name="cornerSize">12dp</item>
     </style>
 
+    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <!-- region Button -->
     <style name="FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.App.SmallComponent</item>
     </style>
@@ -50,6 +56,7 @@
         <item name="android:textColor">@color/toggle_text</item>
         <item name="strokeColor">?android:attr/colorButtonNormal</item>
     </style>
+    <!-- endregion -->
 
     <!-- region BottomSheet -->
     <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
@@ -79,11 +86,6 @@
 
     <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="shapeAppearance">@style/ShapeAppearance.App.SmallComponent</item>
-    </style>
-
-    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">8dp</item>
     </style>
     <!-- endregion -->
 </resources>
