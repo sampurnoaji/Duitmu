@@ -59,6 +59,7 @@ class TransactionChartActivity : AppCompatActivity() {
 
     private fun initLineChart() {
         with(binding.lineChart) {
+            setNoDataText(getString(R.string.empty_note))
             setExtraOffsets(0f, 0f, 0f, 8f)
             //hide grid lines
             axisLeft.apply {
@@ -120,21 +121,22 @@ class TransactionChartActivity : AppCompatActivity() {
     ) {
         with(binding.lineChart) {
             //now draw bar chart with dynamic data
-            val xLabels = ArrayList<String>()
-            val expenses: ArrayList<Entry> = ArrayList()
-            val incomes: ArrayList<Entry> = ArrayList()
+            val xLabels = mutableListOf<String>()
+            val expenses = mutableListOf<Entry>()
+            val incomes = mutableListOf<Entry>()
 
-            expenseTrx?.let {
-                for (i in it.indices) {
-                    xLabels.add(it[i].first)
-                    expenses.add(Entry(i.toFloat(), it[i].second.toFloat()))
-                }
+            expenseTrx?.mapIndexed { index, pair ->
+                xLabels.add(pair.first)
+                expenses.add(Entry(index.toFloat(), pair.second.toFloat()))
             }
-            incomeTrx?.let {
-                for (i in it.indices) {
-                    xLabels.add(it[i].first)
-                    incomes.add(Entry(i.toFloat(), it[i].second.toFloat()))
-                }
+            if (xLabels.size == 1) {
+                //add first element
+            }
+
+
+            incomeTrx?.mapIndexed { index, pair ->
+                xLabels.add(pair.first)
+                incomes.add(Entry(index.toFloat(), pair.second.toFloat()))
             }
 
             xAxis.valueFormatter = object : IndexAxisValueFormatter() {

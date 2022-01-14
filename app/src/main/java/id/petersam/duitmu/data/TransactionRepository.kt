@@ -23,7 +23,7 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
     suspend fun getSummaryExpenseTransactions(): List<Pair<String, Long>> {
         return transactionDao.getSummaryExpenseTransactions().map { trx ->
             Pair(
-                trx.date.toDate(DatePattern.FULL)?.toReadableString(DatePattern.DMY_LONG).orEmpty(),
+                trx.date.toDate(DatePattern.YMD)?.toReadableString(DatePattern.DMY_LONG).orEmpty(),
                 trx.amount
             )
         }
@@ -32,7 +32,7 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
     suspend fun getSummaryIncomeTransactions(): List<Pair<String, Long>> {
         return transactionDao.getSummaryIncomeTransactions().map { trx ->
             Pair(
-                trx.date.toDate(DatePattern.FULL)?.toReadableString(DatePattern.DMY_LONG).orEmpty(),
+                trx.date.toDate(DatePattern.YMD)?.toReadableString(DatePattern.DMY_LONG).orEmpty(),
                 trx.amount
             )
         }

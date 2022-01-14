@@ -11,6 +11,7 @@ enum class DatePattern(val pattern: String) {
     D("d"),
     MY_LONG("MMMM yyyy"),
     DMY_LONG("d MMMM yyyy"),
+    YMD("yyyy-MM-dd"),
     FULL("yyyy-MM-dd'T'HH:mm:ss")
 }
 
