@@ -9,22 +9,25 @@ import id.petersam.duitmu.model.Transaction
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
-import kotlin.math.exp
 
 @HiltViewModel
 class TransactionChartViewModel @Inject constructor(
     private val repository: TransactionRepository
 ) : ViewModel() {
 
-    var incomeData: List<Pair<String, Long>>
-    var expenseData: List<Pair<String, Long>>
+    var incomesAmount: List<Pair<String, Long>>
+    var expensesAmount: List<Pair<String, Long>>
+
+    var incomeCategories: List<Pair<String, Long>>
 
     private val _type = MutableLiveData<Transaction.Type>()
     val type: LiveData<Transaction.Type> get() = _type
 
     init {
-        incomeData = getIncomes()
-        expenseData = getExpenses()
+        incomesAmount = getIncomes()
+        expensesAmount = getExpenses()
+
+        incomeCategories = getIncomeCategoryPercentage()
     }
 
     fun onTypeChanged(index: Int) {
@@ -51,5 +54,10 @@ class TransactionChartViewModel @Inject constructor(
         return toMutableList().apply {
             add(0, Pair("", 0))
         }
+    }
+
+    private fun getIncomeCategoryPercentage(): List<Pair<String, Long>> = runBlocking {
+        val categoriesDeferred = async { repository.getIncomeCategoryPercentage() }
+        categoriesDeferred.await()
     }
 }

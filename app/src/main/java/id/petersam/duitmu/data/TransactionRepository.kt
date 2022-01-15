@@ -12,6 +12,10 @@ import javax.inject.Inject
 
 class TransactionRepository @Inject constructor(private val transactionDao: TransactionDao) {
 
+    suspend fun insertTransaction(transaction: Transaction) {
+        transactionDao.insertTransaction(transaction.toEntity())
+    }
+
     fun getTransactions(): Flow<List<Transaction>> {
         return transactionDao.getAllTransaction().map {
             it.map { trxEntity ->
@@ -38,8 +42,10 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         }
     }
 
-    suspend fun insertTransaction(transaction: Transaction) {
-        transactionDao.insertTransaction(transaction.toEntity())
+    suspend fun getIncomeCategoryPercentage(): List<Pair<String, Long>> {
+        return transactionDao.getIncomeCategoryPercentage().map {
+            Pair(it.category, it.amount)
+        }
     }
 
     fun getExpenseCategories(): Flow<List<Category>> {

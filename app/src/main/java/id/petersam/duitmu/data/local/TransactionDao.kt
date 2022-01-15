@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import id.petersam.duitmu.model.CategoryEntity
 import id.petersam.duitmu.model.TransactionEntity
+import id.petersam.duitmu.model.entity.CategoryChartEntity
 import id.petersam.duitmu.model.entity.TransactionChartEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -24,6 +25,9 @@ interface TransactionDao {
 
     @Query("SELECT date, SUM(amount) as amount FROM TransactionEntity WHERE type LIKE 'income' GROUP BY date")
     suspend fun getSummaryIncomeTransactions(): List<TransactionChartEntity>
+
+    @Query("SELECT category, SUM(amount) as amount FROM TransactionEntity WHERE type LIKE 'income' GROUP BY category")
+    suspend fun getIncomeCategoryPercentage(): List<CategoryChartEntity>
 
     @Query("SELECT * FROM CategoryEntity WHERE type = :type ORDER BY category ASC")
     fun getAllCategory(type: String): Flow<List<CategoryEntity>>
