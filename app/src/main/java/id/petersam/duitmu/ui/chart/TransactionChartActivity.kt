@@ -157,8 +157,7 @@ open class TransactionChartActivity : AppCompatActivity() {
             if (it == Transaction.Type.EXPENSE) {
                 insertTransactionsToChart(expenseTrx = vm.expensesAmount)
                 insertCategoriesToChart(expenseTrx = vm.expensesCategories)
-            }
-            else {
+            } else {
                 insertTransactionsToChart(incomeTrx = vm.incomesAmount)
                 insertCategoriesToChart(incomeTrx = vm.incomeCategories)
             }
@@ -184,6 +183,7 @@ open class TransactionChartActivity : AppCompatActivity() {
         incomeTrx: List<Pair<String, Long>>? = null
     ) {
         with(binding.lineChart) {
+            clear()
             //now draw bar chart with dynamic data
             val xLabels = mutableListOf<String>()
 
@@ -198,8 +198,9 @@ open class TransactionChartActivity : AppCompatActivity() {
             }
 
             xAxis.valueFormatter = object : IndexAxisValueFormatter() {
-                override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-                    return xLabels[value.toInt()]
+                override fun getFormattedValue(value: Float): String {
+                    val index = value.toInt()
+                    return if (index < 0 || index >= xLabels.size) "" else xLabels[index]
                 }
             }
 
