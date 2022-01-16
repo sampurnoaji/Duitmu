@@ -133,7 +133,7 @@ class CreateTransactionActivity : AppCompatActivity() {
             binding.tilDate.error = getString(R.string.error_required_field)
             return
         }
-        if (vm.category.value == null) {
+        if (vm.category.value.isNullOrEmpty()) {
             binding.tilCategory.error = getString(R.string.error_required_field)
             return
         }
