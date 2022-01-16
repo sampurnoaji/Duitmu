@@ -19,6 +19,7 @@ class TransactionChartViewModel @Inject constructor(
     var expensesAmount: List<Pair<String, Long>>
 
     var incomeCategories: List<Pair<String, Long>>
+    var expensesCategories: List<Pair<String, Long>>
 
     private val _type = MutableLiveData<Transaction.Type>()
     val type: LiveData<Transaction.Type> get() = _type
@@ -28,6 +29,7 @@ class TransactionChartViewModel @Inject constructor(
         expensesAmount = getExpenses()
 
         incomeCategories = getIncomeCategoryPercentage()
+        expensesCategories = getExpenseCategoryPercentage()
     }
 
     fun onTypeChanged(index: Int) {
@@ -58,6 +60,25 @@ class TransactionChartViewModel @Inject constructor(
 
     private fun getIncomeCategoryPercentage(): List<Pair<String, Long>> = runBlocking {
         val categoriesDeferred = async { repository.getIncomeCategoryPercentage() }
-        categoriesDeferred.await()
+        categoriesDeferred.await().sortedByDescending { it.second }
+    }
+
+    private fun getExpenseCategoryPercentage(): List<Pair<String, Long>> = runBlocking {
+        val categoriesDeferred = async { repository.getExpenseCategoryPercentage() }
+        categoriesDeferred.await().sortedByDescending { it.second }
+    }
+
+    fun getIncomesCategoryPercentageLabels(): List<Float> {
+        val amountTotal = incomeCategories.sumOf { it.second }.toFloat()
+        return incomeCategories.map {
+            (it.second / amountTotal) * 100
+        }
+    }
+
+    fun getExpensesCategoryPercentageLabels(): List<Float> {
+        val amountTotal = expensesCategories.sumOf { it.second }.toFloat()
+        return expensesCategories.map {
+            (it.second / amountTotal) * 100
+        }
     }
 }

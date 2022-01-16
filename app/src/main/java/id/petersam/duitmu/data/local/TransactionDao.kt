@@ -20,14 +20,11 @@ interface TransactionDao {
     @Query("SELECT * FROM TransactionEntity ORDER BY date DESC")
     fun getAllTransaction(): Flow<List<TransactionEntity>>
 
-    @Query("SELECT date, SUM(amount) as amount FROM TransactionEntity WHERE type LIKE 'expense' GROUP BY date")
-    suspend fun getSummaryExpenseTransactions(): List<TransactionChartEntity>
+    @Query("SELECT date, SUM(amount) as amount FROM TransactionEntity WHERE type LIKE :type GROUP BY date")
+    suspend fun getSummaryTransactions(type: String): List<TransactionChartEntity>
 
-    @Query("SELECT date, SUM(amount) as amount FROM TransactionEntity WHERE type LIKE 'income' GROUP BY date")
-    suspend fun getSummaryIncomeTransactions(): List<TransactionChartEntity>
-
-    @Query("SELECT category, SUM(amount) as amount FROM TransactionEntity WHERE type LIKE 'income' GROUP BY category")
-    suspend fun getIncomeCategoryPercentage(): List<CategoryChartEntity>
+    @Query("SELECT category, SUM(amount) as amount FROM TransactionEntity WHERE type LIKE :type GROUP BY category")
+    suspend fun getCategoryPercentage(type: String): List<CategoryChartEntity>
 
     @Query("SELECT * FROM CategoryEntity WHERE type = :type ORDER BY category ASC")
     fun getAllCategory(type: String): Flow<List<CategoryEntity>>
