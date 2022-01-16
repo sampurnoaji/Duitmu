@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
@@ -19,12 +20,14 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.utils.MPPointF
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.duitmu.R
 import id.petersam.duitmu.databinding.ActivityTransactionChartBinding
 import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.util.getAllMaterialColors
+import id.petersam.duitmu.util.toRupiah
 import id.petersam.duitmu.util.toShortRupiah
 import id.petersam.duitmu.util.viewBinding
 import java.util.Random
@@ -35,6 +38,8 @@ open class TransactionChartActivity : AppCompatActivity() {
 
     private val binding by viewBinding(ActivityTransactionChartBinding::inflate)
     private val vm by viewModels<TransactionChartViewModel>()
+
+    private val legendListAdapter by lazy { CategoryChartLegendListAdapter() }
 
     companion object {
         const val INCOME_BUTTON_INDEX = 0
@@ -101,7 +106,6 @@ open class TransactionChartActivity : AppCompatActivity() {
 
     private fun initPieChart() {
         with(binding.pieChart) {
-            setUsePercentValues(true)
             description.isEnabled = false
 
             isDrawHoleEnabled = true
@@ -114,11 +118,8 @@ open class TransactionChartActivity : AppCompatActivity() {
             transparentCircleRadius = 61f
 
             setDrawCenterText(true)
-            centerText = getString(R.string.label_category)
-            setCenterTextSize(14f)
 
             rotationAngle = 180f
-            setCenterTextOffset(0f, -20f)
 
             animateY(1400, Easing.EaseInOutQuad)
 
@@ -127,14 +128,40 @@ open class TransactionChartActivity : AppCompatActivity() {
             // entry label styling
             setEntryLabelColor(Color.WHITE)
             setEntryLabelTextSize(12f)
+
+            setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+                override fun onValueSelected(e: Entry?, h: Highlight?) {
+                    e?.let {
+                        val data = it as PieEntry
+                        centerText = "${data.label}\n${data.value}"
+                    }
+                }
+
+                override fun onNothingSelected() {
+                    centerText = ""
+                }
+            })
+        }
+        with(binding.rvPieChartLegend) {
+            layoutManager = LinearLayoutManager(
+                this@TransactionChartActivity,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+            adapter = legendListAdapter
         }
     }
 
     private fun observeVm() {
         vm.type.observe(this) {
-            if (it == Transaction.Type.EXPENSE) insertTransactionsToChart(expenseTrx = vm.expensesAmount)
-            else insertTransactionsToChart(incomeTrx = vm.incomesAmount)
-            insertCategoriesToChart(vm.incomeCategories)
+            if (it == Transaction.Type.EXPENSE) {
+                insertTransactionsToChart(expenseTrx = vm.expensesAmount)
+                insertCategoriesToChart(expenseTrx = vm.expensesCategories)
+            }
+            else {
+                insertTransactionsToChart(incomeTrx = vm.incomesAmount)
+                insertCategoriesToChart(incomeTrx = vm.incomeCategories)
+            }
         }
     }
 
@@ -159,17 +186,15 @@ open class TransactionChartActivity : AppCompatActivity() {
         with(binding.lineChart) {
             //now draw bar chart with dynamic data
             val xLabels = mutableListOf<String>()
-            val expenses = mutableListOf<Entry>()
-            val incomes = mutableListOf<Entry>()
 
-            expenseTrx?.mapIndexed { index, pair ->
+            val expenses = expenseTrx?.mapIndexed { index, pair ->
                 xLabels.add(pair.first)
-                expenses.add(Entry(index.toFloat(), pair.second.toFloat()))
+                Entry(index.toFloat(), pair.second.toFloat())
             }
 
-            incomeTrx?.mapIndexed { index, pair ->
+            val incomes = incomeTrx?.mapIndexed { index, pair ->
                 xLabels.add(pair.first)
-                incomes.add(Entry(index.toFloat(), pair.second.toFloat()))
+                Entry(index.toFloat(), pair.second.toFloat())
             }
 
             xAxis.valueFormatter = object : IndexAxisValueFormatter() {
@@ -178,7 +203,7 @@ open class TransactionChartActivity : AppCompatActivity() {
                 }
             }
 
-            val lineDataSet1 = LineDataSet(expenses, "").apply {
+            val expensesDataSet = LineDataSet(expenses, "").apply {
                 val color = ContextCompat.getColor(this@TransactionChartActivity, R.color.red_text)
                 setCircleColor(color)
                 this.color = color
@@ -190,12 +215,13 @@ open class TransactionChartActivity : AppCompatActivity() {
                     R.drawable.chart_gradient_expense
                 )
             }
-            val lineDataSet2 = LineDataSet(incomes, "").apply {
+            val incomesDataSet = LineDataSet(incomes, "").apply {
                 val color =
                     ContextCompat.getColor(this@TransactionChartActivity, R.color.green_text)
                 setCircleColor(color)
                 this.color = color
                 lineWidth = 2f
+                valueFormatter = ShortRupiahValueFormatter()
                 setDrawFilled(true)
                 fillDrawable = ContextCompat.getDrawable(
                     this@TransactionChartActivity,
@@ -203,28 +229,63 @@ open class TransactionChartActivity : AppCompatActivity() {
                 )
             }
 
-            val data = LineData(lineDataSet1, lineDataSet2)
-            this.data = data
+            data = LineData(expensesDataSet, incomesDataSet)
             invalidate()
         }
     }
 
-    private fun insertCategoriesToChart(incomeTrx: List<Pair<String, Long>>? = null) {
+    private fun insertCategoriesToChart(
+        expenseTrx: List<Pair<String, Long>>? = null,
+        incomeTrx: List<Pair<String, Long>>? = null
+    ) {
         with(binding.pieChart) {
-            val entries = incomeTrx?.map {
-                PieEntry(it.second.toFloat(), it.first)
-            }
-
             val allColors = getAllMaterialColors(this@TransactionChartActivity)
-            val entryColors = incomeTrx?.map {
-                val randomIndex = Random().nextInt(allColors.size)
-                allColors[randomIndex]
+            val colors = mutableListOf<Int>()
+            val legends = mutableListOf<CategoryChartLegendListAdapter.Item>()
+
+            val entries = if (incomeTrx != null) {
+                val percentages = vm.getIncomesCategoryPercentageLabels()
+
+                incomeTrx.mapIndexed { index, pair ->
+                    val randomIndex = Random().nextInt(allColors.size)
+                    val color = allColors[randomIndex]
+                    colors.add(color)
+
+                    legends.add(
+                        CategoryChartLegendListAdapter.Item(
+                            category = pair.first,
+                            amount = pair.second,
+                            color = color,
+                            percent = percentages?.get(index)
+                        )
+                    )
+                    PieEntry(pair.second.toFloat(), pair.first)
+                }
+            } else {
+                val percentages = vm.getExpensesCategoryPercentageLabels()
+
+                expenseTrx?.mapIndexed { index, pair ->
+                    val randomIndex = Random().nextInt(allColors.size)
+                    val color = allColors[randomIndex]
+                    colors.add(color)
+
+                    legends.add(
+                        CategoryChartLegendListAdapter.Item(
+                            category = pair.first,
+                            amount = pair.second,
+                            color = color,
+                            percent = percentages?.get(index)
+                        )
+                    )
+                    PieEntry(pair.second.toFloat(), pair.first)
+                }
             }
 
             val dataSet = PieDataSet(entries, "").apply {
                 sliceSpace = 3f
                 selectionShift = 5f
-                colors = entryColors
+                this.colors = colors
+                setDrawValues(false)
             }
 
             val data = PieData(dataSet).apply {
@@ -234,6 +295,8 @@ open class TransactionChartActivity : AppCompatActivity() {
             }
             setData(data)
             invalidate()
+            legendListAdapter.submitList(legends)
+            binding.tvAmountTotal.text = legends.sumOf { it.amount }.toRupiah()
         }
     }
 

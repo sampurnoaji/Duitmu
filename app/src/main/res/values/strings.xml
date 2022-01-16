@@ -25,6 +25,7 @@
 
     <string name="error_required_field">Isian masih kosong</string>
     <string name="error_occured">Terjadi kesalahan</string>
+    <string name="total_semicolon">Total:</string>
 
     <string-array name="expense_categories">
         <item>Makanana/minuman</item>
