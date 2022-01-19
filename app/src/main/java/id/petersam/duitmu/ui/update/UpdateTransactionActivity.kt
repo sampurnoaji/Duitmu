@@ -1,13 +1,12 @@
 package id.petersam.duitmu.ui.update
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
-import androidx.room.Update
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.duitmu.R
 import id.petersam.duitmu.databinding.ActivityUpdateTransactionBinding
@@ -15,9 +14,8 @@ import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.LoadState
 import id.petersam.duitmu.util.addThousandSeparator
-import id.petersam.duitmu.util.snackbar
+import id.petersam.duitmu.util.snackBar
 import id.petersam.duitmu.util.toReadableString
-import id.petersam.duitmu.util.toRupiah
 import id.petersam.duitmu.util.viewBinding
 
 @AndroidEntryPoint
@@ -68,7 +66,13 @@ class UpdateTransactionActivity : AppCompatActivity() {
                 }
                 is LoadState.Error -> {
                     setLoading(false)
-                    snackbar(binding.appBarLayout, getString(R.string.error_occured), R.color.red_text)
+                    snackBar(binding.appBarLayout,
+                        getString(R.string.error_occured),
+                        R.color.red_text,
+                        duration = Snackbar.LENGTH_INDEFINITE,
+                        actionText = getString(R.string.close),
+                        action = { finish() }
+                    )
                 }
             }
         }

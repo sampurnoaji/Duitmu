@@ -8,9 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.duitmu.data.TransactionRepository
 import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.util.LoadState
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel

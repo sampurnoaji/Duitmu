@@ -17,6 +17,7 @@
     <string name="cancel">Batal</string>
     <string name="add">Tambah</string>
     <string name="edit">Ubah</string>
+    <string name="close">Tutup</string>
 
     <string name="add_transaction">Tambah Transaksi</string>
     <string name="transaction_detail">Detail Transaksi</string>

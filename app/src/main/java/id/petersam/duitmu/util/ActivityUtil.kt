@@ -15,8 +15,16 @@ inline fun <T : ViewBinding> AppCompatActivity.viewBinding(
     bindingInflater.invoke(layoutInflater)
 }
 
-fun Activity.snackbar(view: View, msg: String, @ColorRes color: Int? = null) {
-    val snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
-    color?.let { snackbar.setBackgroundTint(ContextCompat.getColor(this, color)) }
-    snackbar.show()
+fun Activity.snackBar(
+    view: View,
+    msg: String,
+    @ColorRes color: Int? = null,
+    duration: Int = Snackbar.LENGTH_LONG,
+    actionText: String? = null,
+    action: (() -> Unit)? = null
+) {
+    val snackBar = Snackbar.make(view, msg, duration)
+    snackBar.setAction(actionText) { action?.invoke() }
+    color?.let { snackBar.setBackgroundTint(ContextCompat.getColor(this, color)) }
+    snackBar.show()
 }

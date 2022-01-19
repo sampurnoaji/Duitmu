@@ -18,7 +18,7 @@ import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.LoadState
 import id.petersam.duitmu.util.ThousandSeparatorTextWatcher
 import id.petersam.duitmu.util.removeThousandSeparator
-import id.petersam.duitmu.util.snackbar
+import id.petersam.duitmu.util.snackBar
 import id.petersam.duitmu.util.toReadableString
 import id.petersam.duitmu.util.viewBinding
 
@@ -73,7 +73,7 @@ class CreateTransactionActivity : AppCompatActivity() {
                 }
                 is LoadState.Error -> {
                     setLoading(false)
-                    snackbar(binding.root, getString(R.string.error_occured), R.color.red_text)
+                    snackBar(binding.root, getString(R.string.error_occured), R.color.red_text)
                 }
             }
         }

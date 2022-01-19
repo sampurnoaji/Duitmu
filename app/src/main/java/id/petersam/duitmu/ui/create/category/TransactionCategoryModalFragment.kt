@@ -20,7 +20,7 @@ import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.ui.create.CreateTransactionActivity
 import id.petersam.duitmu.util.LoadState
 import id.petersam.duitmu.util.showDialog
-import id.petersam.duitmu.util.snackbar
+import id.petersam.duitmu.util.snackBar
 import id.petersam.duitmu.util.viewBinding
 
 @AndroidEntryPoint
@@ -69,7 +69,7 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
                 }
                 is LoadState.Error -> {
                     setLoading(false)
-                    requireActivity().snackbar(
+                    requireActivity().snackBar(
                         binding.root,
                         getString(R.string.error_occured),
                         R.color.red_text

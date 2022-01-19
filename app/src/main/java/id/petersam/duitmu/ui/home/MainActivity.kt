@@ -15,7 +15,7 @@ import id.petersam.duitmu.databinding.ActivityMainBinding
 import id.petersam.duitmu.ui.chart.TransactionChartActivity
 import id.petersam.duitmu.ui.create.CreateTransactionActivity
 import id.petersam.duitmu.ui.update.UpdateTransactionActivity
-import id.petersam.duitmu.util.snackbar
+import id.petersam.duitmu.util.snackBar
 import id.petersam.duitmu.util.toRupiah
 import id.petersam.duitmu.util.viewBinding
 import java.util.*
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
-                snackbar(
+                snackBar(
                     binding.root,
                     getString(R.string.success_add_data),
                     R.color.green_text
