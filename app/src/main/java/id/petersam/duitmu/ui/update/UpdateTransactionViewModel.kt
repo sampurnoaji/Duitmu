@@ -29,4 +29,14 @@ class UpdateTransactionViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteTransaction() {
+        _trx.value?.let {
+            if (it is LoadState.Success) {
+                viewModelScope.launch {
+                    repository.deleteTransaction(it.data)
+                }
+            }
+        }
+    }
 }

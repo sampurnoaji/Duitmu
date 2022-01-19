@@ -29,6 +29,9 @@ interface TransactionDao {
     @Query("SELECT category, SUM(amount) as amount FROM TransactionEntity WHERE type = :type GROUP BY category")
     suspend fun getCategoryPercentage(type: String): List<CategoryChartEntity>
 
+    @Delete
+    suspend fun deleteTransaction(transaction: TransactionEntity)
+
     @Query("SELECT * FROM CategoryEntity WHERE type = :type ORDER BY category ASC")
     fun getAllCategory(type: String): Flow<List<CategoryEntity>>
 

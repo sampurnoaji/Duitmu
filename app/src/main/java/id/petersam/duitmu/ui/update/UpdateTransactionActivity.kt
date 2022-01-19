@@ -14,6 +14,7 @@ import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.LoadState
 import id.petersam.duitmu.util.addThousandSeparator
+import id.petersam.duitmu.util.alertDialog
 import id.petersam.duitmu.util.snackBar
 import id.petersam.duitmu.util.toReadableString
 import id.petersam.duitmu.util.viewBinding
@@ -46,6 +47,18 @@ class UpdateTransactionActivity : AppCompatActivity() {
         }
 
         observeTransactionResult()
+
+        binding.btnDelete.setOnClickListener {
+            alertDialog(
+                message = getString(R.string.dialog_msg_delete_confirmation),
+                positiveButtonText = getString(R.string.delete),
+                positiveAction = {
+                    vm.deleteTransaction()
+                    finish()
+                },
+                negativeButtonText = getString(R.string.cancel)
+            )
+        }
     }
 
     private fun setupToolbar() {

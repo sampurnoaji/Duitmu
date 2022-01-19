@@ -45,6 +45,10 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         }
     }
 
+    suspend fun deleteTransaction(transaction: Transaction) {
+        transactionDao.deleteTransaction(transaction.toEntity())
+    }
+
     suspend fun getIncomeCategoryPercentage(): List<Pair<String, Long>> {
         return transactionDao.getCategoryPercentage(Transaction.Type.INCOME.readable).map {
             Pair(it.category, it.amount)
