@@ -80,8 +80,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val itemListener = object : TransactionListAdapter.Listener {
-        override fun onItemClicked() {
-            UpdateTransactionActivity.start(this@MainActivity)
+        override fun onItemClicked(id: String) {
+            UpdateTransactionActivity.start(this@MainActivity, id)
         }
     }
 }

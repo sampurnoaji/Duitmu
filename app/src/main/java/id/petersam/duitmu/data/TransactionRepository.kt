@@ -16,6 +16,9 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         transactionDao.insertTransaction(transaction.toEntity())
     }
 
+    suspend fun getTransaction(trxId: String): Transaction =
+        transactionDao.getTransaction(trxId).toDomain()
+
     fun getTransactions(): Flow<List<Transaction>> {
         return transactionDao.getAllTransaction().map {
             it.map { trxEntity ->

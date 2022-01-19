@@ -63,7 +63,9 @@ class TransactionListAdapter(private val listener: Listener) :
             HeaderViewHolder(ItemListHeaderBinding.inflate(inflater, parent, false))
         else
             ChildViewHolder(ItemListChildBinding.inflate(inflater, parent, false)).apply {
-                itemView.setOnClickListener { listener.onItemClicked() }
+                itemView.setOnClickListener {
+                    listener.onItemClicked(currentList[adapterPosition].transaction?.id.orEmpty())
+                }
             }
     }
 
@@ -95,6 +97,6 @@ class TransactionListAdapter(private val listener: Listener) :
     }
 
     interface Listener {
-        fun onItemClicked()
+        fun onItemClicked(id: String)
     }
 }

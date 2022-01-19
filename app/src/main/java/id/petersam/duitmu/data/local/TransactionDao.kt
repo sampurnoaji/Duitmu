@@ -17,13 +17,16 @@ interface TransactionDao {
     @Insert
     suspend fun insertTransaction(transaction: TransactionEntity)
 
+    @Query("SELECT * FROM TransactionEntity WHERE createdAt = :trxId")
+    suspend fun getTransaction(trxId: String): TransactionEntity
+
     @Query("SELECT * FROM TransactionEntity ORDER BY date DESC")
     fun getAllTransaction(): Flow<List<TransactionEntity>>
 
-    @Query("SELECT date, SUM(amount) as amount FROM TransactionEntity WHERE type LIKE :type GROUP BY date")
+    @Query("SELECT date, SUM(amount) as amount FROM TransactionEntity WHERE type = :type GROUP BY date")
     suspend fun getSummaryTransactions(type: String): List<TransactionChartEntity>
 
-    @Query("SELECT category, SUM(amount) as amount FROM TransactionEntity WHERE type LIKE :type GROUP BY category")
+    @Query("SELECT category, SUM(amount) as amount FROM TransactionEntity WHERE type = :type GROUP BY category")
     suspend fun getCategoryPercentage(type: String): List<CategoryChartEntity>
 
     @Query("SELECT * FROM CategoryEntity WHERE type = :type ORDER BY category ASC")

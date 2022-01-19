@@ -26,7 +26,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:checkedButton="@+id/btnExpense"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:selectionRequired="true"
         app:singleSelection="true">
@@ -117,7 +116,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:focusable="false" />
+            android:focusable="false"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -130,8 +130,8 @@
         android:layout_marginEnd="16dp"
         app:boxBackgroundColor="@color/edittext_disable"
         app:boxStrokeWidth="0dp"
-        app:errorEnabled="true"
         app:endIconMode="none"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toStartOf="@+id/btnEditCategory"
         app:layout_constraintStart_toStartOf="@+id/barrier"
         app:layout_constraintTop_toBottomOf="@+id/tilDate"
@@ -142,7 +142,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:inputType="none" />
+            android:inputType="none"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageButton
@@ -176,7 +177,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -200,7 +202,8 @@
             android:layout_height="wrap_content"
             android:enabled="false"
             android:maxEms="100"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.card.MaterialCardView
