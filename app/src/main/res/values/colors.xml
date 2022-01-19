@@ -20,4 +20,6 @@
     <color name="secondaryDarkColor">#a30000</color>
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#ffffff</color>
+
+    <color name="edittext_disable">#F0F0F0</color>
 </resources>

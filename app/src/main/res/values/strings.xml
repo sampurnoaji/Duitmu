@@ -16,8 +16,10 @@
     <string name="delete">Hapus</string>
     <string name="cancel">Batal</string>
     <string name="add">Tambah</string>
+    <string name="edit">Ubah</string>
 
     <string name="add_transaction">Tambah Transaksi</string>
+    <string name="transaction_detail">Detail Transaksi</string>
     <string name="add_category">Tambah Kategori</string>
     <string name="edit_category">Ubah Kategori</string>
 

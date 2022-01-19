@@ -14,6 +14,7 @@ import id.petersam.duitmu.R
 import id.petersam.duitmu.databinding.ActivityMainBinding
 import id.petersam.duitmu.ui.chart.TransactionChartActivity
 import id.petersam.duitmu.ui.create.CreateTransactionActivity
+import id.petersam.duitmu.ui.update.UpdateTransactionActivity
 import id.petersam.duitmu.util.snackbar
 import id.petersam.duitmu.util.toRupiah
 import id.petersam.duitmu.util.viewBinding
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityMainBinding::inflate)
     private val vm by viewModels<MainViewModel>()
 
-    private val adapter by lazy { TransactionListAdapter() }
+    private val adapter by lazy { TransactionListAdapter(itemListener) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +76,12 @@ class MainActivity : AppCompatActivity() {
                     DividerItemDecoration.VERTICAL
                 )
             )
+        }
+    }
+
+    private val itemListener = object : TransactionListAdapter.Listener {
+        override fun onItemClicked() {
+            UpdateTransactionActivity.start(this@MainActivity)
         }
     }
 }

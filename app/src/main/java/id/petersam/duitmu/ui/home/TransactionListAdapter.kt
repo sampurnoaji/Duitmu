@@ -15,7 +15,7 @@ import id.petersam.duitmu.util.toReadableString
 import id.petersam.duitmu.util.toRupiah
 import java.util.Date
 
-class TransactionListAdapter :
+class TransactionListAdapter(private val listener: Listener) :
     ListAdapter<TransactionListAdapter.Item, RecyclerView.ViewHolder>(DiffCallback()) {
 
     companion object {
@@ -62,7 +62,9 @@ class TransactionListAdapter :
         return if (viewType == VIEW_TYPE_HEADER)
             HeaderViewHolder(ItemListHeaderBinding.inflate(inflater, parent, false))
         else
-            ChildViewHolder(ItemListChildBinding.inflate(inflater, parent, false))
+            ChildViewHolder(ItemListChildBinding.inflate(inflater, parent, false)).apply {
+                itemView.setOnClickListener { listener.onItemClicked() }
+            }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -90,5 +92,9 @@ class TransactionListAdapter :
         override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
             return oldItem == newItem
         }
+    }
+
+    interface Listener {
+        fun onItemClicked()
     }
 }
