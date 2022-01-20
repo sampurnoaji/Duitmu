@@ -44,21 +44,17 @@ class CreateTransactionViewModel @Inject constructor(
         }
     }
 
-    private val _category = MutableLiveData<String>()
-    val category: LiveData<String> get() = _category
+    private val _category = MutableLiveData<String?>()
+    val category: LiveData<String?> get() = _category
 
     private val _amount = MutableLiveData<Long>()
     val amount: LiveData<Long> get() = _amount
 
-    private var _note: String? = null
+    private val _note = MutableLiveData<String>()
+    val note: LiveData<String> get() = _note
 
-    private val _insertTransaction = MutableLiveData<LoadState<Boolean>>()
-    val insertTransaction: LiveData<LoadState<Boolean>> get() = _insertTransaction
-
-    fun onTypeChanged(index: Int) {
-        _type.value =
-            if (index == CreateTransactionActivity.INCOME_BUTTON_INDEX) Transaction.Type.INCOME
-            else Transaction.Type.EXPENSE
+    fun onTypeChanged(type: Transaction.Type) {
+        _type.value = type
         _category.value = null
     }
 
@@ -69,7 +65,11 @@ class CreateTransactionViewModel @Inject constructor(
         _date.value = selectedDate
     }
 
-    fun onCategoryChanged(category: String) {
+    fun onDateChanged(date: Date) {
+        _date.value = date
+    }
+
+    fun onCategoryChanged(category: String?) {
         _category.value = category
     }
 
@@ -78,7 +78,24 @@ class CreateTransactionViewModel @Inject constructor(
     }
 
     fun onNoteChanged(note: String) {
-        _note = note
+        _note.value = note
+    }
+
+    private val _insertTransaction = MutableLiveData<LoadState<Boolean>>()
+    val insertTransaction: LiveData<LoadState<Boolean>> get() = _insertTransaction
+
+    private val _trx = MutableLiveData<LoadState<Transaction>>()
+    val trx: LiveData<LoadState<Transaction>> get() = _trx
+
+    fun getTransaction(trxId: String) {
+        _trx.value = LoadState.Loading
+        viewModelScope.launch {
+            try {
+                _trx.value = LoadState.Success(repository.getTransaction(trxId))
+            } catch (e: Exception) {
+                _trx.value = LoadState.Error(e.message.orEmpty())
+            }
+        }
     }
 
     fun saveTransaction() {
@@ -92,12 +109,22 @@ class CreateTransactionViewModel @Inject constructor(
                         amount = _amount.value ?: 0,
                         category = _category.value.orEmpty(),
                         date = _date.value ?: Date(),
-                        note = _note.orEmpty()
+                        note = _note.value.orEmpty()
                     )
                 )
                 _insertTransaction.value = LoadState.Success(true)
             } catch (e: Exception) {
                 _insertTransaction.value = LoadState.Error(e.message ?: "Something went wrong")
+            }
+        }
+    }
+
+    fun deleteTransaction() {
+        _trx.value?.let {
+            if (it is LoadState.Success) {
+                viewModelScope.launch {
+                    repository.deleteTransaction(it.data)
+                }
             }
         }
     }

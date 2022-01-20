@@ -1,6 +1,8 @@
 package id.petersam.duitmu.ui.create
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.widget.ArrayAdapter
@@ -10,13 +12,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.duitmu.R
 import id.petersam.duitmu.databinding.ActivityCreateTransactionBinding
+import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.ui.create.category.TransactionCategoryModalFragment
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.LoadState
 import id.petersam.duitmu.util.ThousandSeparatorTextWatcher
+import id.petersam.duitmu.util.addThousandSeparator
+import id.petersam.duitmu.util.alertDialog
 import id.petersam.duitmu.util.removeThousandSeparator
 import id.petersam.duitmu.util.snackBar
 import id.petersam.duitmu.util.toReadableString
@@ -33,6 +40,15 @@ class CreateTransactionActivity : AppCompatActivity() {
         const val EXPENSE_BUTTON_INDEX = 1
 
         private const val DATE_PICKER_TAG = "date_picker"
+
+        private const val INTENT_KEY_TRX_ID = "trxId"
+
+        @JvmStatic
+        fun start(context: Context, trxId: String) {
+            val starter = Intent(context, CreateTransactionActivity::class.java)
+                .putExtra(INTENT_KEY_TRX_ID, trxId)
+            context.startActivity(starter)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +56,14 @@ class CreateTransactionActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupToolbar()
         setupActionView()
-        observeVm()
+        observeInputParams()
+        observeTransactionDetail()
+        observeInsertTransaction()
+
+        intent.extras?.let {
+            val trxId = it.getString(INTENT_KEY_TRX_ID) ?: return
+            vm.getTransaction(trxId)
+        }
     }
 
     private fun setupToolbar() {
@@ -49,18 +72,72 @@ class CreateTransactionActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
-    private fun observeVm() {
+    private fun observeInputParams() {
+        vm.type.observe(this) {
+            binding.toggleButton.check(
+                if (it == Transaction.Type.INCOME) binding.btnIncome.id
+                else binding.btnExpense.id
+            )
+        }
         vm.date.observe(this) {
             binding.etDate.setText(it.toReadableString(DatePattern.DMY_LONG))
         }
         vm.categories.observe(this) {
             val adapter = ArrayAdapter(this, R.layout.list_item_dropdown, it)
-            (binding.etCategory as? AutoCompleteTextView)?.let { dropdown ->
-                dropdown.setAdapter(adapter)
-                dropdown.setText("")
+            (binding.etCategory as? AutoCompleteTextView)?.setAdapter(adapter)
+
+            if (binding.etDate.isEnabled) vm.onCategoryChanged(null)
+        }
+        vm.category.observe(this) {
+            (binding.etCategory as? AutoCompleteTextView)?.apply {
+                if (text.toString() != it) setText(it)
             }
         }
+        vm.amount.observe(this) {
+            binding.etAmount.apply {
+                if (text.toString().removeThousandSeparator() != it)
+                    setText(it.toString().addThousandSeparator())
+            }
+        }
+        vm.note.observe(this) {
+            binding.etNote.apply {
+                if (text.toString() != it) setText(it)
+            }
+        }
+    }
 
+    private fun observeTransactionDetail() {
+        vm.trx.observe(this) {
+            when (it) {
+                is LoadState.Loading -> {
+                    setLoading(true)
+                }
+                is LoadState.Success -> {
+                    setLoading(false)
+                    with(it.data) {
+                        vm.onTypeChanged(type)
+                        vm.onDateChanged(date)
+                        vm.onCategoryChanged(category)
+                        vm.onAmountChanged(amount)
+                        vm.onNoteChanged(note)
+                    }
+                    disableForm()
+                }
+                is LoadState.Error -> {
+                    setLoading(false)
+                    snackBar(binding.appBarLayout,
+                        getString(R.string.error_occured),
+                        R.color.red_text,
+                        duration = Snackbar.LENGTH_INDEFINITE,
+                        actionText = getString(R.string.close),
+                        action = { finish() }
+                    )
+                }
+            }
+        }
+    }
+
+    private fun observeInsertTransaction() {
         vm.insertTransaction.observe(this) {
             when (it) {
                 is LoadState.Loading -> {
@@ -81,10 +158,10 @@ class CreateTransactionActivity : AppCompatActivity() {
 
     private fun setupActionView() {
         binding.toggleButton.addOnButtonCheckedListener { _, _, _ ->
-            if (binding.btnIncome.isChecked) vm.onTypeChanged(INCOME_BUTTON_INDEX)
-            if (binding.btnExpense.isChecked) vm.onTypeChanged(EXPENSE_BUTTON_INDEX)
+            if (binding.btnIncome.isChecked) vm.onTypeChanged(Transaction.Type.INCOME)
+            if (binding.btnExpense.isChecked) vm.onTypeChanged(Transaction.Type.EXPENSE)
         }
-        vm.onTypeChanged(EXPENSE_BUTTON_INDEX)
+        vm.onTypeChanged(Transaction.Type.EXPENSE)
 
         with(binding.etDate) {
             setOnClickListener {
@@ -126,6 +203,22 @@ class CreateTransactionActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
             validateInput()
         }
+
+        binding.btnDelete.setOnClickListener {
+            alertDialog(
+                message = getString(R.string.dialog_msg_delete_confirmation),
+                positiveButtonText = getString(R.string.delete),
+                positiveAction = {
+                    vm.deleteTransaction()
+                    finish()
+                },
+                negativeButtonText = getString(R.string.cancel)
+            )
+        }
+
+        binding.btnEdit.setOnClickListener {
+
+        }
     }
 
     private fun validateInput() {
@@ -147,5 +240,69 @@ class CreateTransactionActivity : AppCompatActivity() {
     private fun setLoading(isVisible: Boolean) {
         binding.pgbLoading.isVisible = isVisible
         binding.btnSave.isEnabled = !isVisible
+    }
+
+    private fun enableForm() {
+        with(binding) {
+            btnIncome.isEnabled = true
+            btnExpense.isEnabled = true
+
+            tilDate.apply {
+                boxStrokeWidth = 1
+                boxBackgroundColor = getColor(R.color.white)
+            }
+            etDate.isEnabled = true
+            tilCategory.apply {
+                boxStrokeWidth = 1
+                boxBackgroundColor = getColor(R.color.white)
+                endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
+            }
+            etCategory.isEnabled = true
+            tilAmount.apply {
+                boxStrokeWidth = 1
+                boxBackgroundColor = getColor(R.color.white)
+            }
+            etAmount.isEnabled = true
+            tilNote.apply {
+                boxStrokeWidth = 1
+                boxBackgroundColor = getColor(R.color.white)
+            }
+            etNote.isEnabled = true
+        }
+    }
+
+    private fun disableForm() {
+        with(binding) {
+            btnIncome.isEnabled = vm.type.value == Transaction.Type.INCOME
+            btnExpense.isEnabled = vm.type.value == Transaction.Type.EXPENSE
+
+            tilDate.apply {
+                boxStrokeWidth = 0
+                boxBackgroundColor = getColor(R.color.edittext_disable)
+            }
+            etDate.isEnabled = false
+            tilCategory.apply {
+                boxStrokeWidth = 0
+                boxBackgroundColor = getColor(R.color.edittext_disable)
+                endIconMode = TextInputLayout.END_ICON_NONE
+            }
+            etCategory.isEnabled = false
+            btnEditCategory.isVisible = false
+            tilAmount.apply {
+                boxStrokeWidth = 0
+                boxBackgroundColor = getColor(R.color.edittext_disable)
+            }
+            etAmount.isEnabled = false
+            tilNote.apply {
+                boxStrokeWidth = 0
+                boxBackgroundColor = getColor(R.color.edittext_disable)
+            }
+            etNote.isEnabled = false
+
+            btnEditCategory.isVisible = false
+            btnSave.isVisible = false
+            btnDelete.isVisible = true
+            btnEdit.isVisible = true
+        }
     }
 }

@@ -2,9 +2,9 @@ package id.petersam.duitmu.ui.update
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +40,7 @@ class UpdateTransactionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupToolbar()
+        setupActionView()
 
         intent.extras?.let {
             val trxId = it.getString(INTENT_KEY_TRX_ID) ?: return
@@ -47,7 +48,15 @@ class UpdateTransactionActivity : AppCompatActivity() {
         }
 
         observeTransactionResult()
+    }
 
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    private fun setupActionView() {
         binding.btnDelete.setOnClickListener {
             alertDialog(
                 message = getString(R.string.dialog_msg_delete_confirmation),
@@ -59,12 +68,10 @@ class UpdateTransactionActivity : AppCompatActivity() {
                 negativeButtonText = getString(R.string.cancel)
             )
         }
-    }
 
-    private fun setupToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
+        binding.btnEdit.setOnClickListener {
+
+        }
     }
 
     private fun observeTransactionResult() {
