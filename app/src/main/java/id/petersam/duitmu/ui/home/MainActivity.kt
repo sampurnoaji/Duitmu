@@ -2,10 +2,10 @@ package id.petersam.duitmu.ui.home
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +14,6 @@ import id.petersam.duitmu.R
 import id.petersam.duitmu.databinding.ActivityMainBinding
 import id.petersam.duitmu.ui.chart.TransactionChartActivity
 import id.petersam.duitmu.ui.create.CreateTransactionActivity
-import id.petersam.duitmu.ui.update.UpdateTransactionActivity
 import id.petersam.duitmu.util.snackBar
 import id.petersam.duitmu.util.toRupiah
 import id.petersam.duitmu.util.viewBinding
