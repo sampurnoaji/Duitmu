@@ -53,6 +53,11 @@ class CreateTransactionViewModel @Inject constructor(
     private val _note = MutableLiveData<String>()
     val note: LiveData<String> get() = _note
 
+    private var trxId: String? = null
+    fun setTransactionId(id: String) {
+        trxId = id
+    }
+
     fun onTypeChanged(type: Transaction.Type) {
         _type.value = type
         _category.value = null
@@ -102,16 +107,16 @@ class CreateTransactionViewModel @Inject constructor(
         viewModelScope.launch {
             _insertTransaction.value = LoadState.Loading
             try {
-                repository.insertTransaction(
-                    Transaction(
-                        id = Date().toReadableString(DatePattern.FULL),
-                        type = _type.value ?: Transaction.Type.EXPENSE,
-                        amount = _amount.value ?: 0,
-                        category = _category.value.orEmpty(),
-                        date = _date.value ?: Date(),
-                        note = _note.value.orEmpty()
-                    )
+                val trx = Transaction(
+                    id = trxId ?: Date().toReadableString(DatePattern.FULL),
+                    type = _type.value ?: Transaction.Type.EXPENSE,
+                    amount = _amount.value ?: 0,
+                    category = _category.value.orEmpty(),
+                    date = _date.value ?: Date(),
+                    note = _note.value.orEmpty()
                 )
+                if (_trx.value == null) repository.insertTransaction(trx)
+                else repository.updateTransaction(trx)
                 _insertTransaction.value = LoadState.Success(true)
             } catch (e: Exception) {
                 _insertTransaction.value = LoadState.Error(e.message ?: "Something went wrong")

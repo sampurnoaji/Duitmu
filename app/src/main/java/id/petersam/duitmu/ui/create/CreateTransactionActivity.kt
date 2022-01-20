@@ -62,6 +62,7 @@ class CreateTransactionActivity : AppCompatActivity() {
 
         intent.extras?.let {
             val trxId = it.getString(INTENT_KEY_TRX_ID) ?: return
+            supportActionBar?.title = getString(R.string.edit_category)
             vm.getTransaction(trxId)
         }
     }
@@ -115,6 +116,7 @@ class CreateTransactionActivity : AppCompatActivity() {
                 is LoadState.Success -> {
                     setLoading(false)
                     with(it.data) {
+                        vm.setTransactionId(id)
                         vm.onTypeChanged(type)
                         vm.onDateChanged(date)
                         vm.onCategoryChanged(category)
@@ -217,7 +219,7 @@ class CreateTransactionActivity : AppCompatActivity() {
         }
 
         binding.btnEdit.setOnClickListener {
-
+            enableForm()
         }
     }
 
@@ -268,6 +270,11 @@ class CreateTransactionActivity : AppCompatActivity() {
                 boxBackgroundColor = getColor(R.color.white)
             }
             etNote.isEnabled = true
+
+            btnEditCategory.isVisible = true
+            btnSave.isVisible = true
+            btnDelete.isVisible = false
+            btnEdit.isVisible = false
         }
     }
 
