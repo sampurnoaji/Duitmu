@@ -133,7 +133,7 @@ open class TransactionChartActivity : AppCompatActivity() {
                 override fun onValueSelected(e: Entry?, h: Highlight?) {
                     e?.let {
                         val data = it as PieEntry
-                        centerText = "${data.label}\n${data.value}"
+                        centerText = "${data.label}\n${data.value.toLong().toRupiah()}"
                     }
                 }
 
