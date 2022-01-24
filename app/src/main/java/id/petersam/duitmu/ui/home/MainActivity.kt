@@ -14,6 +14,7 @@ import id.petersam.duitmu.R
 import id.petersam.duitmu.databinding.ActivityMainBinding
 import id.petersam.duitmu.ui.chart.TransactionChartActivity
 import id.petersam.duitmu.ui.create.CreateTransactionActivity
+import id.petersam.duitmu.ui.filter.TransactionFilterModalFragment
 import id.petersam.duitmu.util.snackBar
 import id.petersam.duitmu.util.toRupiah
 import id.petersam.duitmu.util.viewBinding
@@ -51,6 +52,11 @@ class MainActivity : AppCompatActivity() {
         }
         binding.cardExpense.setOnClickListener {
             TransactionChartActivity.start(this, TransactionChartActivity.EXPENSE_BUTTON_INDEX)
+        }
+
+        binding.etPeriod.setOnClickListener {
+            val modal = TransactionFilterModalFragment.newInstance(supportFragmentManager)
+            modal?.show(supportFragmentManager, TransactionFilterModalFragment.TAG)
         }
     }
 

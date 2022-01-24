@@ -11,6 +11,7 @@
     <string name="label_note">Catatan</string>
     <string name="label_category">Kategori</string>
     <string name="label_amount">Biaya</string>
+    <string name="label_period">Periode</string>
 
     <string name="save">Simpan</string>
     <string name="delete">Hapus</string>
@@ -21,6 +22,7 @@
 
     <string name="add_transaction">Tambah Transaksi</string>
     <string name="transaction_detail">Detail Transaksi</string>
+    <string name="filter_transaction">Saring Transaksi</string>
     <string name="add_category">Tambah Kategori</string>
     <string name="edit_category">Ubah Kategori</string>
 

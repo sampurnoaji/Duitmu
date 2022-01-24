@@ -32,8 +32,8 @@
         android:id="@+id/cardIncome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         app:cardBackgroundColor="@color/green_text"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
@@ -76,7 +76,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         app:cardBackgroundColor="@color/red_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -113,12 +113,39 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
+    <TextView
+        android:id="@+id/tvPeriod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_period"
+        app:layout_constraintBottom_toBottomOf="@id/etPeriod"
+        app:layout_constraintStart_toStartOf="@+id/cardIncome"
+        app:layout_constraintTop_toTopOf="@+id/etPeriod" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etPeriod"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edittext_outlined_grey"
+        android:drawableStart="@drawable/ic_baseline_calendar_month_16"
+        android:drawablePadding="8dp"
+        android:focusable="false"
+        android:minHeight="32dp"
+        android:paddingHorizontal="12dp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/cardExpense"
+        app:layout_constraintStart_toEndOf="@+id/tvPeriod"
+        app:layout_constraintTop_toBottomOf="@+id/cardIncome"
+        tools:text="Semua" />
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardIncome">
+        app:layout_constraintTop_toBottomOf="@+id/etPeriod">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTransactions"

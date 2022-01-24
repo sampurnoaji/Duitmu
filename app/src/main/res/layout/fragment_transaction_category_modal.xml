@@ -15,7 +15,7 @@
             android:id="@+id/labelTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Atur Kategori"
+            android:text="@string/label_category"
             android:textAlignment="center"
             android:textSize="16sp"
             android:textStyle="bold"
