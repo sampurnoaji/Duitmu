@@ -12,10 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.duitmu.R
 import id.petersam.duitmu.databinding.ActivityMainBinding
+import id.petersam.duitmu.model.DatePeriod
 import id.petersam.duitmu.ui.chart.TransactionChartActivity
 import id.petersam.duitmu.ui.create.CreateTransactionActivity
 import id.petersam.duitmu.ui.filter.TransactionFilterModalFragment
+import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.snackBar
+import id.petersam.duitmu.util.toReadableString
 import id.petersam.duitmu.util.toRupiah
 import id.petersam.duitmu.util.viewBinding
 import java.util.*
@@ -32,7 +35,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupRecyclerView()
+        setupActionView()
 
+        observeVm()
+    }
+
+    private fun observeVm() {
         vm.transaction.observe(this) { items ->
             binding.rvTransactions.isVisible = items.isNotEmpty()
             binding.groupEmptyNote.isVisible = items.isEmpty()
@@ -42,6 +50,17 @@ class MainActivity : AppCompatActivity() {
             binding.tvExpense.text = items.sumOf { it.expense ?: 0L }.toRupiah()
         }
 
+        vm.datePeriod.observe(this) {
+            binding.etPeriod.setText(
+                if (it == DatePeriod.CUSTOM) {
+                    "${vm.startDate.value?.toReadableString(DatePattern.DMY_SHORT)} - " +
+                            "${vm.endDate.value?.toReadableString(DatePattern.DMY_SHORT)}"
+                } else it.readable
+            )
+        }
+    }
+
+    private fun setupActionView() {
         binding.fabCreateTransaction.setOnClickListener {
             val intent = Intent(this, CreateTransactionActivity::class.java)
             launcher.launch(intent)

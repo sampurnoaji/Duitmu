@@ -11,7 +11,8 @@ enum class DatePeriod(
     ALL("Semua"),
     TODAY("Hari ini", Date()),
     CURRENT_MONTH("Bulan ini", getFirstDateOfCurrentMonth(), getEndDateOfCurrentMonth()),
-    CURRENT_YEAR("Tahun ini", getFirstDateOfCurrentYear(), getEndDateOfCurrentYear())
+    CURRENT_YEAR("Tahun ini", getFirstDateOfCurrentYear(), getEndDateOfCurrentYear()),
+    CUSTOM("Pilih tanggal dari kalender")
 }
 
 fun getFirstDateOfCurrentMonth(): Date {

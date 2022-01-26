@@ -24,7 +24,58 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/labelTitle"/>
+        app:layout_constraintTop_toBottomOf="@+id/labelTitle" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etStartDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_outlined_grey"
+        android:drawableStart="@drawable/ic_baseline_calendar_month_16"
+        android:drawablePadding="8dp"
+        android:focusable="false"
+        android:minHeight="32dp"
+        android:enabled="false"
+        android:paddingHorizontal="12dp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/labelMinus"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rgFilter"
+        tools:text="Semua" />
+
+    <TextView
+        android:id="@+id/labelMinus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="-"
+        app:layout_constraintBottom_toBottomOf="@+id/etStartDate"
+        app:layout_constraintEnd_toStartOf="@+id/etEndDate"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/etStartDate"
+        app:layout_constraintTop_toTopOf="@+id/etStartDate" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etEndDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:enabled="false"
+        android:background="@drawable/edittext_outlined_grey"
+        android:drawableStart="@drawable/ic_baseline_calendar_month_16"
+        android:drawablePadding="8dp"
+        android:focusable="false"
+        android:minHeight="32dp"
+        android:paddingHorizontal="12dp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/labelMinus"
+        app:layout_constraintTop_toBottomOf="@+id/rgFilter"
+        tools:text="Semua" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSave"
@@ -33,5 +84,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="@string/save"
-        app:layout_constraintTop_toBottomOf="@+id/rgFilter" />
+        app:layout_constraintTop_toBottomOf="@+id/etStartDate" />
 </androidx.constraintlayout.widget.ConstraintLayout>

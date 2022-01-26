@@ -1,15 +1,18 @@
 package id.petersam.duitmu.ui.home
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.duitmu.data.TransactionRepository
+import id.petersam.duitmu.model.DatePeriod
 import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.toDate
 import id.petersam.duitmu.util.toReadableString
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,5 +50,32 @@ class MainViewModel @Inject constructor(transactionRepository: TransactionReposi
             }
         }
         return items
+    }
+
+    private val _datePeriod = MutableLiveData(DatePeriod.ALL)
+    val datePeriod: LiveData<DatePeriod> get() = _datePeriod
+
+    private val _startDate = MutableLiveData<Date>()
+    val startDate: LiveData<Date> get() = _startDate
+
+    private val _endDate = MutableLiveData<Date>()
+    val endDate: LiveData<Date> get() = _endDate
+
+    fun onDatePeriodChanged(filter: String) {
+        DatePeriod.values().forEach {
+            if (filter == it.readable) _datePeriod.value = it
+        }
+    }
+
+    fun onDatePeriodChanged(startDate: Date, endDate: Date) {
+        val datePeriod = _datePeriod.value
+    }
+
+    fun onStartDateChanged(date: Date) {
+        _startDate.value = date
+    }
+
+    fun onEndDateChanged(date: Date) {
+        _endDate.value = date
     }
 }
