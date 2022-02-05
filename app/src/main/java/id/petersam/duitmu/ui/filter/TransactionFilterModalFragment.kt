@@ -21,7 +21,6 @@ import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.toReadableString
 import id.petersam.duitmu.util.viewBinding
 import java.util.Calendar
-import java.util.Date
 
 @AndroidEntryPoint
 class TransactionFilterModalFragment : BottomSheetDialogFragment() {
@@ -80,7 +79,11 @@ class TransactionFilterModalFragment : BottomSheetDialogFragment() {
             if (filter == DatePeriod.CUSTOM.readable) {
                 showCustomDatePeriodPicker()
                 setEditTextEnabled(true)
-            } else setEditTextEnabled(false)
+            } else {
+                setEditTextEnabled(false)
+                vm.onStartDateChanged(null)
+                vm.onEndDateChanged(null)
+            }
         }
 
         binding.etStartDate.apply {
@@ -136,7 +139,10 @@ class TransactionFilterModalFragment : BottomSheetDialogFragment() {
             && binding.etStartDate.text.toString().isEmpty()) {
             binding.etStartDate.error = getString(R.string.error_required_field)
             binding.etEndDate.error = getString(R.string.error_required_field)
-        } else dismiss()
+        } else {
+            vm.getTransactions()
+            dismiss()
+        }
     }
 
     private fun setEditTextEnabled(isEnabled: Boolean) {

@@ -10,6 +10,7 @@ import id.petersam.duitmu.model.TransactionEntity
 import id.petersam.duitmu.model.entity.CategoryChartEntity
 import id.petersam.duitmu.model.entity.TransactionChartEntity
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 @Dao
 interface TransactionDao {
@@ -20,13 +21,29 @@ interface TransactionDao {
     @Query("SELECT * FROM TransactionEntity WHERE createdAt = :trxId")
     suspend fun getTransaction(trxId: String): TransactionEntity
 
-    @Query("SELECT * FROM TransactionEntity ORDER BY date DESC")
-    fun getAllTransaction(): Flow<List<TransactionEntity>>
+    @Query(
+        """SELECT * FROM TransactionEntity
+            WHERE (:startDate IS NULL OR date >= :startDate)
+            AND (:endDate IS NULL OR date <= :endDate)
+            ORDER BY date DESC"""
+    )
+    fun getAllTransaction(
+        startDate: Date? = null,
+        endDate: Date? = null
+    ): Flow<List<TransactionEntity>>
 
-    @Query("SELECT date, SUM(amount) as amount FROM TransactionEntity WHERE type = :type GROUP BY date")
+    @Query(
+        """SELECT date, SUM(amount) as amount FROM TransactionEntity 
+            WHERE type = :type 
+            GROUP BY date"""
+    )
     suspend fun getSummaryTransactions(type: String): List<TransactionChartEntity>
 
-    @Query("SELECT category, SUM(amount) as amount FROM TransactionEntity WHERE type = :type GROUP BY category")
+    @Query(
+        """SELECT category, SUM(amount) as amount FROM TransactionEntity 
+            WHERE type = :type 
+            GROUP BY category"""
+    )
     suspend fun getCategoryPercentage(type: String): List<CategoryChartEntity>
 
     @Delete

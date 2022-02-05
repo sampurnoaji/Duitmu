@@ -8,6 +8,7 @@ import id.petersam.duitmu.util.toDate
 import id.petersam.duitmu.util.toReadableString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.Date
 import javax.inject.Inject
 
 class TransactionRepository @Inject constructor(private val transactionDao: TransactionDao) {
@@ -19,8 +20,11 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
     suspend fun getTransaction(trxId: String): Transaction =
         transactionDao.getTransaction(trxId).toDomain()
 
-    fun getTransactions(): Flow<List<Transaction>> {
-        return transactionDao.getAllTransaction().map {
+    fun getTransactions(
+        startDate: Date? = null,
+        endDate: Date? = null
+    ): Flow<List<Transaction>> {
+        return transactionDao.getAllTransaction(startDate, endDate).map {
             it.map { trxEntity ->
                 trxEntity.toDomain()
             }

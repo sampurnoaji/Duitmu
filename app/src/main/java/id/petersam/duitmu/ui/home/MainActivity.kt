@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         setupActionView()
 
         observeVm()
+        vm.getTransactions()
     }
 
     private fun observeVm() {
@@ -53,8 +54,10 @@ class MainActivity : AppCompatActivity() {
         vm.datePeriod.observe(this) {
             binding.etPeriod.setText(
                 if (it == DatePeriod.CUSTOM) {
-                    "${vm.startDate.value?.toReadableString(DatePattern.DMY_SHORT)} - " +
-                            "${vm.endDate.value?.toReadableString(DatePattern.DMY_SHORT)}"
+                    val startDate = vm.startDate.value ?: return@observe
+                    val endDate = vm.endDate.value ?: return@observe
+                    "${startDate.toReadableString(DatePattern.DMY_SHORT)} - " +
+                            endDate.toReadableString(DatePattern.DMY_SHORT)
                 } else it.readable
             )
         }
@@ -87,6 +90,7 @@ class MainActivity : AppCompatActivity() {
                     getString(R.string.success_add_data),
                     R.color.green_text
                 )
+                vm.getTransactions()
             }
         }
 

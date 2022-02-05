@@ -1,8 +1,5 @@
 package id.petersam.duitmu.model
 
-import id.petersam.duitmu.util.DatePattern
-import id.petersam.duitmu.util.toReadableString
-import java.lang.IllegalArgumentException
 import java.util.Date
 
 data class Transaction(
@@ -26,7 +23,7 @@ data class Transaction(
     fun toEntity() = TransactionEntity(
         createdAt = id,
         type = type.readable,
-        date = date.toReadableString(DatePattern.YMD),
+        date = date,
         category = category,
         note = note,
         amount = amount
