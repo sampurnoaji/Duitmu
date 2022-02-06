@@ -1,8 +1,9 @@
 package id.petersam.duitmu.model.entity
 
 import androidx.room.ColumnInfo
+import java.util.Date
 
 data class TransactionChartEntity(
-    @ColumnInfo(name = "date") val date: String,
+    @ColumnInfo(name = "date") val date: Date,
     @ColumnInfo(name = "amount") val amount: Long
 )
