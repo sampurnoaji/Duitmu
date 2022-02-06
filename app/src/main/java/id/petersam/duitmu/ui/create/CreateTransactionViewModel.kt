@@ -11,6 +11,7 @@ import id.petersam.duitmu.data.TransactionRepository
 import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.LoadState
+import id.petersam.duitmu.util.removeTime
 import id.petersam.duitmu.util.toReadableString
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -112,11 +113,12 @@ class CreateTransactionViewModel @Inject constructor(
                     type = _type.value ?: Transaction.Type.EXPENSE,
                     amount = _amount.value ?: 0,
                     category = _category.value.orEmpty(),
-                    date = _date.value ?: Date(),
+                    date = _date.value?.removeTime() ?: Date(),
                     note = _note.value.orEmpty()
                 )
                 if (_trx.value == null) repository.insertTransaction(trx)
                 else repository.updateTransaction(trx)
+
                 _insertTransaction.value = LoadState.Success(true)
             } catch (e: Exception) {
                 _insertTransaction.value = LoadState.Error(e.message ?: "Something went wrong")

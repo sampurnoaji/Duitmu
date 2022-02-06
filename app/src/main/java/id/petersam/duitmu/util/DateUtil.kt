@@ -1,6 +1,7 @@
 package id.petersam.duitmu.util
 
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -23,4 +24,14 @@ fun Date.toReadableString(pattern: DatePattern): String {
     } catch (e: Exception) {
         "Wrong Date pattern!"
     }
+}
+
+fun Date.removeTime(): Date {
+    return Calendar.getInstance().apply {
+        time = this@removeTime
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }.time
 }
