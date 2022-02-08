@@ -10,11 +10,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.duitmu.data.TransactionRepository
 import id.petersam.duitmu.model.DatePeriod
 import id.petersam.duitmu.model.Transaction
+import id.petersam.duitmu.ui.chart.TransactionChartActivity
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.toDate
 import id.petersam.duitmu.util.toReadableString
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.Date
 import javax.inject.Inject
 
@@ -90,4 +93,71 @@ class MainViewModel @Inject constructor(private val repository: TransactionRepos
     fun onEndDateChanged(date: Date?) {
         _endDate.value = date
     }
+
+    /*region Chart*/
+    var incomesAmount: List<Pair<String, Long>>
+    var expensesAmount: List<Pair<String, Long>>
+
+    var incomeCategories: List<Pair<String, Long>>
+    var expensesCategories: List<Pair<String, Long>>
+
+    private val _type = MutableLiveData<Transaction.Type>()
+    val type: LiveData<Transaction.Type> get() = _type
+
+    init {
+        incomesAmount = getIncomes()
+        expensesAmount = getExpenses()
+
+        incomeCategories = getIncomeCategoryPercentage()
+        expensesCategories = getExpenseCategoryPercentage()
+    }
+
+    fun onTypeChanged(type: Transaction.Type) {
+        _type.value = type
+    }
+
+    private fun getIncomes(): List<Pair<String, Long>> = runBlocking {
+        val incomesDeferred = async { repository.getSummaryIncomeTransactions() }
+        var incomes = incomesDeferred.await()
+        if (incomes.isNotEmpty()) incomes = incomes.prependEmpty()
+        incomes
+    }
+
+    private fun getExpenses(): List<Pair<String, Long>> = runBlocking {
+        val expensesDeferred = async { repository.getSummaryExpenseTransactions() }
+        var expenses = expensesDeferred.await()
+        if (expenses.isNotEmpty()) expenses = expenses.prependEmpty()
+        expenses
+    }
+
+    private fun List<Pair<String, Long>>.prependEmpty(): List<Pair<String, Long>> {
+        return toMutableList().apply {
+            add(0, Pair("", 0))
+        }
+    }
+
+    private fun getIncomeCategoryPercentage(): List<Pair<String, Long>> = runBlocking {
+        val categoriesDeferred = async { repository.getIncomeCategoryPercentage() }
+        categoriesDeferred.await().sortedByDescending { it.second }
+    }
+
+    private fun getExpenseCategoryPercentage(): List<Pair<String, Long>> = runBlocking {
+        val categoriesDeferred = async { repository.getExpenseCategoryPercentage() }
+        categoriesDeferred.await().sortedByDescending { it.second }
+    }
+
+    fun getIncomesCategoryPercentageLabels(): List<Float> {
+        val amountTotal = incomeCategories.sumOf { it.second }.toFloat()
+        return incomeCategories.map {
+            (it.second / amountTotal) * 100
+        }
+    }
+
+    fun getExpensesCategoryPercentageLabels(): List<Float> {
+        val amountTotal = expensesCategories.sumOf { it.second }.toFloat()
+        return expensesCategories.map {
+            (it.second / amountTotal) * 100
+        }
+    }
+    /*endregion*/
 }

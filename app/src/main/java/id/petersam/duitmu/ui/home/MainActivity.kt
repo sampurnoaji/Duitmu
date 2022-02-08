@@ -13,7 +13,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.duitmu.R
 import id.petersam.duitmu.databinding.ActivityMainBinding
 import id.petersam.duitmu.model.DatePeriod
-import id.petersam.duitmu.ui.chart.TransactionChartActivity
+import id.petersam.duitmu.model.Transaction
+import id.petersam.duitmu.ui.chart.TransactionChartFragment
 import id.petersam.duitmu.ui.create.CreateTransactionActivity
 import id.petersam.duitmu.ui.filter.TransactionFilterModalFragment
 import id.petersam.duitmu.util.DatePattern
@@ -21,7 +22,6 @@ import id.petersam.duitmu.util.snackBar
 import id.petersam.duitmu.util.toReadableString
 import id.petersam.duitmu.util.toRupiah
 import id.petersam.duitmu.util.viewBinding
-import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -70,10 +70,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.cardIncome.setOnClickListener {
-            TransactionChartActivity.start(this, TransactionChartActivity.INCOME_BUTTON_INDEX)
+            showChartFragment(Transaction.Type.INCOME)
         }
         binding.cardExpense.setOnClickListener {
-            TransactionChartActivity.start(this, TransactionChartActivity.EXPENSE_BUTTON_INDEX)
+            showChartFragment(Transaction.Type.EXPENSE)
         }
 
         binding.etPeriod.setOnClickListener {
@@ -111,5 +111,11 @@ class MainActivity : AppCompatActivity() {
         override fun onItemClicked(id: String) {
             CreateTransactionActivity.start(this@MainActivity, id)
         }
+    }
+
+    private fun showChartFragment(type: Transaction.Type) {
+        vm.onTypeChanged(type)
+        val fragment = TransactionChartFragment.newInstance(supportFragmentManager)
+        fragment?.show(supportFragmentManager, TransactionChartFragment.TAG)
     }
 }
