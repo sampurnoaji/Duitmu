@@ -3,14 +3,11 @@ package id.petersam.duitmu.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.duitmu.data.TransactionRepository
 import id.petersam.duitmu.model.DatePeriod
 import id.petersam.duitmu.model.Transaction
-import id.petersam.duitmu.ui.chart.TransactionChartActivity
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.toDate
 import id.petersam.duitmu.util.toReadableString

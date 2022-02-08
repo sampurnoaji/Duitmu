@@ -11,9 +11,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Duitmu">
         <activity
-            android:name=".ui.chart.TransactionChartActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.create.CreateTransactionActivity"
             android:exported="false" />
         <activity
