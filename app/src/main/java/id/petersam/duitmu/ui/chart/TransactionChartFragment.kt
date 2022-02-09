@@ -58,22 +58,20 @@ class TransactionChartFragment : DialogFragment(R.layout.fragment_transaction_ch
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog: Dialog = super.onCreateDialog(savedInstanceState)
-        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        return dialog
+        return super.onCreateDialog(savedInstanceState).apply {
+            window?.requestFeature(Window.FEATURE_NO_TITLE)
+        }
     }
 
 
     override fun onStart() {
         super.onStart()
-        val dialog: Dialog? = dialog
-        if (dialog != null) {
-            dialog.window
-                ?.setLayout(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+        dialog?.window?.apply {
+            setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            setBackgroundDrawable(ColorDrawable(Color.WHITE))
         }
     }
 
@@ -100,6 +98,38 @@ class TransactionChartFragment : DialogFragment(R.layout.fragment_transaction_ch
         binding.etPeriod.setOnClickListener {
             val modal = TransactionFilterModalFragment.newInstance(childFragmentManager)
             modal?.show(childFragmentManager, TransactionFilterModalFragment.TAG)
+        }
+    }
+
+    private fun observeVm() {
+        vm.type.observe(viewLifecycleOwner) {
+//            if (it == Transaction.Type.EXPENSE) {
+//                insertTransactionsToChart(expenseTrx = vm.expensesAmount)
+//                insertCategoriesToChart(expenseTrx = vm.expensesCategories)
+//            } else {
+//                insertTransactionsToChart(incomeTrx = vm.incomesAmount)
+//                insertCategoriesToChart(incomeTrx = vm.incomeCategories)
+//            }
+            binding.toggleButton.check(
+                if (it == Transaction.Type.INCOME) binding.btnIncome.id
+                else binding.btnExpense.id
+            )
+            binding.pieChart.centerText = ""
+        }
+
+        vm.datePeriod.observe(viewLifecycleOwner) {
+            binding.etPeriod.setText(
+                if (it == DatePeriod.CUSTOM) {
+                    val startDate = vm.startDate.value ?: return@observe
+                    val endDate = vm.endDate.value ?: return@observe
+                    "${startDate.toReadableString(DatePattern.DMY_SHORT)} - " +
+                            endDate.toReadableString(DatePattern.DMY_SHORT)
+                } else it.readable
+            )
+        }
+
+        vm.lineChartData.observe(viewLifecycleOwner) {
+            insertTransactionsToChart(vm.prependEmpty(it))
         }
     }
 
@@ -184,45 +214,12 @@ class TransactionChartFragment : DialogFragment(R.layout.fragment_transaction_ch
         }
     }
 
-    private fun observeVm() {
-        vm.type.observe(this) {
-            if (it == Transaction.Type.EXPENSE) {
-                insertTransactionsToChart(expenseTrx = vm.expensesAmount)
-                insertCategoriesToChart(expenseTrx = vm.expensesCategories)
-            } else {
-                insertTransactionsToChart(incomeTrx = vm.incomesAmount)
-                insertCategoriesToChart(incomeTrx = vm.incomeCategories)
-            }
-            binding.pieChart.centerText = ""
-        }
-
-        vm.datePeriod.observe(this) {
-            binding.etPeriod.setText(
-                if (it == DatePeriod.CUSTOM) {
-                    val startDate = vm.startDate.value ?: return@observe
-                    val endDate = vm.endDate.value ?: return@observe
-                    "${startDate.toReadableString(DatePattern.DMY_SHORT)} - " +
-                            endDate.toReadableString(DatePattern.DMY_SHORT)
-                } else it.readable
-            )
-        }
-    }
-
-    private fun insertTransactionsToChart(
-        expenseTrx: List<Pair<String, Long>>? = null,
-        incomeTrx: List<Pair<String, Long>>? = null
-    ) {
+    private fun insertTransactionsToChart(trxs: List<Pair<String, Long>>) {
         with(binding.lineChart) {
             clear()
-            //now draw bar chart with dynamic data
             val xLabels = mutableListOf<String>()
 
-            val expenses = expenseTrx?.mapIndexed { index, pair ->
-                xLabels.add(pair.first)
-                Entry(index.toFloat(), pair.second.toFloat())
-            }
-
-            val incomes = incomeTrx?.mapIndexed { index, pair ->
+            val entries = trxs.mapIndexed { index, pair ->
                 xLabels.add(pair.first)
                 Entry(index.toFloat(), pair.second.toFloat())
             }
@@ -234,27 +231,25 @@ class TransactionChartFragment : DialogFragment(R.layout.fragment_transaction_ch
                 }
             }
 
-            val expensesDataSet = LineDataSet(expenses, "").apply {
-                val color = ContextCompat.getColor(context, R.color.red_text)
+            val dataSet = LineDataSet(entries, "").apply {
+                val color = ContextCompat.getColor(
+                    context,
+                    if (vm.type.value == Transaction.Type.INCOME) R.color.green_text
+                    else R.color.red_text
+                )
                 setCircleColor(color)
                 this.color = color
                 lineWidth = 2f
                 valueFormatter = ShortRupiahValueFormatter()
                 setDrawFilled(true)
-                fillDrawable = ContextCompat.getDrawable(context, R.drawable.chart_gradient_expense)
-            }
-            val incomesDataSet = LineDataSet(incomes, "").apply {
-                val color =
-                    ContextCompat.getColor(context, R.color.green_text)
-                setCircleColor(color)
-                this.color = color
-                lineWidth = 2f
-                valueFormatter = ShortRupiahValueFormatter()
-                setDrawFilled(true)
-                fillDrawable = ContextCompat.getDrawable(context, R.drawable.chart_gradient_income)
+                fillDrawable = ContextCompat.getDrawable(
+                    context,
+                    if (vm.type.value == Transaction.Type.INCOME) R.drawable.chart_gradient_income
+                    else R.drawable.chart_gradient_expense
+                )
             }
 
-            data = LineData(expensesDataSet, incomesDataSet)
+            data = LineData(dataSet)
             invalidate()
         }
     }

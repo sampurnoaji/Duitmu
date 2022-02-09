@@ -141,6 +141,7 @@ class TransactionFilterModalFragment : BottomSheetDialogFragment() {
             binding.etEndDate.error = getString(R.string.error_required_field)
         } else {
             vm.getTransactions()
+            vm.updateChartData()
             dismiss()
         }
     }

@@ -10,19 +10,19 @@ data class Transaction(
     val note: String,
     val amount: Long
 ) {
-    enum class Type(val readable: String) {
+    enum class Type(val value: String) {
         INCOME("income"),
         EXPENSE("expense");
 
         companion object {
-            private val map = values().associateBy(Type::readable)
+            private val map = values().associateBy(Type::value)
             fun map(readable: String) = map[readable] ?: throw IllegalArgumentException()
         }
     }
 
     fun toEntity() = TransactionEntity(
         createdAt = id,
-        type = type.readable,
+        type = type.value,
         date = date,
         category = category,
         note = note,

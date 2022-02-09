@@ -34,10 +34,16 @@ interface TransactionDao {
 
     @Query(
         """SELECT date, SUM(amount) as amount FROM TransactionEntity 
-            WHERE type = :type 
+            WHERE type = :type
+            AND (:startDate IS NULL OR date >= :startDate)
+            AND (:endDate IS NULL OR date <= :endDate)
             GROUP BY date"""
     )
-    suspend fun getSummaryTransactions(type: String): List<TransactionChartEntity>
+    suspend fun getSummaryTransactions(
+        type: String,
+        startDate: Date? = null,
+        endDate: Date? = null
+    ): List<TransactionChartEntity>
 
     @Query(
         """SELECT category, SUM(amount) as amount FROM TransactionEntity 

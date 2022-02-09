@@ -4,7 +4,6 @@ import id.petersam.duitmu.data.local.TransactionDao
 import id.petersam.duitmu.model.Category
 import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.util.DatePattern
-import id.petersam.duitmu.util.toDate
 import id.petersam.duitmu.util.toReadableString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -31,21 +30,26 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         }
     }
 
-    suspend fun getSummaryExpenseTransactions(): List<Pair<String, Long>> {
-        return transactionDao.getSummaryTransactions(Transaction.Type.EXPENSE.readable).map {
-            Pair(
-                it.date.toReadableString(DatePattern.DMY_LONG),
-                it.amount
-            )
+    suspend fun getSummaryExpenseTransactions(
+        startDate: Date? = null,
+        endDate: Date? = null
+    ): List<Pair<String, Long>> {
+        val a = 0
+        return transactionDao.getSummaryTransactions(
+            Transaction.Type.EXPENSE.value, startDate, endDate
+        ).map {
+            Pair(it.date.toReadableString(DatePattern.DMY_LONG), it.amount)
         }
     }
 
-    suspend fun getSummaryIncomeTransactions(): List<Pair<String, Long>> {
-        return transactionDao.getSummaryTransactions(Transaction.Type.INCOME.readable).map {
-            Pair(
-                it.date.toReadableString(DatePattern.DMY_LONG),
-                it.amount
-            )
+    suspend fun getSummaryIncomeTransactions(
+        startDate: Date? = null,
+        endDate: Date? = null
+    ): List<Pair<String, Long>> {
+        return transactionDao.getSummaryTransactions(
+            Transaction.Type.INCOME.value, startDate, endDate
+        ).map {
+            Pair(it.date.toReadableString(DatePattern.DMY_LONG), it.amount)
         }
     }
 
@@ -58,19 +62,19 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
     }
 
     suspend fun getIncomeCategoryPercentage(): List<Pair<String, Long>> {
-        return transactionDao.getCategoryPercentage(Transaction.Type.INCOME.readable).map {
+        return transactionDao.getCategoryPercentage(Transaction.Type.INCOME.value).map {
             Pair(it.category, it.amount)
         }
     }
 
     suspend fun getExpenseCategoryPercentage(): List<Pair<String, Long>> {
-        return transactionDao.getCategoryPercentage(Transaction.Type.EXPENSE.readable).map {
+        return transactionDao.getCategoryPercentage(Transaction.Type.EXPENSE.value).map {
             Pair(it.category, it.amount)
         }
     }
 
     fun getExpenseCategories(): Flow<List<Category>> {
-        return transactionDao.getAllCategory(Transaction.Type.EXPENSE.readable).map {
+        return transactionDao.getAllCategory(Transaction.Type.EXPENSE.value).map {
             it.map { categoryEntity ->
                 categoryEntity.toDomain()
             }
@@ -78,7 +82,7 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
     }
 
     fun getIncomeCategories(): Flow<List<Category>> {
-        return transactionDao.getAllCategory(Transaction.Type.INCOME.readable).map {
+        return transactionDao.getAllCategory(Transaction.Type.INCOME.value).map {
             it.map { categoryEntity ->
                 categoryEntity.toDomain()
             }

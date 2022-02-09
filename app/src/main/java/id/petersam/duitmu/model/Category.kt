@@ -5,5 +5,5 @@ data class Category(
     val category: String,
     val type: Transaction.Type
 ) {
-    fun toEntity() = CategoryEntity(id = id, category = category, type = type.readable)
+    fun toEntity() = CategoryEntity(id = id, category = category, type = type.value)
 }

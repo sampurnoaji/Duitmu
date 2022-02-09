@@ -92,43 +92,62 @@ class MainViewModel @Inject constructor(private val repository: TransactionRepos
     }
 
     /*region Chart*/
-    var incomesAmount: List<Pair<String, Long>>
-    var expensesAmount: List<Pair<String, Long>>
-
     var incomeCategories: List<Pair<String, Long>>
     var expensesCategories: List<Pair<String, Long>>
 
     private val _type = MutableLiveData<Transaction.Type>()
-    val type: LiveData<Transaction.Type> get() = _type
+    val type: LiveData<Transaction.Type>
+        get() = _type
+
+    private val _lineChartData = MutableLiveData<List<Pair<String, Long>>>()
+    val lineChartData: LiveData<List<Pair<String, Long>>>
+        get() = _lineChartData
 
     init {
-        incomesAmount = getIncomes()
-        expensesAmount = getExpenses()
-
         incomeCategories = getIncomeCategoryPercentage()
         expensesCategories = getExpenseCategoryPercentage()
     }
 
     fun onTypeChanged(type: Transaction.Type) {
         _type.value = type
+        if (type == Transaction.Type.INCOME) getLineChartIncomeData()
+        else getLineChartExpenseData()
     }
 
-    private fun getIncomes(): List<Pair<String, Long>> = runBlocking {
-        val incomesDeferred = async { repository.getSummaryIncomeTransactions() }
-        var incomes = incomesDeferred.await()
-        if (incomes.isNotEmpty()) incomes = incomes.prependEmpty()
-        incomes
+    fun updateChartData() {
+        _type.value?.let { onTypeChanged(it) }
     }
 
-    private fun getExpenses(): List<Pair<String, Long>> = runBlocking {
-        val expensesDeferred = async { repository.getSummaryExpenseTransactions() }
-        var expenses = expensesDeferred.await()
-        if (expenses.isNotEmpty()) expenses = expenses.prependEmpty()
-        expenses
+    private fun getLineChartIncomeData() {
+        viewModelScope.launch {
+            _lineChartData.value = if (_datePeriod.value == DatePeriod.CUSTOM)
+                repository.getSummaryIncomeTransactions(
+                    _startDate.value,
+                    _endDate.value
+                )
+            else repository.getSummaryIncomeTransactions(
+                _datePeriod.value?.startDate,
+                _datePeriod.value?.endDate
+            )
+        }
     }
 
-    private fun List<Pair<String, Long>>.prependEmpty(): List<Pair<String, Long>> {
-        return toMutableList().apply {
+    private fun getLineChartExpenseData() {
+        viewModelScope.launch {
+            _lineChartData.value =
+                if (_datePeriod.value == DatePeriod.CUSTOM) repository.getSummaryExpenseTransactions(
+                    _startDate.value,
+                    _endDate.value
+                )
+                else repository.getSummaryExpenseTransactions(
+                    _datePeriod.value?.startDate,
+                    _datePeriod.value?.endDate
+                )
+        }
+    }
+
+    fun prependEmpty(data: List<Pair<String, Long>>): List<Pair<String, Long>> {
+        return data.toMutableList().apply {
             add(0, Pair("", 0))
         }
     }
