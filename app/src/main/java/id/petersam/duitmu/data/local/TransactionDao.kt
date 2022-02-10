@@ -47,10 +47,16 @@ interface TransactionDao {
 
     @Query(
         """SELECT category, SUM(amount) as amount FROM TransactionEntity 
-            WHERE type = :type 
+            WHERE type = :type
+            AND (:startDate IS NULL OR date >= :startDate)
+            AND (:endDate IS NULL OR date <= :endDate)
             GROUP BY category"""
     )
-    suspend fun getCategoryPercentage(type: String): List<CategoryChartEntity>
+    suspend fun getCategoryPercentage(
+        type: String,
+        startDate: Date? = null,
+        endDate: Date? = null
+    ): List<CategoryChartEntity>
 
     @Delete
     suspend fun deleteTransaction(transaction: TransactionEntity)

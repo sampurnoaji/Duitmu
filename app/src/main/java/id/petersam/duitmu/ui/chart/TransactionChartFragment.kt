@@ -103,13 +103,6 @@ class TransactionChartFragment : DialogFragment(R.layout.fragment_transaction_ch
 
     private fun observeVm() {
         vm.type.observe(viewLifecycleOwner) {
-//            if (it == Transaction.Type.EXPENSE) {
-//                insertTransactionsToChart(expenseTrx = vm.expensesAmount)
-//                insertCategoriesToChart(expenseTrx = vm.expensesCategories)
-//            } else {
-//                insertTransactionsToChart(incomeTrx = vm.incomesAmount)
-//                insertCategoriesToChart(incomeTrx = vm.incomeCategories)
-//            }
             binding.toggleButton.check(
                 if (it == Transaction.Type.INCOME) binding.btnIncome.id
                 else binding.btnExpense.id
@@ -130,6 +123,10 @@ class TransactionChartFragment : DialogFragment(R.layout.fragment_transaction_ch
 
         vm.lineChartData.observe(viewLifecycleOwner) {
             insertTransactionsToChart(vm.prependEmpty(it))
+        }
+
+        vm.pieChartData.observe(viewLifecycleOwner) {
+            insertCategoriesToChart(it)
         }
     }
 
@@ -255,50 +252,28 @@ class TransactionChartFragment : DialogFragment(R.layout.fragment_transaction_ch
     }
 
     private fun insertCategoriesToChart(
-        expenseTrx: List<Pair<String, Long>>? = null,
-        incomeTrx: List<Pair<String, Long>>? = null
+        trxs: List<Pair<String, Long>>
     ) {
         with(binding.pieChart) {
             val allColors = getAllMaterialColors(context)
             val colors = mutableListOf<Int>()
             val legends = mutableListOf<CategoryChartLegendListAdapter.Item>()
 
-            val entries = if (incomeTrx != null) {
-                val percentages = vm.getIncomesCategoryPercentageLabels()
+            val percentages = vm.getCategoryPercentageLabels()
+            val entries = trxs.mapIndexed { index, pair ->
+                val randomIndex = Random().nextInt(allColors.size)
+                val color = allColors[randomIndex]
+                colors.add(color)
 
-                incomeTrx.mapIndexed { index, pair ->
-                    val randomIndex = Random().nextInt(allColors.size)
-                    val color = allColors[randomIndex]
-                    colors.add(color)
-
-                    legends.add(
-                        CategoryChartLegendListAdapter.Item(
-                            category = pair.first,
-                            amount = pair.second,
-                            color = color,
-                            percent = percentages?.get(index)
-                        )
+                legends.add(
+                    CategoryChartLegendListAdapter.Item(
+                        category = pair.first,
+                        amount = pair.second,
+                        color = color,
+                        percent = percentages?.get(index)
                     )
-                    PieEntry(pair.second.toFloat(), pair.first)
-                }
-            } else {
-                val percentages = vm.getExpensesCategoryPercentageLabels()
-
-                expenseTrx?.mapIndexed { index, pair ->
-                    val randomIndex = Random().nextInt(allColors.size)
-                    val color = allColors[randomIndex]
-                    colors.add(color)
-
-                    legends.add(
-                        CategoryChartLegendListAdapter.Item(
-                            category = pair.first,
-                            amount = pair.second,
-                            color = color,
-                            percent = percentages?.get(index)
-                        )
-                    )
-                    PieEntry(pair.second.toFloat(), pair.first)
-                }
+                )
+                PieEntry(pair.second.toFloat(), pair.first)
             }
 
             val dataSet = PieDataSet(entries, "").apply {

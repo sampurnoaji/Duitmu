@@ -60,14 +60,24 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         transactionDao.updateTransaction(transaction.toEntity())
     }
 
-    suspend fun getIncomeCategoryPercentage(): List<Pair<String, Long>> {
-        return transactionDao.getCategoryPercentage(Transaction.Type.INCOME.value).map {
+    suspend fun getIncomeCategoryPercentage(
+        startDate: Date? = null,
+        endDate: Date? = null
+    ): List<Pair<String, Long>> {
+        return transactionDao.getCategoryPercentage(
+            Transaction.Type.INCOME.value, startDate, endDate
+        ).map {
             Pair(it.category, it.amount)
         }
     }
 
-    suspend fun getExpenseCategoryPercentage(): List<Pair<String, Long>> {
-        return transactionDao.getCategoryPercentage(Transaction.Type.EXPENSE.value).map {
+    suspend fun getExpenseCategoryPercentage(
+        startDate: Date? = null,
+        endDate: Date? = null
+    ): List<Pair<String, Long>> {
+        return transactionDao.getCategoryPercentage(
+            Transaction.Type.EXPENSE.value, startDate, endDate
+        ).map {
             Pair(it.category, it.amount)
         }
     }

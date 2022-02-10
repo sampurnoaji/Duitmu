@@ -11,10 +11,8 @@ import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.toDate
 import id.petersam.duitmu.util.toReadableString
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.Date
 import javax.inject.Inject
 
@@ -92,9 +90,6 @@ class MainViewModel @Inject constructor(private val repository: TransactionRepos
     }
 
     /*region Chart*/
-    var incomeCategories: List<Pair<String, Long>>
-    var expensesCategories: List<Pair<String, Long>>
-
     private val _type = MutableLiveData<Transaction.Type>()
     val type: LiveData<Transaction.Type>
         get() = _type
@@ -103,15 +98,20 @@ class MainViewModel @Inject constructor(private val repository: TransactionRepos
     val lineChartData: LiveData<List<Pair<String, Long>>>
         get() = _lineChartData
 
-    init {
-        incomeCategories = getIncomeCategoryPercentage()
-        expensesCategories = getExpenseCategoryPercentage()
-    }
+    private val _pieChartData = MutableLiveData<List<Pair<String, Long>>>()
+    val pieChartData: LiveData<List<Pair<String, Long>>>
+        get() = _pieChartData
 
     fun onTypeChanged(type: Transaction.Type) {
         _type.value = type
-        if (type == Transaction.Type.INCOME) getLineChartIncomeData()
-        else getLineChartExpenseData()
+        if (type == Transaction.Type.INCOME) {
+            getLineChartIncomeData()
+            getPieChartIncomeData()
+        }
+        else {
+            getLineChartExpenseData()
+            getPieChartExpenseData()
+        }
     }
 
     fun updateChartData() {
@@ -146,32 +146,43 @@ class MainViewModel @Inject constructor(private val repository: TransactionRepos
         }
     }
 
+    private fun getPieChartIncomeData() {
+        viewModelScope.launch {
+            _pieChartData.value = if (_datePeriod.value == DatePeriod.CUSTOM)
+                repository.getIncomeCategoryPercentage(
+                    _startDate.value,
+                    _endDate.value
+                )
+            else repository.getIncomeCategoryPercentage(
+                _datePeriod.value?.startDate,
+                _datePeriod.value?.endDate
+            )
+        }
+    }
+
+    private fun getPieChartExpenseData() {
+        viewModelScope.launch {
+            _pieChartData.value = if (_datePeriod.value == DatePeriod.CUSTOM)
+                repository.getExpenseCategoryPercentage(
+                    _startDate.value,
+                    _endDate.value
+                )
+            else repository.getExpenseCategoryPercentage(
+                _datePeriod.value?.startDate,
+                _datePeriod.value?.endDate
+            )
+        }
+    }
+
     fun prependEmpty(data: List<Pair<String, Long>>): List<Pair<String, Long>> {
         return data.toMutableList().apply {
             add(0, Pair("", 0))
         }
     }
 
-    private fun getIncomeCategoryPercentage(): List<Pair<String, Long>> = runBlocking {
-        val categoriesDeferred = async { repository.getIncomeCategoryPercentage() }
-        categoriesDeferred.await().sortedByDescending { it.second }
-    }
-
-    private fun getExpenseCategoryPercentage(): List<Pair<String, Long>> = runBlocking {
-        val categoriesDeferred = async { repository.getExpenseCategoryPercentage() }
-        categoriesDeferred.await().sortedByDescending { it.second }
-    }
-
-    fun getIncomesCategoryPercentageLabels(): List<Float> {
-        val amountTotal = incomeCategories.sumOf { it.second }.toFloat()
-        return incomeCategories.map {
-            (it.second / amountTotal) * 100
-        }
-    }
-
-    fun getExpensesCategoryPercentageLabels(): List<Float> {
-        val amountTotal = expensesCategories.sumOf { it.second }.toFloat()
-        return expensesCategories.map {
+    fun getCategoryPercentageLabels(): List<Float>? {
+        val amountTotal = _pieChartData.value?.sumOf { it.second }?.toFloat() ?: return null
+        return _pieChartData.value?.map {
             (it.second / amountTotal) * 100
         }
     }
