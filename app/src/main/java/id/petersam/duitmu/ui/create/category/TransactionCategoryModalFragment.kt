@@ -99,6 +99,8 @@ class TransactionCategoryModalFragment : BottomSheetDialogFragment() {
         binding.btnAdd.setOnClickListener {
             showAddCategoryDialog()
         }
+
+        binding.btnClose.setOnClickListener { dismiss() }
     }
 
     private val onItemListClick = object : TransactionCategoryListAdapter.OnItemClick {

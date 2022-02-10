@@ -65,6 +65,8 @@ class TransactionFilterModalFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupActionView() {
+        binding.btnClose.setOnClickListener { dismiss() }
+
         binding.btnSave.setOnClickListener {
             val radioId = binding.rgFilter.checkedRadioButtonId
             val filter = binding.rgFilter.findViewById<RadioButton>(radioId).text.toString()
