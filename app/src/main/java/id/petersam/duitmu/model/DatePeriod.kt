@@ -23,7 +23,7 @@ private fun todayStartCalendar(): Calendar = Calendar.getInstance().apply {
 
 private fun todayEndCalendar(): Calendar = Calendar.getInstance().apply {
     set(Calendar.HOUR_OF_DAY, 23)
-    set(Calendar.MINUTE, 23)
+    set(Calendar.MINUTE, 59)
     set(Calendar.SECOND, 59)
 }
 

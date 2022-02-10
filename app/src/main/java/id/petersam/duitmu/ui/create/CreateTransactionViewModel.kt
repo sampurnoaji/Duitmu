@@ -113,7 +113,7 @@ class CreateTransactionViewModel @Inject constructor(
                     type = _type.value ?: Transaction.Type.EXPENSE,
                     amount = _amount.value ?: 0,
                     category = _category.value.orEmpty(),
-                    date = _date.value?.removeTime() ?: Date(),
+                    date = _date.value ?: Date(),
                     note = _note.value.orEmpty()
                 )
                 if (_trx.value == null) repository.insertTransaction(trx)

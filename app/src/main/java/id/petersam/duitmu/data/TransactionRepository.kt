@@ -34,7 +34,6 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         startDate: Date? = null,
         endDate: Date? = null
     ): List<Pair<String, Long>> {
-        val a = 0
         return transactionDao.getSummaryTransactions(
             Transaction.Type.EXPENSE.value, startDate, endDate
         ).map {
