@@ -20,6 +20,7 @@ import id.petersam.duitmu.model.DatePeriod
 import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.ui.chart.TransactionChartFragment
 import id.petersam.duitmu.ui.create.CreateTransactionActivity
+import id.petersam.duitmu.ui.create.category.TransactionCategoryModalFragment
 import id.petersam.duitmu.ui.filter.TransactionFilterModalFragment
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.snackBar
@@ -59,6 +60,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.menuChart -> {
                 showChartFragment(Transaction.Type.INCOME)
+                true
+            }
+            R.id.menuCategory -> {
+                showCategoryModal()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -175,5 +180,10 @@ class MainActivity : AppCompatActivity() {
     private fun showTransactionFilterModal() {
         val modal = TransactionFilterModalFragment.newInstance(supportFragmentManager)
         modal?.show(supportFragmentManager, TransactionFilterModalFragment.TAG)
+    }
+
+    private fun showCategoryModal() {
+        val modal = TransactionCategoryModalFragment.newInstance(supportFragmentManager)
+        modal?.show(supportFragmentManager, TransactionCategoryModalFragment.TAG)
     }
 }
