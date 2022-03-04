@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -36,11 +38,27 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         setupRecyclerView()
         setupActionView()
 
         observeVm()
         vm.getTransactions()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuPeriod -> {
+                showTransactionFilterModal()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun observeVm() {
@@ -78,8 +96,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.etPeriod.setOnClickListener {
-            val modal = TransactionFilterModalFragment.newInstance(supportFragmentManager)
-            modal?.show(supportFragmentManager, TransactionFilterModalFragment.TAG)
+            showTransactionFilterModal()
         }
     }
 
@@ -149,5 +166,10 @@ class MainActivity : AppCompatActivity() {
         vm.onTypeChanged(type)
         val fragment = TransactionChartFragment.newInstance(supportFragmentManager)
         fragment?.show(supportFragmentManager, TransactionChartFragment.TAG)
+    }
+
+    private fun showTransactionFilterModal() {
+        val modal = TransactionFilterModalFragment.newInstance(supportFragmentManager)
+        modal?.show(supportFragmentManager, TransactionFilterModalFragment.TAG)
     }
 }
