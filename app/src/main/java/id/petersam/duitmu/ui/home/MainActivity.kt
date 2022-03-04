@@ -24,7 +24,6 @@ import id.petersam.duitmu.util.snackBar
 import id.petersam.duitmu.util.toReadableString
 import id.petersam.duitmu.util.toRupiah
 import id.petersam.duitmu.util.viewBinding
-import kotlin.math.abs
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -121,31 +120,30 @@ class MainActivity : AppCompatActivity() {
         binding.tvIncome.text = totalIncome.toRupiah()
         binding.tvExpense.text = totalExpense.toRupiah()
 
-        binding.tvBalance.apply {
-            text = abs(totalIncome - totalExpense).toRupiah()
-            setTextColor(
-                when {
-                    totalIncome > totalExpense -> ContextCompat.getColor(
-                        context,
-                        R.color.green_text
-                    )
-                    totalIncome < totalExpense -> ContextCompat.getColor(
-                        context,
-                        R.color.red_text
-                    )
-                    else -> Color.BLACK
+        when {
+            totalIncome > totalExpense -> {
+                binding.tvBalance.apply {
+                    text = (totalIncome - totalExpense).toRupiah()
+                    setTextColor(ContextCompat.getColor(context, R.color.green_text))
                 }
-            )
-        }
-        binding.containerBalance.setBackgroundResource(
-            when {
-                totalIncome > totalExpense -> R.drawable.green_gradient_horizontal
-                totalIncome < totalExpense -> R.drawable.red_gradient_horizontal
-                else -> android.R.color.white
+                binding.containerBalance.setBackgroundResource(R.drawable.green_gradient_horizontal)
             }
-        )
+            totalIncome < totalExpense -> {
+                binding.tvBalance.apply {
+                    text = "- ${(totalExpense - totalIncome).toRupiah()}"
+                    setTextColor(ContextCompat.getColor(context, R.color.red_text))
+                }
+                binding.containerBalance.setBackgroundResource(R.drawable.red_gradient_horizontal)
+            }
+            else -> {
+                binding.tvBalance.apply {
+                    text = totalIncome.toRupiah()
+                    setTextColor(Color.BLACK)
+                }
+                binding.containerBalance.setBackgroundResource(android.R.color.white)
+            }
+        }
     }
-
 
     private fun showChartFragment(type: Transaction.Type) {
         vm.onTypeChanged(type)
