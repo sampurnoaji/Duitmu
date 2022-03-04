@@ -113,11 +113,53 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardBalance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/cardExpense"
+        app:layout_constraintStart_toStartOf="@+id/cardIncome"
+        app:layout_constraintTop_toBottomOf="@id/cardIncome">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerBalance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            tools:background="@drawable/green_gradient_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/balance"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Rp 5.000.000"
+                tools:textColor="@color/green_text" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
     <TextView
         android:id="@+id/tvPeriod"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/label_period"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@id/etPeriod"
         app:layout_constraintStart_toStartOf="@+id/cardIncome"
         app:layout_constraintTop_toTopOf="@+id/etPeriod" />
@@ -137,7 +179,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/cardExpense"
         app:layout_constraintStart_toEndOf="@+id/tvPeriod"
-        app:layout_constraintTop_toBottomOf="@+id/cardIncome"
+        app:layout_constraintTop_toBottomOf="@+id/cardBalance"
         tools:text="Semua" />
 
     <androidx.core.widget.NestedScrollView

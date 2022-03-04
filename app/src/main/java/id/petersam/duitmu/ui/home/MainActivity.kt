@@ -2,10 +2,12 @@ package id.petersam.duitmu.ui.home
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +24,7 @@ import id.petersam.duitmu.util.snackBar
 import id.petersam.duitmu.util.toReadableString
 import id.petersam.duitmu.util.toRupiah
 import id.petersam.duitmu.util.viewBinding
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -47,8 +50,7 @@ class MainActivity : AppCompatActivity() {
             binding.groupEmptyNote.isVisible = items.isEmpty()
 
             adapter.submitList(items)
-            binding.tvIncome.text = items.sumOf { it.income ?: 0L }.toRupiah()
-            binding.tvExpense.text = items.sumOf { it.expense ?: 0L }.toRupiah()
+            showCardData(items)
         }
 
         vm.datePeriod.observe(this) {
@@ -112,6 +114,38 @@ class MainActivity : AppCompatActivity() {
             CreateTransactionActivity.start(this@MainActivity, id)
         }
     }
+
+    private fun showCardData(items: List<TransactionListAdapter.Item>) {
+        val totalIncome = items.sumOf { it.income ?: 0L }
+        val totalExpense = items.sumOf { it.expense ?: 0L }
+        binding.tvIncome.text = totalIncome.toRupiah()
+        binding.tvExpense.text = totalExpense.toRupiah()
+
+        binding.tvBalance.apply {
+            text = abs(totalIncome - totalExpense).toRupiah()
+            setTextColor(
+                when {
+                    totalIncome > totalExpense -> ContextCompat.getColor(
+                        context,
+                        R.color.green_text
+                    )
+                    totalIncome < totalExpense -> ContextCompat.getColor(
+                        context,
+                        R.color.red_text
+                    )
+                    else -> Color.BLACK
+                }
+            )
+        }
+        binding.containerBalance.setBackgroundResource(
+            when {
+                totalIncome > totalExpense -> R.drawable.green_gradient_horizontal
+                totalIncome < totalExpense -> R.drawable.red_gradient_horizontal
+                else -> android.R.color.white
+            }
+        )
+    }
+
 
     private fun showChartFragment(type: Transaction.Type) {
         vm.onTypeChanged(type)

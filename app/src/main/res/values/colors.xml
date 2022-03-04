@@ -9,7 +9,9 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="green_text">#27AE60</color>
+    <color name="green_text_transparent">#b327AE60</color>
     <color name="red_text">#E43835</color>
+    <color name="red_text_transparent">#b3E43835</color>
 
     <color name="primaryColor">#a1887f</color>
     <color name="primaryLightColor">#d3b8ae</color>

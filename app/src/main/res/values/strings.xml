@@ -3,6 +3,7 @@
     <string name="finance">Keuangan</string>
     <string name="income">Pemasukan</string>
     <string name="expense">Pengeluaran</string>
+    <string name="balance">Saldo</string>
     <string name="chart">Grafik</string>
 
     <string name="empty_note">Catatan Kosong</string>
@@ -36,7 +37,7 @@
     <string name="dialog_msg_delete_confirmation">Apakah Anda ingin menghapus data ini?</string>
 
     <string-array name="expense_categories">
-        <item>Makanana/minuman</item>
+        <item>Makanan</item>
         <item>Listrik</item>
         <item>Belanja</item>
         <item>Bensin</item>
@@ -59,7 +60,7 @@
     <string-array name="income_categories">
         <item>Gaji</item>
         <item>Deposito</item>
-        <item>Pekerjaan tidak tetap</item>
+        <item>Freelance</item>
         <item>Tabungan</item>
     </string-array>
 </resources>
