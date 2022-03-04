@@ -57,6 +57,10 @@ class MainActivity : AppCompatActivity() {
                 showTransactionFilterModal()
                 true
             }
+            R.id.menuChart -> {
+                showChartFragment(Transaction.Type.INCOME)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

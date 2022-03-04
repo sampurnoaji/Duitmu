@@ -3,4 +3,8 @@
     <item
         android:id="@+id/menuPeriod"
         android:title="@string/label_period" />
+
+    <item
+        android:id="@+id/menuChart"
+        android:title="@string/chart" />
 </menu>
