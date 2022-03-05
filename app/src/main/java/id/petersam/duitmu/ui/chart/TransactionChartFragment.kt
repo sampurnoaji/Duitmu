@@ -63,7 +63,6 @@ class TransactionChartFragment : DialogFragment(R.layout.fragment_transaction_ch
         }
     }
 
-
     override fun onStart() {
         super.onStart()
         dialog?.window?.apply {
@@ -84,6 +83,10 @@ class TransactionChartFragment : DialogFragment(R.layout.fragment_transaction_ch
     }
 
     private fun setupActionView() {
+        binding.toolbar.setNavigationOnClickListener {
+            dismiss()
+        }
+
         binding.toggleButton.apply {
             addOnButtonCheckedListener { _, _, _ ->
                 if (binding.btnIncome.isChecked) vm.onTypeChanged(Transaction.Type.INCOME)
