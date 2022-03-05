@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "485934600324",
+    "project_id": "duitmu-9bd56",
+    "storage_bucket": "duitmu-9bd56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485934600324:android:d7a6a0663f3f4cc0bfb2d1",
+        "android_client_info": {
+          "package_name": "id.petersam.duitmu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485934600324-jjhk0uiop56s69t04520umanr8ec1bh0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV99NE5QJZDIhKu9Ep_hNKwl-Bll8cReE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "485934600324-jjhk0uiop56s69t04520umanr8ec1bh0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485934600324:android:25508790a8089729bfb2d1",
+        "android_client_info": {
+          "package_name": "id.petersam.duitmu.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485934600324-jjhk0uiop56s69t04520umanr8ec1bh0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV99NE5QJZDIhKu9Ep_hNKwl-Bll8cReE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "485934600324-jjhk0uiop56s69t04520umanr8ec1bh0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

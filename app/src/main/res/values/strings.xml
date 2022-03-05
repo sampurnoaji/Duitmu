@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Duitmu</string>
     <string name="finance">Keuangan</string>
     <string name="income">Pemasukan</string>
     <string name="expense">Pengeluaran</string>

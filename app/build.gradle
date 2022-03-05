@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -24,21 +25,40 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
     buildFeatures {
         viewBinding true
+    }
+
+    flavorDimensions "version"
+    productFlavors {
+        dev {
+            applicationIdSuffix ".dev"
+            dimension "version"
+            resValue "string", "app_name", "Duitmu-Dev"
+        }
+        production {
+            dimension "version"
+            resValue "string", "app_name", "Duitmu"
+        }
     }
 }
 
 dependencies {
     def hilt = "2.38.1"
     def room = "2.4.0"
+
+    implementation platform('com.google.firebase:firebase-bom:29.1.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.fragment:fragment-ktx:1.4.0'
