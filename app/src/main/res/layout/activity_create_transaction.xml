@@ -17,8 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             app:title="@string/add_transaction"
-            app:titleCentered="true"
-            app:titleTextColor="@color/white" />
+            app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.button.MaterialButtonToggleGroup
@@ -98,7 +97,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilDate"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        style="@style/TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -113,13 +112,12 @@
             android:id="@+id/etDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
-            android:textColor="@color/primaryTextColor" />
+            android:focusable="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilCategory"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        style="@style/TextInputLayoutDropdown"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -135,8 +133,7 @@
             android:id="@+id/etCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"
-            android:textColor="@color/primaryTextColor" />
+            android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageButton
@@ -151,7 +148,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilAmount"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        style="@style/TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -166,13 +163,12 @@
             android:id="@+id/etAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textColor="@color/primaryTextColor" />
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilNote"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        style="@style/TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -188,8 +184,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxEms="100"
-            android:singleLine="true"
-            android:textColor="@color/primaryTextColor" />
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.card.MaterialCardView

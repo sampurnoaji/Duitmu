@@ -13,15 +13,17 @@
     <color name="red_text">#E43835</color>
     <color name="red_text_transparent">#b3E43835</color>
 
-    <color name="primaryColor">#a1887f</color>
-    <color name="primaryLightColor">#d3b8ae</color>
-    <color name="primaryLightColor_transparent_40">#64d3b8ae</color>
-    <color name="primaryDarkColor">#725b53</color>
-    <color name="secondaryColor">#dd2c00</color>
-    <color name="secondaryLightColor">#ff6434</color>
-    <color name="secondaryDarkColor">#a30000</color>
-    <color name="primaryTextColor">#000000</color>
-    <color name="secondaryTextColor">#ffffff</color>
+    <color name="primaryColor">#37474f</color>
+    <color name="primaryLightColor">#62727b</color>
+    <color name="primaryDarkColor">#102027</color>
+    <color name="secondaryColor">#ffab40</color>
+    <color name="secondaryLightColor">#ffdd71</color>
+    <color name="secondaryDarkColor">#c77c02</color>
+    <color name="primaryTextColor">#ffab40</color>
+    <color name="secondaryTextColor">#37474f</color>
+
+    <color name="darkPrimaryColor">#78909c</color>
+
 
     <color name="edittext_disable">#F0F0F0</color>
 </resources>

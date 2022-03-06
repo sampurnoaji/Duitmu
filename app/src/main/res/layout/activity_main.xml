@@ -17,8 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             app:title="@string/finance"
-            app:titleCentered="true"
-            app:titleTextColor="@color/white" />
+            app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -51,7 +50,6 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="4dp"
                 android:text="@string/income"
-                android:textColor="@color/black"
                 app:drawableStartCompat="@drawable/ic_baseline_trending_up_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

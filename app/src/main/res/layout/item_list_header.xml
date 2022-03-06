@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/primaryLightColor_transparent_40"
+    android:background="@color/primaryLightColor"
     android:padding="8dp">
 
     <TextView
         android:id="@+id/tvDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/primaryDarkColor"
+        android:textColor="?colorOnPrimary"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="@color/primaryDarkColor"
+        android:textColor="?colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/tvDay"
         app:layout_constraintStart_toEndOf="@+id/tvDay"
         app:layout_constraintTop_toTopOf="@+id/tvDay"
