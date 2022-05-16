@@ -1,4 +1,4 @@
-package id.petersam.duitmu.ui.home
+package id.petersam.duitmu.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.duitmu.data.TransactionRepository
 import id.petersam.duitmu.model.DatePeriod
 import id.petersam.duitmu.model.Transaction
+import id.petersam.duitmu.ui.home.TransactionListAdapter
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.toDate
 import id.petersam.duitmu.util.toReadableString

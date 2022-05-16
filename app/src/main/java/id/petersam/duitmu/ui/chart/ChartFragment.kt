@@ -1,15 +1,10 @@
 package id.petersam.duitmu.ui.chart
 
-import android.app.Dialog
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.animation.Easing
@@ -27,11 +22,11 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import id.petersam.duitmu.R
-import id.petersam.duitmu.databinding.FragmentTransactionChartBinding
+import id.petersam.duitmu.databinding.FragmentChartBinding
 import id.petersam.duitmu.model.DatePeriod
 import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.ui.filter.TransactionFilterModalFragment
-import id.petersam.duitmu.ui.home.MainViewModel
+import id.petersam.duitmu.ui.main.MainViewModel
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.getAllMaterialColors
 import id.petersam.duitmu.util.toReadableString
@@ -41,52 +36,22 @@ import id.petersam.duitmu.util.viewBinding
 import java.util.Random
 import kotlin.math.roundToLong
 
+class ChartFragment : Fragment(R.layout.fragment_chart) {
 
-class TransactionChartFragment : DialogFragment(R.layout.fragment_transaction_chart) {
-
-    private val binding by viewBinding(FragmentTransactionChartBinding::bind)
+    private val binding by viewBinding(FragmentChartBinding::bind)
     private val vm by activityViewModels<MainViewModel>()
 
     private val legendListAdapter by lazy { CategoryChartLegendListAdapter() }
 
-    companion object {
-        const val TAG = "TransactionChartFragment"
-        fun newInstance(manager: FragmentManager): TransactionChartFragment? {
-            manager.findFragmentByTag(TAG) ?: return TransactionChartFragment()
-            return null
-        }
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState).apply {
-            window?.requestFeature(Window.FEATURE_NO_TITLE)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.apply {
-            setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            setBackgroundDrawable(ColorDrawable(Color.WHITE))
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupActionView()
         initLineChart()
         initPieChart()
         observeVm()
-        setupActionView()
     }
 
     private fun setupActionView() {
-        binding.toolbar.setNavigationOnClickListener {
-            dismiss()
-        }
-
         binding.toggleButton.apply {
             addOnButtonCheckedListener { _, _, _ ->
                 if (binding.btnIncome.isChecked) vm.onTypeChanged(Transaction.Type.INCOME)
@@ -101,35 +66,6 @@ class TransactionChartFragment : DialogFragment(R.layout.fragment_transaction_ch
         binding.etPeriod.setOnClickListener {
             val modal = TransactionFilterModalFragment.newInstance(childFragmentManager)
             modal?.show(childFragmentManager, TransactionFilterModalFragment.TAG)
-        }
-    }
-
-    private fun observeVm() {
-        vm.type.observe(viewLifecycleOwner) {
-            binding.toggleButton.check(
-                if (it == Transaction.Type.INCOME) binding.btnIncome.id
-                else binding.btnExpense.id
-            )
-            binding.pieChart.centerText = ""
-        }
-
-        vm.datePeriod.observe(viewLifecycleOwner) {
-            binding.etPeriod.setText(
-                if (it == DatePeriod.CUSTOM) {
-                    val startDate = vm.startDate.value ?: return@observe
-                    val endDate = vm.endDate.value ?: return@observe
-                    "${startDate.toReadableString(DatePattern.DMY_SHORT)} - " +
-                            endDate.toReadableString(DatePattern.DMY_SHORT)
-                } else it.readable
-            )
-        }
-
-        vm.lineChartData.observe(viewLifecycleOwner) {
-            insertTransactionsToChart(vm.prependEmpty(it))
-        }
-
-        vm.pieChartData.observe(viewLifecycleOwner) {
-            insertCategoriesToChart(it)
         }
     }
 
@@ -211,6 +147,35 @@ class TransactionChartFragment : DialogFragment(R.layout.fragment_transaction_ch
                 false
             )
             adapter = legendListAdapter
+        }
+    }
+
+    private fun observeVm() {
+        vm.type.observe(viewLifecycleOwner) {
+            binding.toggleButton.check(
+                if (it == Transaction.Type.INCOME) binding.btnIncome.id
+                else binding.btnExpense.id
+            )
+            binding.pieChart.centerText = ""
+        }
+
+        vm.datePeriod.observe(viewLifecycleOwner) {
+            binding.etPeriod.setText(
+                if (it == DatePeriod.CUSTOM) {
+                    val startDate = vm.startDate.value ?: return@observe
+                    val endDate = vm.endDate.value ?: return@observe
+                    "${startDate.toReadableString(DatePattern.DMY_SHORT)} - " +
+                            endDate.toReadableString(DatePattern.DMY_SHORT)
+                } else it.readable
+            )
+        }
+
+        vm.lineChartData.observe(viewLifecycleOwner) {
+            insertTransactionsToChart(vm.prependEmpty(it))
+        }
+
+        vm.pieChartData.observe(viewLifecycleOwner) {
+            insertCategoriesToChart(it)
         }
     }
 

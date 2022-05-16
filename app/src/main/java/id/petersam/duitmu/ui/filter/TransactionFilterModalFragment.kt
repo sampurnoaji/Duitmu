@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.duitmu.R
 import id.petersam.duitmu.databinding.FragmentTransactionFilterModalBinding
 import id.petersam.duitmu.model.DatePeriod
-import id.petersam.duitmu.ui.home.MainViewModel
+import id.petersam.duitmu.ui.main.MainViewModel
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.toReadableString
 import id.petersam.duitmu.util.viewBinding
