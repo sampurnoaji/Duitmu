@@ -52,7 +52,7 @@ class MainViewModel @Inject constructor(private val repository: TransactionRepos
         return items
     }
 
-    private val _datePeriod = MutableLiveData(DatePeriod.ALL)
+    private val _datePeriod = MutableLiveData(DatePeriod.CURRENT_MONTH)
     val datePeriod: LiveData<DatePeriod> get() = _datePeriod
 
     private val _startDate = MutableLiveData<Date?>()
