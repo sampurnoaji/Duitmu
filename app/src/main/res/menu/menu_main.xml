@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menuPeriod"
-        android:title="@string/label_period" />
+        android:id="@+id/menuBackup"
+        android:title="@string/backup" />
+
     <item
-        android:id="@+id/menuChart"
-        android:title="@string/chart" />
-    <item
-        android:id="@+id/menuCategory"
-        android:title="@string/label_category" />
+        android:id="@+id/menuDownload"
+        android:title="@string/download" />
 </menu>

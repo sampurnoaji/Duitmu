@@ -26,6 +26,7 @@ import id.petersam.duitmu.databinding.FragmentChartBinding
 import id.petersam.duitmu.model.DatePeriod
 import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.ui.filter.TransactionFilterModalFragment
+import id.petersam.duitmu.ui.main.MainActivity
 import id.petersam.duitmu.ui.main.MainViewModel
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.getAllMaterialColors
@@ -45,6 +46,7 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as MainActivity).setSupportActionBar(binding.toolbar)
         setupActionView()
         initLineChart()
         initPieChart()

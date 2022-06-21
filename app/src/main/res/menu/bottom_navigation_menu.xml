@@ -4,10 +4,10 @@
         android:id="@+id/homeFragment"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_view_list_24"
-        android:title="@string/finance"/>
+        android:title="@string/finance" />
     <item
         android:id="@+id/chartFragment"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_trending_up_24"
-        android:title="@string/chart"/>
+        android:title="@string/chart" />
 </menu>
