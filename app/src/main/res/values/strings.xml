@@ -20,12 +20,25 @@
     <string name="edit">Ubah</string>
     <string name="close">Tutup</string>
     <string name="note">Catat</string>
+    <string name="backup">Cadangkan</string>
+    <string name="sync">Sinkronkan</string>
 
     <string name="add_transaction">Tambah Transaksi</string>
     <string name="transaction_detail">Detail Transaksi</string>
     <string name="filter_transaction">Saring Transaksi</string>
     <string name="add_category">Tambah Kategori</string>
     <string name="edit_category">Ubah Kategori</string>
+
+    <string name="google_backup_dialog_title">Cadangkan Data Catatan</string>
+    <string name="google_backup_dialog_message">Data sekarang akan dicadangkan ke akun Google Anda</string>
+    <string name="google_backup_in_process">Proses pencadangan sedang berjalan</string>
+    <string name="google_backup_success">Proses pencadangan berhasil</string>
+    <string name="google_backup_failed">Proses pencadangan gagal</string>
+    <string name="google_sync_dialog_title">Sinkronkan Data Catatan</string>
+    <string name="google_sync_dialog_message">Data sekarang akan ditambahkan dengan data yang tersimpan di akun Google Anda</string>
+    <string name="google_sync_in_process">Proses sinkronisasi sedang berjalan</string>
+    <string name="google_sync_success">Proses sinkronisasi berhasil</string>
+    <string name="google_sync_failed">Proses sinkronisasi gagal</string>
 
     <string name="success_add_data">Berhasil menambah data</string>
 
@@ -37,24 +50,10 @@
     <string name="dialog_msg_delete_confirmation">Apakah Anda ingin menghapus data ini?</string>
 
     <string-array name="expense_categories">
-        <item>Makanan</item>
+        <item>Makan</item>
         <item>Listrik</item>
-        <item>Belanja</item>
         <item>Bensin</item>
-        <item>Liburan</item>
-        <item>Hiburan</item>
-        <item>Kesehatan</item>
-        <item>Pajak</item>
-        <item>Transportasi</item>
-        <item>Pendidikan</item>
-        <item>Tagihan</item>
-        <item>Pulsa</item>
         <item>Internet</item>
-        <item>Hadiah</item>
-        <item>Pakaian</item>
-        <item>Kecantikan</item>
-        <item>Olahraga</item>
-        <item>Elektronik</item>
     </string-array>
 
     <string-array name="income_categories">

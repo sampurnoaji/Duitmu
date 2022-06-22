@@ -5,6 +5,6 @@
         android:title="@string/backup" />
 
     <item
-        android:id="@+id/menuDownload"
-        android:title="@string/download" />
+        android:id="@+id/menuSync"
+        android:title="@string/sync" />
 </menu>

@@ -3,7 +3,7 @@ package id.petersam.duitmu.util
 import androidx.room.TypeConverter
 import java.util.Date
 
-class Converters {
+class DateConverters {
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? {
         return value?.let { Date(it) }

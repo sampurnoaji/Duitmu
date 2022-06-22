@@ -1,15 +1,18 @@
 package id.petersam.duitmu.ui.main
 
+import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.duitmu.data.TransactionRepository
+import id.petersam.duitmu.data.google.GoogleDrive
 import id.petersam.duitmu.model.DatePeriod
 import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.ui.home.TransactionListAdapter
 import id.petersam.duitmu.util.DatePattern
+import id.petersam.duitmu.util.LoadState
 import id.petersam.duitmu.util.toDate
 import id.petersam.duitmu.util.toReadableString
 import kotlinx.coroutines.flow.collect
@@ -18,8 +21,10 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val repository: TransactionRepository) :
-    ViewModel() {
+class MainViewModel @Inject constructor(
+    private val repository: TransactionRepository,
+    private val googleDrive: GoogleDrive
+) : ViewModel() {
 
     private val _transaction = MutableLiveData<List<TransactionListAdapter.Item>>()
     val transaction: LiveData<List<TransactionListAdapter.Item>> get() = _transaction
@@ -108,8 +113,7 @@ class MainViewModel @Inject constructor(private val repository: TransactionRepos
         if (type == Transaction.Type.INCOME) {
             getLineChartIncomeData()
             getPieChartIncomeData()
-        }
-        else {
+        } else {
             getLineChartExpenseData()
             getPieChartExpenseData()
         }
@@ -186,6 +190,61 @@ class MainViewModel @Inject constructor(private val repository: TransactionRepos
         return _pieChartData.value?.map {
             (it.second / amountTotal) * 100
         }
+    }
+    /*endregion*/
+
+    /*region Backup*/
+    private val _backup = MutableLiveData<LoadState<Boolean>>()
+    val backup: LiveData<LoadState<Boolean>>
+        get() = _backup
+
+    private val _sync = MutableLiveData<LoadState<Boolean>>()
+    val sync: LiveData<LoadState<Boolean>>
+        get() = _sync
+
+    private val _loginIntent = MutableLiveData<Pair<GoogleAction, Intent>>()
+    val loginIntent: LiveData<Pair<GoogleAction, Intent>>
+        get() = _loginIntent
+
+    fun backup() {
+        viewModelScope.launch {
+            try {
+                val status = googleDrive.checkStatus()
+                if (status == null) {
+                    _loginIntent.value = Pair(GoogleAction.BACKUP, googleDrive.login())
+                    return@launch
+                }
+
+                _backup.value = LoadState.Loading
+                googleDrive.uploadFile()
+                _backup.value = LoadState.Success(true)
+            } catch (e: Exception) {
+                _backup.value = LoadState.Error(msg = e.message)
+            }
+        }
+    }
+
+    fun sync() {
+        viewModelScope.launch {
+            try {
+                val status = googleDrive.checkStatus()
+                if (status == null) {
+                    _loginIntent.value = Pair(GoogleAction.SYNC, googleDrive.login())
+                    return@launch
+                }
+
+                _sync.value = LoadState.Loading
+                googleDrive.downloadFile()
+                _sync.value = LoadState.Success(true)
+            } catch (e: Exception) {
+                _sync.value = LoadState.Error(msg = e.message)
+            }
+        }
+    }
+
+    enum class GoogleAction {
+        BACKUP,
+        SYNC,
     }
     /*endregion*/
 }

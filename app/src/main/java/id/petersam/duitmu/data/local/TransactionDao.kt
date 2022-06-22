@@ -3,6 +3,7 @@ package id.petersam.duitmu.data.local
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import id.petersam.duitmu.model.CategoryEntity
@@ -15,7 +16,7 @@ import java.util.Date
 @Dao
 interface TransactionDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: TransactionEntity)
 
     @Query("SELECT * FROM TransactionEntity WHERE createdAt = :trxId")
@@ -31,6 +32,17 @@ interface TransactionDao {
         startDate: Date? = null,
         endDate: Date? = null
     ): Flow<List<TransactionEntity>>
+
+    @Query(
+        """SELECT * FROM TransactionEntity
+            WHERE (:startDate IS NULL OR date >= :startDate)
+            AND (:endDate IS NULL OR date <= :endDate)
+            ORDER BY date DESC"""
+    )
+    suspend fun getBackupTransactions(
+        startDate: Date? = null,
+        endDate: Date? = null
+    ): List<TransactionEntity>
 
     @Query(
         """SELECT date, SUM(amount) as amount FROM TransactionEntity 
@@ -64,8 +76,12 @@ interface TransactionDao {
     @Update
     suspend fun updateTransaction(transaction: TransactionEntity)
 
-    @Query("SELECT * FROM CategoryEntity WHERE type = :type ORDER BY category ASC")
-    fun getAllCategory(type: String): Flow<List<CategoryEntity>>
+    @Query(
+        "SELECT * FROM CategoryEntity " +
+                "WHERE (:type IS NULL OR type = :type) " +
+                "ORDER BY category ASC"
+    )
+    fun getAllCategory(type: String? = null): Flow<List<CategoryEntity>>
 
     @Insert
     suspend fun insertCategory(categories: List<CategoryEntity>)
