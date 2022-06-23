@@ -34,6 +34,7 @@
     <string name="google_backup_in_process">Proses pencadangan sedang berjalan</string>
     <string name="google_backup_success">Proses pencadangan berhasil</string>
     <string name="google_backup_failed">Proses pencadangan gagal</string>
+    <string name="google_backup_already_done">Anda sudah mencadangkan data</string>
     <string name="google_sync_dialog_title">Sinkronkan Data Catatan</string>
     <string name="google_sync_dialog_message">Data sekarang akan ditambahkan dengan data yang tersimpan di akun Google Anda</string>
     <string name="google_sync_in_process">Proses sinkronisasi sedang berjalan</string>

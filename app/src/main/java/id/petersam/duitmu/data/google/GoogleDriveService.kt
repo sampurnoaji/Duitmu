@@ -36,6 +36,8 @@ class GoogleDriveService @Inject constructor(
 
     private var drive: Drive? = null
 
+    override fun getLatestBackupTime(): String? = repository.getLatestBackupTime()
+
     override suspend fun checkStatus(): User? {
         val account = GoogleSignIn.getLastSignedInAccount(context)
         return if (account != null) {

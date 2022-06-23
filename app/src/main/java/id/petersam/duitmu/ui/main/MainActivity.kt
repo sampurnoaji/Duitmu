@@ -58,10 +58,15 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menuBackup -> {
-                if (vm.backup.value is LoadState.Loading) {
-                    snackBar(binding.root, getString(R.string.google_backup_in_process))
+                if (vm.canBackupContent()) {
+                    if (vm.backup.value is LoadState.Loading) {
+                        snackBar(binding.root, getString(R.string.google_backup_in_process))
+                    } else {
+                        showBackupConfirmationDialog()
+                    }
+
                 } else {
-                    showBackupConfirmationDialog()
+                    snackBar(binding.root, getString(R.string.google_backup_already_done))
                 }
                 return true
             }

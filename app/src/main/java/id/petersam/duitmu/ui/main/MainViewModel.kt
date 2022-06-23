@@ -194,6 +194,14 @@ class MainViewModel @Inject constructor(
     /*endregion*/
 
     /*region Backup*/
+    fun canBackupContent(): Boolean {
+        val latestBackup = googleDrive.getLatestBackupTime()?.toDate(DatePattern.DRIVE)?.time
+            ?: return true
+        val oneDayInMillis = 86400000
+        val now = Date().time
+        return (now - latestBackup) > oneDayInMillis
+    }
+
     private val _backup = MutableLiveData<LoadState<Boolean>>()
     val backup: LiveData<LoadState<Boolean>>
         get() = _backup
