@@ -35,6 +35,6 @@ class DatabaseCallback(
             categories.addAll(getStringArray(R.array.income_categories)
                 .map { Category(category = it, type = Transaction.Type.INCOME).toEntity() })
         }
-        provider.get().insertCategory(categories)
+        provider.get().insertCategories(categories)
     }
 }

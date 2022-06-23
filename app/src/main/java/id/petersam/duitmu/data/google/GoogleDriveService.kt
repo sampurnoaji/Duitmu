@@ -5,14 +5,15 @@ import android.content.Intent
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.Scopes
-import com.google.android.gms.tasks.Task
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.http.FileContent
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
+import com.google.api.services.drive.model.FileList
 import id.petersam.duitmu.R
 import id.petersam.duitmu.data.BackupRepository
+import id.petersam.duitmu.model.CategoryEntity
 import id.petersam.duitmu.model.TransactionEntity
 import id.petersam.duitmu.model.google.User
 import id.petersam.duitmu.util.fromJson
@@ -52,20 +53,12 @@ class GoogleDriveService @Inject constructor(
     override suspend fun uploadFile() {
         drive?.let { drive ->
             withContext(Dispatchers.IO) {
-                val json = repository.getBackupTransactions().toJson()
-                val file =
-                    File.createTempFile(Backup.TRANSACTION_FILENAME, null, context.cacheDir).apply {
-                        writeText(json)
-                    }
-                val gFileMetadata = GoogleFile().apply {
-                    name = Backup.TRANSACTION_FILENAME
-                }
-                val gFileContent = FileContent("", file)
-                val gFile = drive.files()
-                    .create(gFileMetadata, gFileContent)
-                    .setFields("id, createdTime")
-                    .execute()
-                repository.setLatestBackupTime(gFile.createdTime.toStringRfc3339())
+                val trxJson = repository.getBackupTransactions().toJson()
+                val trxFile = uploadContent(trxJson, Backup.TRANSACTION_FILENAME, drive)
+                repository.setLatestBackupTime(trxFile.createdTime.toStringRfc3339())
+
+                val categoriesJson = repository.getBackupCategories().toJson()
+                uploadContent(categoriesJson, Backup.CATEGORY_FILENAME, drive)
             }
         }
     }
@@ -76,21 +69,47 @@ class GoogleDriveService @Inject constructor(
                 val result = drive.files().list()
                     .setQ("mimeType='application/json'")
                     .execute()
-                for (file in result.files) {
-                    if (file.name == Backup.TRANSACTION_FILENAME) {
-                        val outputStream: OutputStream = ByteArrayOutputStream()
-                        drive.files().get(file.id)
-                            .executeMediaAndDownloadTo(outputStream)
 
-                        val json = outputStream.toString()
-                        val trxs = json.fromJson<TransactionEntity>()
-                        trxs?.forEach {
-                            repository.insertBackupTransactions(it)
-                        }
-                    }
+                val trxJson = downloadContent(result, Backup.TRANSACTION_FILENAME, drive)
+                val trxs = trxJson?.fromJson<TransactionEntity>()
+                trxs?.forEach {
+                    repository.insertBackupTransactions(it)
+                }
+
+                val categoriesJson = downloadContent(result, Backup.CATEGORY_FILENAME, drive)
+                val categories = categoriesJson?.fromJson<CategoryEntity>()
+                categories?.forEach {
+                    repository.insertCategory(it)
                 }
             }
         }
+    }
+
+    private fun uploadContent(json: String, filename: String, drive: Drive): GoogleFile {
+        val file = File.createTempFile(filename, null, context.cacheDir).apply {
+            writeText(json)
+        }
+        val gFileMetadata = GoogleFile().apply {
+            name = filename
+        }
+        val gFileContent = FileContent("", file)
+        val gFile = drive.files()
+            .create(gFileMetadata, gFileContent)
+            .setFields("id, createdTime")
+            .execute()
+        return gFile
+    }
+
+    private fun downloadContent(result: FileList, filename: String, drive: Drive): String? {
+        for (file in result.files) {
+            if (file.name == filename) {
+                val outputStream: OutputStream = ByteArrayOutputStream()
+                drive.files().get(file.id)
+                    .executeMediaAndDownloadTo(outputStream)
+                return outputStream.toString()
+            }
+        }
+        return null
     }
 
     private fun provideDrive(): Drive {

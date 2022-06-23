@@ -99,7 +99,7 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
     }
 
     suspend fun insertCategory(category: Category) {
-        transactionDao.insertCategory(listOf(category.toEntity()))
+        transactionDao.insertCategories(listOf(category.toEntity()))
     }
 
     suspend fun deleteCategory(category: Category) {

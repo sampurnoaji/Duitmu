@@ -34,17 +34,6 @@ interface TransactionDao {
     ): Flow<List<TransactionEntity>>
 
     @Query(
-        """SELECT * FROM TransactionEntity
-            WHERE (:startDate IS NULL OR date >= :startDate)
-            AND (:endDate IS NULL OR date <= :endDate)
-            ORDER BY date DESC"""
-    )
-    suspend fun getBackupTransactions(
-        startDate: Date? = null,
-        endDate: Date? = null
-    ): List<TransactionEntity>
-
-    @Query(
         """SELECT date, SUM(amount) as amount FROM TransactionEntity 
             WHERE type = :type
             AND (:startDate IS NULL OR date >= :startDate)
@@ -83,12 +72,21 @@ interface TransactionDao {
     )
     fun getAllCategory(type: String? = null): Flow<List<CategoryEntity>>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCategory(categories: CategoryEntity)
+
     @Insert
-    suspend fun insertCategory(categories: List<CategoryEntity>)
+    suspend fun insertCategories(categories: List<CategoryEntity>)
 
     @Delete
     suspend fun deleteCategory(category: CategoryEntity)
 
     @Update
     suspend fun updateCategory(category: CategoryEntity)
+
+    @Query("SELECT * FROM TransactionEntity")
+    suspend fun getBackupTransactions(): List<TransactionEntity>
+
+    @Query("SELECT * FROM CategoryEntity")
+    suspend fun getBackupCategories(): List<CategoryEntity>
 }
