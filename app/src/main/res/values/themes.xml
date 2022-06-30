@@ -18,6 +18,33 @@
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
     </style>
 
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="ShapeAppearance.App.MediumComponent.Cut" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">cut</item>
+    </style>
+
+    <style name="ShapeAppearance.App.MediumComponent.Cut.All" parent="ShapeAppearance.App.MediumComponent.Cut">
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="ShapeAppearance.App.MediumComponent.Cut.Left" parent="ShapeAppearance.App.MediumComponent.Cut">
+        <item name="cornerSizeBottomLeft">12dp</item>
+        <item name="cornerSizeTopLeft">12dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <style name="ShapeAppearance.App.MediumComponent.Cut.Right" parent="ShapeAppearance.App.MediumComponent.Cut">
+        <item name="cornerSizeBottomRight">12dp</item>
+        <item name="cornerSizeTopRight">12dp</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
     <!--region Toolbar-->
     <style name="Toolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="navigationIconTint">?colorOnPrimary</item>
@@ -39,15 +66,15 @@
     </style>
     <!--endregion-->
 
-    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">12dp</item>
+    <!-- region Card -->
+    <style name="CardCutLeft" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent.Cut.Left</item>
     </style>
 
-    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">8dp</item>
+    <style name="CardCutRight" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent.Cut.Right</item>
     </style>
+    <!-- endregion -->
 
     <!-- region Button -->
     <style name="FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
@@ -105,7 +132,7 @@
     </style>
 
     <style name="MaterialAlertDialog.App" parent="MaterialAlertDialog.MaterialComponents">
-        <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent.Cut.All</item>
     </style>
 
     <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">

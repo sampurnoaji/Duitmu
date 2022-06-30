@@ -24,7 +24,7 @@
         <entry key="app/src/main/res/layout/dialog_add_category.xml" value="0.45" />
         <entry key="app/src/main/res/layout/fragment_chart.xml" value="0.28940217391304346" />
         <entry key="app/src/main/res/layout/fragment_google.xml" value="0.28940217391304346" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.28940217391304346" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_transaction_category_modal.xml" value="0.45" />
         <entry key="app/src/main/res/layout/fragment_transaction_chart.xml" value="0.37228260869565216" />
         <entry key="app/src/main/res/layout/fragment_transaction_filter_modal.xml" value="0.375" />
@@ -33,6 +33,7 @@
         <entry key="app/src/main/res/layout/item_list_child.xml" value="0.375" />
         <entry key="app/src/main/res/layout/item_list_header.xml" value="0.375" />
         <entry key="app/src/main/res/layout/list_item_dropdown.xml" value="0.4244791666666667" />
+        <entry key="app/src/main/res/layout/section_home_dashboard.xml" value="0.5" />
         <entry key="app/src/main/res/menu/bottom_navigation_menu.xml" value="0.4244791666666667" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.4244791666666667" />
         <entry key="app/src/main/res/xml/material_design_colors.xml" value="0.24427083333333333" />

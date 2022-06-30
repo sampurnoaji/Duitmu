@@ -65,11 +65,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             launcher.launch(intent)
         }
 
-        binding.cardIncome.setOnClickListener {
+        binding.sectionHomeDashboard.cardIncome.setOnClickListener {
             actVm.onTypeChanged(Transaction.Type.INCOME)
             (requireActivity() as MainActivity).navigateToChartPage()
         }
-        binding.cardExpense.setOnClickListener {
+        binding.sectionHomeDashboard.cardExpense.setOnClickListener {
             actVm.onTypeChanged(Transaction.Type.EXPENSE)
             (requireActivity() as MainActivity).navigateToChartPage()
         }
@@ -120,30 +120,30 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun showCardData(items: List<TransactionListAdapter.Item>) {
         val totalIncome = items.sumOf { it.income ?: 0L }
         val totalExpense = items.sumOf { it.expense ?: 0L }
-        binding.tvIncome.text = totalIncome.toRupiah()
-        binding.tvExpense.text = totalExpense.toRupiah()
+        binding.sectionHomeDashboard.tvIncome.text = totalIncome.toRupiah()
+        binding.sectionHomeDashboard.tvExpense.text = totalExpense.toRupiah()
 
         when {
             totalIncome > totalExpense -> {
-                binding.tvBalance.apply {
+                binding.sectionHomeDashboard.tvBalance.apply {
                     text = (totalIncome - totalExpense).toRupiah()
                     setTextColor(ContextCompat.getColor(context, R.color.green_text))
                 }
-                binding.containerBalance.setBackgroundResource(R.drawable.green_gradient_horizontal)
+                binding.sectionHomeDashboard.containerBalance.setBackgroundResource(R.drawable.green_gradient_horizontal)
             }
             totalIncome < totalExpense -> {
-                binding.tvBalance.apply {
+                binding.sectionHomeDashboard.tvBalance.apply {
                     text = "- ${(totalExpense - totalIncome).toRupiah()}"
                     setTextColor(ContextCompat.getColor(context, R.color.red_text))
                 }
-                binding.containerBalance.setBackgroundResource(R.drawable.red_gradient_horizontal)
+                binding.sectionHomeDashboard.containerBalance.setBackgroundResource(R.drawable.red_gradient_horizontal)
             }
             else -> {
-                binding.tvBalance.apply {
+                binding.sectionHomeDashboard.tvBalance.apply {
                     text = totalIncome.toRupiah()
                     setTextColor(Color.BLACK)
                 }
-                binding.containerBalance.setBackgroundResource(android.R.color.white)
+                binding.sectionHomeDashboard.containerBalance.setBackgroundResource(android.R.color.white)
             }
         }
     }
