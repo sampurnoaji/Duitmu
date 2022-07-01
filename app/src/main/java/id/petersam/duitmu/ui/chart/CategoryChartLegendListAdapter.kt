@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.github.mikephil.charting.formatter.PercentFormatter
 import id.petersam.duitmu.databinding.ItemListCategoryChartLegendBinding
 import id.petersam.duitmu.util.toRupiah
 import java.text.DecimalFormat

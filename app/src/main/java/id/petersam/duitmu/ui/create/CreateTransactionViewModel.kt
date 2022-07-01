@@ -11,7 +11,6 @@ import id.petersam.duitmu.data.TransactionRepository
 import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.LoadState
-import id.petersam.duitmu.util.removeTime
 import id.petersam.duitmu.util.toReadableString
 import kotlinx.coroutines.launch
 import java.util.Calendar

@@ -1,6 +1,6 @@
 package id.petersam.duitmu.util
 
-import java.util.*
+import java.util.Locale
 
 fun Long.toRupiah(): String {
     return try {
