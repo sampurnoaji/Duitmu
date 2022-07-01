@@ -24,7 +24,6 @@
     <string name="sync">Sinkronkan</string>
 
     <string name="add_transaction">Tambah Transaksi</string>
-    <string name="transaction_detail">Detail Transaksi</string>
     <string name="filter_transaction">Saring Transaksi</string>
     <string name="add_category">Tambah Kategori</string>
     <string name="edit_category">Ubah Kategori</string>

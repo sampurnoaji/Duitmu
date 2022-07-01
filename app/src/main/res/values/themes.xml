@@ -77,10 +77,6 @@
     <!-- endregion -->
 
     <!-- region Button -->
-    <style name="FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.App.SmallComponent</item>
-    </style>
-
     <style name="ExtendedFab" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.App.SmallComponent</item>
     </style>
