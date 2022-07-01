@@ -228,6 +228,7 @@ class MainViewModel @Inject constructor(
                 _backup.value = LoadState.Success(true)
             } catch (e: Exception) {
                 _backup.value = LoadState.Error(msg = e.message)
+                e.printStackTrace()
             }
         }
     }
@@ -246,6 +247,7 @@ class MainViewModel @Inject constructor(
                 _sync.value = LoadState.Success(true)
             } catch (e: Exception) {
                 _sync.value = LoadState.Error(msg = e.message)
+                e.printStackTrace()
             }
         }
     }
