@@ -6,8 +6,8 @@ import id.petersam.duitmu.R
 object Backup {
 
     fun getTransactionFilename(context: Context) =
-        "Data Transaksi Aplikasi ${context.getString(R.string.app_name)}"
+        "Data_Transaksi_Aplikasi_${context.getString(R.string.app_name)}.json"
 
     fun getCategoryFilename(context: Context) =
-        "Data Kategori Aplikasi ${context.getString(R.string.app_name)}"
+        "Data_Kategori_Aplikasi_${context.getString(R.string.app_name)}.json"
 }

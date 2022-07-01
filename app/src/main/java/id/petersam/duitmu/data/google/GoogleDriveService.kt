@@ -55,12 +55,18 @@ class GoogleDriveService @Inject constructor(
     override suspend fun uploadFile() {
         drive?.let { drive ->
             withContext(Dispatchers.IO) {
+                val fileIds = getToBeDeleteFileIds(drive)
+
                 val trxJson = repository.getBackupTransactions().toJson()
                 val trxFile = uploadContent(trxJson, Backup.getTransactionFilename(context), drive)
                 repository.setLatestBackupTime(trxFile.createdTime.toStringRfc3339())
 
                 val categoriesJson = repository.getBackupCategories().toJson()
                 uploadContent(categoriesJson, Backup.getCategoryFilename(context), drive)
+
+                for (id in fileIds) {
+                    drive.files().delete(id).execute()
+                }
             }
         }
     }
@@ -78,7 +84,8 @@ class GoogleDriveService @Inject constructor(
                     repository.insertBackupTransactions(it)
                 }
 
-                val categoriesJson = downloadContent(result, Backup.getCategoryFilename(context), drive)
+                val categoriesJson =
+                    downloadContent(result, Backup.getCategoryFilename(context), drive)
                 val categories = categoriesJson?.fromJson<CategoryEntity>()
                 categories?.forEach {
                     repository.insertCategory(it)
@@ -112,6 +119,21 @@ class GoogleDriveService @Inject constructor(
             }
         }
         return null
+    }
+
+    private fun getToBeDeleteFileIds(drive: Drive): List<String> {
+        val ids = mutableListOf<String>()
+        val result = drive.files().list()
+            .setQ("mimeType='application/json'")
+            .execute()
+        for (file in result.files) {
+            if (file.name == Backup.getTransactionFilename(context)
+                || file.name == Backup.getCategoryFilename(context)
+            ) {
+                ids.add(file.id)
+            }
+        }
+        return ids
     }
 
     private fun provideDrive(): Drive {
