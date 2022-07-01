@@ -56,11 +56,11 @@ class GoogleDriveService @Inject constructor(
         drive?.let { drive ->
             withContext(Dispatchers.IO) {
                 val trxJson = repository.getBackupTransactions().toJson()
-                val trxFile = uploadContent(trxJson, Backup.TRANSACTION_FILENAME, drive)
+                val trxFile = uploadContent(trxJson, Backup.getTransactionFilename(context), drive)
                 repository.setLatestBackupTime(trxFile.createdTime.toStringRfc3339())
 
                 val categoriesJson = repository.getBackupCategories().toJson()
-                uploadContent(categoriesJson, Backup.CATEGORY_FILENAME, drive)
+                uploadContent(categoriesJson, Backup.getCategoryFilename(context), drive)
             }
         }
     }
@@ -72,13 +72,13 @@ class GoogleDriveService @Inject constructor(
                     .setQ("mimeType='application/json'")
                     .execute()
 
-                val trxJson = downloadContent(result, Backup.TRANSACTION_FILENAME, drive)
+                val trxJson = downloadContent(result, Backup.getTransactionFilename(context), drive)
                 val trxs = trxJson?.fromJson<TransactionEntity>()
                 trxs?.forEach {
                     repository.insertBackupTransactions(it)
                 }
 
-                val categoriesJson = downloadContent(result, Backup.CATEGORY_FILENAME, drive)
+                val categoriesJson = downloadContent(result, Backup.getCategoryFilename(context), drive)
                 val categories = categoriesJson?.fromJson<CategoryEntity>()
                 categories?.forEach {
                     repository.insertCategory(it)

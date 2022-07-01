@@ -1,9 +1,13 @@
 package id.petersam.duitmu.data.google
 
-import id.petersam.duitmu.BuildConfig
+import android.content.Context
+import id.petersam.duitmu.R
 
 object Backup {
 
-    const val TRANSACTION_FILENAME = "${BuildConfig.APPLICATION_ID}_transaction.json"
-    const val CATEGORY_FILENAME = "${BuildConfig.APPLICATION_ID}_category.json"
+    fun getTransactionFilename(context: Context) =
+        "Data Transaksi Aplikasi ${context.getString(R.string.app_name)}"
+
+    fun getCategoryFilename(context: Context) =
+        "Data Kategori Aplikasi ${context.getString(R.string.app_name)}"
 }
