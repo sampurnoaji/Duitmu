@@ -8,11 +8,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.duitmu.R
 import id.petersam.duitmu.databinding.ActivityMainBinding
 import id.petersam.duitmu.util.LoadState
+import id.petersam.duitmu.util.alertDialog
 import id.petersam.duitmu.util.snackBar
 import id.petersam.duitmu.util.viewBinding
 
@@ -140,31 +140,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showBackupConfirmationDialog() {
-        MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.google_backup_dialog_title))
-            .setMessage(getString(R.string.google_backup_dialog_message))
-            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setPositiveButton(getString(R.string.backup)) { dialog, _ ->
-                dialog.dismiss()
-                vm.backup()
-            }
-            .show()
+        alertDialog(
+            title = getString(R.string.google_backup_dialog_title),
+            message = getString(R.string.google_backup_dialog_message),
+            positiveButtonText = getString(R.string.backup),
+            positiveAction = { vm.backup() },
+            negativeButtonText = getString(R.string.cancel),
+        )
     }
 
     private fun showSyncConfirmationDialog() {
-        MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.google_sync_dialog_title))
-            .setMessage(getString(R.string.google_sync_dialog_message))
-            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setPositiveButton(getString(R.string.sync)) { dialog, _ ->
-                dialog.dismiss()
-                vm.sync()
-            }
-            .show()
+        alertDialog(
+            title = getString(R.string.google_sync_dialog_title),
+            message = getString(R.string.google_sync_dialog_message),
+            positiveButtonText = getString(R.string.sync),
+            positiveAction = { vm.sync() },
+            negativeButtonText = getString(R.string.cancel),
+        )
     }
 
     internal fun navigateToChartPage() {

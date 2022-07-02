@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 inline fun <T : ViewBinding> AppCompatActivity.viewBinding(
@@ -38,7 +39,7 @@ fun Activity.alertDialog(
     negativeButtonText: String = "",
     negativeAction: (() -> Unit)? = null
 ) {
-    AlertDialog.Builder(this)
+    MaterialAlertDialogBuilder(this)
         .setTitle(title)
         .setMessage(message)
         .setPositiveButton(positiveButtonText) { _, _ ->

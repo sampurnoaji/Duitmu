@@ -49,62 +49,52 @@
 
     <TextView
         android:id="@+id/labelDate"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
         android:text="@string/label_date"
-        app:layout_constraintBaseline_toBaselineOf="@id/tilDate"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tilDate" />
+        app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
 
     <TextView
         android:id="@+id/labelCategory"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:text="@string/label_category"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tilCategory"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tilCategory" />
+        app:layout_constraintEnd_toEndOf="@+id/labelDate"
+        app:layout_constraintStart_toStartOf="@+id/labelDate"
+        app:layout_constraintTop_toBottomOf="@+id/tilDate" />
 
     <TextView
         android:id="@+id/labelAmount"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:text="@string/label_amount"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tilAmount"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tilAmount" />
+        app:layout_constraintEnd_toEndOf="@+id/labelDate"
+        app:layout_constraintStart_toStartOf="@+id/labelDate"
+        app:layout_constraintTop_toBottomOf="@+id/tilCategory" />
 
     <TextView
         android:id="@+id/labelNote"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:text="@string/label_note"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tilNote"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tilNote" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="right"
-        app:constraint_referenced_ids="labelDate,labelCategory,labelAmount,labelNote" />
+        app:layout_constraintEnd_toEndOf="@+id/labelDate"
+        app:layout_constraintStart_toStartOf="@+id/labelDate"
+        app:layout_constraintTop_toBottomOf="@+id/tilAmount" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilDate"
         style="@style/TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:errorEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/barrier"
-        app:layout_constraintTop_toBottomOf="@+id/toggleButton"
+        app:layout_constraintEnd_toEndOf="@+id/labelDate"
+        app:layout_constraintStart_toStartOf="@+id/labelDate"
+        app:layout_constraintTop_toBottomOf="@+id/labelDate"
         app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -119,13 +109,12 @@
         style="@style/TextInputLayoutDropdown"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
         app:errorEnabled="true"
         app:layout_constraintEnd_toStartOf="@+id/btnEditCategory"
-        app:layout_constraintStart_toStartOf="@+id/barrier"
-        app:layout_constraintTop_toBottomOf="@+id/tilDate"
+        app:layout_constraintStart_toStartOf="@+id/labelCategory"
+        app:layout_constraintTop_toBottomOf="@+id/labelCategory"
         app:startIconDrawable="@drawable/ic_baseline_category_24">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -139,23 +128,22 @@
         android:id="@+id/btnEditCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_baseline_edit_24"
-        app:layout_constraintBottom_toBottomOf="@+id/labelCategory"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/labelCategory" />
+        app:layout_constraintTop_toTopOf="@+id/tilCategory" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilAmount"
         style="@style/TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="2dp"
         app:errorEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/barrier"
-        app:layout_constraintTop_toBottomOf="@+id/tilCategory"
+        app:layout_constraintEnd_toEndOf="@+id/labelAmount"
+        app:layout_constraintStart_toStartOf="@+id/labelAmount"
+        app:layout_constraintTop_toBottomOf="@+id/labelAmount"
         app:startIconDrawable="@drawable/ic_prefix_rupiah">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -170,12 +158,11 @@
         style="@style/TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="2dp"
         app:errorEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/barrier"
-        app:layout_constraintTop_toBottomOf="@+id/tilAmount"
+        app:layout_constraintEnd_toEndOf="@+id/labelNote"
+        app:layout_constraintStart_toStartOf="@+id/labelNote"
+        app:layout_constraintTop_toBottomOf="@+id/labelNote"
         app:startIconDrawable="@drawable/ic_baseline_edit_note_24">
 
         <com.google.android.material.textfield.TextInputEditText
