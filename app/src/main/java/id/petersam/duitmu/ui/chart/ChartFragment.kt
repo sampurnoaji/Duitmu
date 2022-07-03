@@ -54,15 +54,15 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
     }
 
     private fun setupActionView() {
-        binding.toggleButton.apply {
-            addOnButtonCheckedListener { _, _, _ ->
-                if (binding.btnIncome.isChecked) vm.onTypeChanged(Transaction.Type.INCOME)
-                if (binding.btnExpense.isChecked) vm.onTypeChanged(Transaction.Type.EXPENSE)
-            }
-            check(
-                if (vm.type.value == Transaction.Type.INCOME) binding.btnIncome.id
-                else binding.btnExpense.id
-            )
+        binding.toggleButton.check(
+            if (vm.type.value == Transaction.Type.INCOME) binding.btnIncome.id
+            else binding.btnExpense.id
+        )
+        binding.btnIncome.setOnClickListener {
+            vm.onTypeChanged(Transaction.Type.INCOME)
+        }
+        binding.btnExpense.setOnClickListener {
+            vm.onTypeChanged(Transaction.Type.EXPENSE)
         }
 
         binding.etPeriod.setOnClickListener {
