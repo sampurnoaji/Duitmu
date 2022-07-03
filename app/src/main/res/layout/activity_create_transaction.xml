@@ -101,7 +101,8 @@
             android:id="@+id/etDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false" />
+            android:focusable="false"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -121,7 +122,8 @@
             android:id="@+id/etCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none" />
+            android:inputType="none"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageButton
@@ -150,7 +152,8 @@
             android:id="@+id/etAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -170,7 +173,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxEms="100"
-            android:singleLine="true" />
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.card.MaterialCardView
