@@ -86,6 +86,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             adapter.submitList(items)
             showCardData(items)
+            actVm.updateChartData()
         }
 
         actVm.datePeriod.observe(viewLifecycleOwner) {
