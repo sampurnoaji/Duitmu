@@ -6,11 +6,14 @@ import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.duitmu.R
 import id.petersam.duitmu.databinding.ActivityMainBinding
+import id.petersam.duitmu.model.Transaction
+import id.petersam.duitmu.ui.chart.ChartFragment
+import id.petersam.duitmu.ui.home.HomeFragment
 import id.petersam.duitmu.util.LoadState
 import id.petersam.duitmu.util.alertDialog
 import id.petersam.duitmu.util.snackBar
@@ -22,6 +25,10 @@ class MainActivity : AppCompatActivity() {
 
     private val binding by viewBinding(ActivityMainBinding::inflate)
     private val vm by viewModels<MainViewModel>()
+
+    private val homeFragment by lazy { HomeFragment() }
+    private val chartFragment by lazy { ChartFragment() }
+    private var visibleFragment: Fragment = homeFragment
 
     private val syncSignInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -36,18 +43,40 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        setupNavigation()
+        setupFragments()
 
         observeGoogleLogin()
         observeGoogleBackup()
         observeGoogleSync()
     }
 
-    private fun setupNavigation() {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        binding.bottomNavigationView.setupWithNavController(navController)
+    private fun setupFragments() {
+        showFragment(homeFragment, Page.HOME.tag)
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                Page.HOME.id -> {
+                    showFragment(homeFragment, Page.HOME.tag)
+                    true
+                }
+                Page.CHART.id -> {
+                    if (!chartFragment.isAdded) vm.onTypeChanged(Transaction.Type.EXPENSE)
+                    showFragment(chartFragment, Page.CHART.tag)
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun showFragment(fragment: Fragment, tag: String) {
+        supportFragmentManager.commit {
+            if (!fragment.isAdded) {
+                add(R.id.container, fragment, tag)
+            }
+            hide(visibleFragment)
+            show(fragment)
+        }
+        visibleFragment = fragment
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -159,7 +188,17 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    internal fun navigateToChartPage() {
-        binding.bottomNavigationView.selectedItemId = R.id.chartFragment
+    override fun onBackPressed() {
+        if (visibleFragment != homeFragment) navigateTo(Page.HOME)
+        else super.onBackPressed()
+    }
+
+    internal fun navigateTo(page: Page) {
+        binding.bottomNavigationView.selectedItemId = page.id
+    }
+
+    enum class Page(val id: Int, val tag: String) {
+        HOME(R.id.homeFragment, "home"),
+        CHART(R.id.chartFragment, "chart"),
     }
 }

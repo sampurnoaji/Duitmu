@@ -67,11 +67,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding.sectionHomeDashboard.cardIncome.setOnClickListener {
             actVm.onTypeChanged(Transaction.Type.INCOME)
-            (requireActivity() as MainActivity).navigateToChartPage()
+            (requireActivity() as MainActivity).navigateTo(MainActivity.Page.CHART)
         }
         binding.sectionHomeDashboard.cardExpense.setOnClickListener {
             actVm.onTypeChanged(Transaction.Type.EXPENSE)
-            (requireActivity() as MainActivity).navigateToChartPage()
+            (requireActivity() as MainActivity).navigateTo(MainActivity.Page.CHART)
         }
 
         binding.etPeriod.setOnClickListener {

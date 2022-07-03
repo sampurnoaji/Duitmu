@@ -54,10 +54,6 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
     }
 
     private fun setupActionView() {
-        binding.toggleButton.check(
-            if (vm.type.value == Transaction.Type.INCOME) binding.btnIncome.id
-            else binding.btnExpense.id
-        )
         binding.btnIncome.setOnClickListener {
             vm.onTypeChanged(Transaction.Type.INCOME)
         }
