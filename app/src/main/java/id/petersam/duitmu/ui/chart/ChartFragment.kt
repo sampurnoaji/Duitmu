@@ -256,7 +256,7 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
             }
             setData(data)
             invalidate()
-            legendListAdapter.submitList(legends)
+            legendListAdapter.submitList(legends.sortedByDescending { it.amount })
             binding.tvAmountTotal.text = legends.sumOf { it.amount }.toRupiah()
         }
     }
