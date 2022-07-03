@@ -80,13 +80,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun observeVm() {
-        actVm.transaction.observe(viewLifecycleOwner) { items ->
-            binding.rvTransactions.isVisible = items.isNotEmpty()
-            binding.groupEmptyNote.isVisible = items.isEmpty()
-
-            adapter.submitList(items)
+        actVm.shownTransactions.observe(viewLifecycleOwner) { items ->
+            if (!items.isNullOrEmpty()) {
+                adapter.submitList(items)
+            }
             showCardData(items)
             actVm.updateChartData()
+            binding.rvTransactions.isVisible = !items.isNullOrEmpty()
+            binding.groupEmptyNote.isVisible = items.isNullOrEmpty()
         }
 
         actVm.datePeriod.observe(viewLifecycleOwner) {
@@ -118,9 +119,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         modal?.show(childFragmentManager, TransactionFilterModalFragment.TAG)
     }
 
-    private fun showCardData(items: List<TransactionListAdapter.Item>) {
-        val totalIncome = items.sumOf { it.income ?: 0L }
-        val totalExpense = items.sumOf { it.expense ?: 0L }
+    private fun showCardData(items: List<TransactionListAdapter.Item>?) {
+        val totalIncome = items?.sumOf { it.income ?: 0L } ?: 0
+        val totalExpense = items?.sumOf { it.expense ?: 0L } ?: 0
         binding.sectionHomeDashboard.tvIncome.text = totalIncome.toRupiah()
         binding.sectionHomeDashboard.tvExpense.text = totalExpense.toRupiah()
 

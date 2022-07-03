@@ -2,6 +2,7 @@ package id.petersam.duitmu.ui.main
 
 import android.content.Intent
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,35 +27,29 @@ class MainViewModel @Inject constructor(
     private val googleDrive: GoogleDrive
 ) : ViewModel() {
 
-    private val _transaction = MutableLiveData<List<TransactionListAdapter.Item>>()
-    val transaction: LiveData<List<TransactionListAdapter.Item>> get() = _transaction
-
-    private fun List<Transaction>.toRecyclerViewItems(): List<TransactionListAdapter.Item> {
-        val items = mutableListOf<TransactionListAdapter.Item>()
-        val group = this.groupBy { it.date.toReadableString(DatePattern.DMY_LONG) }
-        group.entries.forEach {
-            items.add(
-                TransactionListAdapter.Item(
-                    TransactionListAdapter.VIEW_TYPE_HEADER,
-                    date = it.key.toDate(DatePattern.DMY_LONG),
-                    income = it.value.sumOf { trx ->
-                        if (trx.type == Transaction.Type.INCOME) trx.amount else 0
-                    },
-                    expense = it.value.sumOf { trx ->
-                        if (trx.type == Transaction.Type.EXPENSE) trx.amount else 0
-                    }
-                )
-            )
-            it.value.forEach { trx ->
-                items.add(
-                    TransactionListAdapter.Item(
-                        TransactionListAdapter.VIEW_TYPE_CHILD,
-                        transaction = trx
+    private val _querySearch = MutableLiveData("")
+    private val _transactions = MutableLiveData<List<TransactionListAdapter.Item>>()
+    val shownTransactions = MediatorLiveData<List<TransactionListAdapter.Item>>().apply {
+        addSource(_transactions) {
+            value = if (_querySearch.value.isNullOrEmpty()) {
+                _transactions.value
+            } else {
+                _transactions.value?.filter {
+                    it.transaction!!.category.lowercase().contains(
+                        _querySearch.value!!.lowercase()
                     )
-                )
+                }
             }
         }
-        return items
+        addSource(_querySearch) { query ->
+            value = if (query.isNullOrEmpty()) {
+                _transactions.value
+            } else {
+                _transactions.value?.filter {
+                    it.transaction!!.category.lowercase().contains(query.lowercase())
+                }
+            }
+        }
     }
 
     private val _datePeriod = MutableLiveData(DatePeriod.CURRENT_MONTH)
@@ -76,7 +71,7 @@ class MainViewModel @Inject constructor(
         }
         viewModelScope.launch {
             result.collect {
-                _transaction.value = it.toRecyclerViewItems()
+                _transactions.value = it.toRecyclerViewItems()
             }
         }
     }
@@ -93,6 +88,39 @@ class MainViewModel @Inject constructor(
 
     fun onEndDateChanged(date: Date?) {
         _endDate.value = date
+    }
+
+    fun onQuerySearchChanged(query: String) {
+        _querySearch.value = query
+    }
+
+    private fun List<Transaction>.toRecyclerViewItems(): List<TransactionListAdapter.Item> {
+        val items = mutableListOf<TransactionListAdapter.Item>()
+        val group = this.groupBy { it.date.toReadableString(DatePattern.DMY_LONG) }
+        group.entries.forEach {
+            items.add(
+                TransactionListAdapter.Item(
+                    TransactionListAdapter.VIEW_TYPE_HEADER,
+                    date = it.key.toDate(DatePattern.DMY_LONG),
+                    income = it.value.sumOf { trx ->
+                        if (trx.type == Transaction.Type.INCOME) trx.amount else 0
+                    },
+                    expense = it.value.sumOf { trx ->
+                        if (trx.type == Transaction.Type.EXPENSE) trx.amount else 0
+                    },
+                    transaction = it.value[0]
+                )
+            )
+            it.value.forEach { trx ->
+                items.add(
+                    TransactionListAdapter.Item(
+                        TransactionListAdapter.VIEW_TYPE_CHILD,
+                        transaction = trx
+                    )
+                )
+            }
+        }
+        return items
     }
 
     /*region Chart*/

@@ -22,9 +22,11 @@
     <string name="note">Catat</string>
     <string name="backup">Cadangkan</string>
     <string name="sync">Sinkronkan</string>
+    <string name="search">Cari</string>
 
     <string name="add_transaction">Tambah Transaksi</string>
     <string name="filter_transaction">Saring Transaksi</string>
+    <string name="search_transaction_hint">Cari…</string>
     <string name="add_category">Tambah Kategori</string>
     <string name="edit_category">Ubah Kategori</string>
 
