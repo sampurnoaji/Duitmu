@@ -11,6 +11,8 @@ import id.petersam.duitmu.data.TransactionRepository
 import id.petersam.duitmu.model.Transaction
 import id.petersam.duitmu.util.DatePattern
 import id.petersam.duitmu.util.LoadState
+import id.petersam.duitmu.util.getTodayDate
+import id.petersam.duitmu.util.removeTime
 import id.petersam.duitmu.util.toReadableString
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -25,7 +27,7 @@ class CreateTransactionViewModel @Inject constructor(
     private val _type = MutableLiveData<Transaction.Type>()
     val type: LiveData<Transaction.Type> get() = _type
 
-    private val _date = MutableLiveData(Date())
+    private val _date = MutableLiveData(getTodayDate())
     val date: LiveData<Date> get() = _date
 
     private val _expenseCategories = repository.getExpenseCategories().asLiveData()
@@ -67,7 +69,7 @@ class CreateTransactionViewModel @Inject constructor(
         val selectedDate = Calendar.getInstance().apply {
             this.timeInMillis = timeInMillis
         }.time
-        _date.value = selectedDate
+        _date.value = selectedDate.removeTime()
     }
 
     fun onDateChanged(date: Date) {
