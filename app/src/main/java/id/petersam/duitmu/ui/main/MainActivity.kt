@@ -2,13 +2,20 @@ package id.petersam.duitmu.ui.main
 
 import android.app.SearchManager
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
@@ -87,6 +94,7 @@ class MainActivity : AppCompatActivity() {
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
+            changeSearchViewTextColor(this)
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean = false
@@ -202,6 +210,19 @@ class MainActivity : AppCompatActivity() {
             positiveAction = { vm.sync() },
             negativeButtonText = getString(R.string.cancel),
         )
+    }
+
+    private fun changeSearchViewTextColor(view: View?) {
+        val whiteColor = ContextCompat.getColor(this, R.color.white)
+        when (view) {
+            is TextView -> view.setTextColor(whiteColor)
+            is ImageView -> view.setColorFilter(whiteColor)
+            is ViewGroup -> {
+                for (v in view.children) {
+                    changeSearchViewTextColor(v)
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {

@@ -16,6 +16,7 @@
         <item name="actionOverflowButtonStyle">@style/ActionOverflowButtonStyle</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
+<!--        <item name="searchViewStyle">@style/SearchViewStyle</item>-->
     </style>
 
     <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
@@ -49,6 +50,9 @@
     <style name="Toolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="navigationIconTint">?colorOnPrimary</item>
         <item name="titleTextColor">?colorOnPrimary</item>
+        <item name="android:textColorPrimary">?colorOnPrimary</item>
+        <item name="android:textColorSecondary">?colorOnPrimary</item>
+        <item name="collapseIcon">@drawable/ic_baseline_arrow_back_24</item>
     </style>
 
     <style name="ActionOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
