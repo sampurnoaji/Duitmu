@@ -71,6 +71,7 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
         with(binding.lineChart) {
             setNoDataText(getString(R.string.empty_note))
             setExtraOffsets(0f, 0f, 0f, 8f)
+
             //hide grid lines
             axisLeft.apply {
                 setDrawGridLines(true)
@@ -105,7 +106,7 @@ class ChartFragment : Fragment(R.layout.fragment_chart) {
             description.isEnabled = false
 
             isDrawHoleEnabled = true
-            setHoleColor(Color.WHITE)
+            setHoleColor(Color.TRANSPARENT)
 
             setTransparentCircleColor(Color.WHITE)
             setTransparentCircleAlpha(110)

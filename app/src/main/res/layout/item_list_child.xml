@@ -14,7 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:minWidth="120dp"
-        android:textColor="?colorOnSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -38,10 +37,10 @@
         android:layout_height="match_parent"
         android:drawablePadding="4dp"
         app:drawableEndCompat="@drawable/ic_baseline_chevron_right_16"
+        app:drawableTint="?colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="+Rp 60.000"
-        app:drawableTint="?colorPrimary" />
+        tools:text="+Rp 60.000" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
