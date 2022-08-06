@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:485934600324:android:d7a6a0663f3f4cc0bfb2d1",
+        "mobilesdk_app_id": "1:485934600324:android:2a3afdbc002289bbbfb2d1",
         "android_client_info": {
-          "package_name": "id.petersam.duitmu"
+          "package_name": "id.petersam.catatankeuangan"
         }
       },
       "oauth_client": [
@@ -36,9 +36,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:485934600324:android:25508790a8089729bfb2d1",
+        "mobilesdk_app_id": "1:485934600324:android:3ce418eb55f34574bfb2d1",
         "android_client_info": {
-          "package_name": "id.petersam.duitmu.dev"
+          "package_name": "id.petersam.catatankeuangan.dev"
         }
       },
       "oauth_client": [

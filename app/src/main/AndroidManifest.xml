@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="id.petersam.duitmu">
+    package="id.petersam.catatankeuangan">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".DuitmuApplication"
+        android:name="id.petersam.catatankeuangan.DuitmuApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Duitmu">
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name="id.petersam.catatankeuangan.ui.main.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -27,7 +27,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".ui.create.CreateTransactionActivity"
+            android:name="id.petersam.catatankeuangan.ui.create.CreateTransactionActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
 
