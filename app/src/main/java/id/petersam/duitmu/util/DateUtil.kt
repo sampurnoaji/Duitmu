@@ -27,9 +27,9 @@ fun Date.toReadableString(pattern: DatePattern): String {
     }
 }
 
-fun Date.removeTime(): Date {
+fun Date.minimizeTime(): Date {
     return Calendar.getInstance().apply {
-        time = this@removeTime
+        time = this@minimizeTime
         set(Calendar.HOUR_OF_DAY, 0)
         set(Calendar.MINUTE, 0)
         set(Calendar.SECOND, 0)
@@ -37,9 +37,12 @@ fun Date.removeTime(): Date {
     }.time
 }
 
-fun getTodayDate(): Date = Calendar.getInstance().apply {
-    set(Calendar.HOUR_OF_DAY, 0)
-    set(Calendar.MINUTE, 0)
-    set(Calendar.SECOND, 0)
-    set(Calendar.MILLISECOND, 0)
-}.time
+fun Date.maximizeTime(): Date {
+    return Calendar.getInstance().apply {
+        time = this@maximizeTime
+        set(Calendar.HOUR_OF_DAY, 23)
+        set(Calendar.MINUTE, 59)
+        set(Calendar.SECOND, 59)
+        set(Calendar.MILLISECOND, 999)
+    }.time
+}
