@@ -39,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     private val chartFragment by lazy { ChartFragment() }
     private var visibleFragment: Fragment = homeFragment
 
+    private var menu: Menu? = null
+
     private val syncSignInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             vm.sync()
@@ -90,6 +92,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        this.menu = menu
+        menu?.findItem(R.id.menuSync)?.let { item ->
+            item.isVisible = false
+        }
+        menu?.findItem(R.id.menuBackup)?.let { item ->
+            item.isVisible = false
+        }
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
@@ -103,7 +112,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
-
+        observeRemoteConfig()
         return true
     }
 
@@ -187,6 +196,17 @@ class MainActivity : AppCompatActivity() {
                         color = R.color.red_text
                     )
                 }
+            }
+        }
+    }
+
+    private fun observeRemoteConfig() {
+        vm.isAllowGoogleDriveAction.observe(this) {
+            menu?.findItem(R.id.menuSync)?.let { item ->
+                item.isVisible = it
+            }
+            menu?.findItem(R.id.menuBackup)?.let { item ->
+                item.isVisible = it
             }
         }
     }

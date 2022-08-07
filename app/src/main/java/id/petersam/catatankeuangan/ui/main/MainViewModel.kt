@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.petersam.catatankeuangan.data.TransactionRepository
+import id.petersam.catatankeuangan.data.firebase.FirebaseRepository
 import id.petersam.catatankeuangan.data.google.GoogleDrive
 import id.petersam.catatankeuangan.model.DatePeriod
 import id.petersam.catatankeuangan.model.Transaction
@@ -24,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: TransactionRepository,
-    private val googleDrive: GoogleDrive
+    private val googleDrive: GoogleDrive,
+    private val firebaseRepository: FirebaseRepository
 ) : ViewModel() {
 
     private val _querySearch = MutableLiveData("")
@@ -60,6 +62,14 @@ class MainViewModel @Inject constructor(
 
     private val _endDate = MutableLiveData<Date?>()
     val endDate: LiveData<Date?> get() = _endDate
+
+    private val _isAllowGoogleDriveAction = MutableLiveData(false)
+    val isAllowGoogleDriveAction: LiveData<Boolean>
+        get() = _isAllowGoogleDriveAction
+
+    init {
+        checkIsAllowGoogleDriveAction()
+    }
 
     fun getTransactions() {
         val result = when (_datePeriod.value) {
@@ -221,7 +231,7 @@ class MainViewModel @Inject constructor(
     }
     /*endregion*/
 
-    /*region Backup*/
+    /*region Google Drive*/
     fun canBackupContent(): Boolean {
         val latestBackup = googleDrive.getLatestBackupTime()?.toDate(DatePattern.DRIVE)?.time
             ?: return true
@@ -283,6 +293,13 @@ class MainViewModel @Inject constructor(
     enum class GoogleAction {
         BACKUP,
         SYNC,
+    }
+    /*endregion*/
+
+    /*region Firebase*/
+    private fun checkIsAllowGoogleDriveAction() {
+        _isAllowGoogleDriveAction.value =
+            firebaseRepository.getBooleanRemoteConfigValue("is_allow_google_drive_action")
     }
     /*endregion*/
 }

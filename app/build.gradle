@@ -73,6 +73,7 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-config-ktx'
 
     implementation 'com.google.android.gms:play-services-auth:20.1.0'
     implementation 'com.google.http-client:google-http-client-gson:1.26.0'
