@@ -32,6 +32,7 @@
         <entry key="app/src/main/res/layout/fragment_transaction_category_modal.xml" value="0.45" />
         <entry key="app/src/main/res/layout/fragment_transaction_chart.xml" value="0.37228260869565216" />
         <entry key="app/src/main/res/layout/fragment_transaction_filter_modal.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/item_episode.xml" value="0.20643363728470113" />
         <entry key="app/src/main/res/layout/item_list_category.xml" value="0.375" />
         <entry key="app/src/main/res/layout/item_list_category_chart_legend.xml" value="0.5" />
         <entry key="app/src/main/res/layout/item_list_child.xml" value="0.375" />

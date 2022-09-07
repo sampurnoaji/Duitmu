@@ -1,5 +1,6 @@
 package id.petersam.catatankeuangan.model
 
+import id.petersam.catatankeuangan.util.minimizeTime
 import java.util.Date
 
 data class Transaction(
@@ -23,7 +24,7 @@ data class Transaction(
     fun toEntity() = TransactionEntity(
         createdAt = id,
         type = type.value,
-        date = date,
+        date = date.minimizeTime(),
         category = category,
         note = note,
         amount = amount
