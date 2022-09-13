@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import dagger.hilt.android.AndroidEntryPoint
 import id.petersam.catatankeuangan.R
 import id.petersam.catatankeuangan.databinding.ActivityMainBinding
@@ -43,12 +44,16 @@ class MainActivity : AppCompatActivity() {
 
     private val syncSignInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            vm.sync()
+            if (it.resultCode == RESULT_OK) {
+                vm.sync()
+            }
         }
 
     private val backupSignInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            vm.backup()
+            if (it.resultCode == RESULT_OK) {
+                vm.backup()
+            }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -171,6 +176,9 @@ class MainActivity : AppCompatActivity() {
                         getString(R.string.google_backup_failed),
                         color = R.color.red_text
                     )
+                    if (it.e is UserRecoverableAuthIOException) {
+                        backupSignInLauncher.launch(it.e.intent)
+                    }
                 }
             }
         }
@@ -195,6 +203,9 @@ class MainActivity : AppCompatActivity() {
                         getString(R.string.google_sync_failed),
                         color = R.color.red_text
                     )
+                    if (it.e is UserRecoverableAuthIOException) {
+                        backupSignInLauncher.launch(it.e.intent)
+                    }
                 }
             }
         }
