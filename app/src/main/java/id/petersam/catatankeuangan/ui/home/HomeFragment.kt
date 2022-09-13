@@ -105,8 +105,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
-                requireActivity().snackBar(
-                    binding.root,
+                snackBar(
                     getString(R.string.success_add_data),
                     R.color.green_text
                 )

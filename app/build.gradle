@@ -15,7 +15,7 @@ android {
         applicationId "id.petersam.catatankeuangan"
         minSdk 23
         targetSdk 31
-        versionCode 1
+        versionCode 2
         versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -29,8 +29,7 @@ android {
         }
         release {
             debuggable false
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
