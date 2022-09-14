@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
 
+
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: TransactionRepository,
@@ -265,7 +266,7 @@ class MainViewModel @Inject constructor(
                 googleDrive.uploadFile()
                 _backup.value = LoadState.Success(true)
             } catch (e: Exception) {
-                _backup.value = LoadState.Error(msg = e.message)
+                _backup.value = LoadState.Error(e)
                 e.printStackTrace()
             }
         }
@@ -284,7 +285,7 @@ class MainViewModel @Inject constructor(
                 googleDrive.downloadFile()
                 _sync.value = LoadState.Success(true)
             } catch (e: Exception) {
-                _sync.value = LoadState.Error(msg = e.message)
+                _sync.value = LoadState.Error(e)
                 e.printStackTrace()
             }
         }

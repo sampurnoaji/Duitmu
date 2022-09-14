@@ -98,7 +98,7 @@ class CreateTransactionViewModel @Inject constructor(
             try {
                 _trx.value = LoadState.Success(repository.getTransaction(trxId))
             } catch (e: Exception) {
-                _trx.value = LoadState.Error(e.message.orEmpty())
+                _trx.value = LoadState.Error(e)
             }
         }
     }
@@ -120,7 +120,7 @@ class CreateTransactionViewModel @Inject constructor(
 
                 _insertTransaction.value = LoadState.Success(true)
             } catch (e: Exception) {
-                _insertTransaction.value = LoadState.Error(e.message ?: "Something went wrong")
+                _insertTransaction.value = LoadState.Error(e)
             }
         }
     }

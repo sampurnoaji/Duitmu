@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "485934600324-5qcepulh0opdi7d0hd4a9tcpsdhk9q52.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.petersam.catatankeuangan",
+            "certificate_hash": "b835df408b716964273a7873836c1debfbb0c466"
+          }
+        },
+        {
+          "client_id": "485934600324-u7adj6mfjhpaat3fhvigpj99b5218v5q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.petersam.catatankeuangan",
+            "certificate_hash": "b68671985569dbf63bf7052da9710ba67462a042"
+          }
+        },
+        {
           "client_id": "485934600324-jjhk0uiop56s69t04520umanr8ec1bh0.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -42,6 +58,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "485934600324-5h396bs572shdf7tca7qgm4653mgpbtj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.petersam.catatankeuangan.dev",
+            "certificate_hash": "b835df408b716964273a7873836c1debfbb0c466"
+          }
+        },
         {
           "client_id": "485934600324-jjhk0uiop56s69t04520umanr8ec1bh0.apps.googleusercontent.com",
           "client_type": 3

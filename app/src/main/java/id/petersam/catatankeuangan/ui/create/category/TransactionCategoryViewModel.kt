@@ -54,7 +54,7 @@ class TransactionCategoryViewModel @Inject constructor(
                 repository.insertCategory(Category(category = category, type = type))
                 _insertCategory.value = LoadState.Success(true)
             } catch (e: Exception) {
-                _insertCategory.value = LoadState.Error(e.message ?: "Something went wrong")
+                _insertCategory.value = LoadState.Error(e)
             }
         }
     }
